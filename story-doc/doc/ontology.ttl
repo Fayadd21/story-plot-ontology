@@ -1,0 +1,1315 @@
+@prefix : <https://purl.org/region/rcc8/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <https://purl.org/region/rcc8/> .
+
+<https://purl.org/region/rcc8/> rdf:type owl:Ontology ;
+                                 owl:imports <http://purl.org/family/> ,
+                                             <http://purl.org/meo/> ,
+                                             <http://purl.org/story/event/> ,
+                                             <http://purl.org/story/location/> ,
+                                             <http://purl.org/story/social/> ,
+                                             <http://www.w3.org/2006/time#> ,
+                                             <https://purl.org/region/rcc8/> ;
+                                 rdfs:comment "An ontology for the Region Connection Calculus."@en ,
+                                              "Classes and properties for the narrated structure of a story, such as stories, chapters and climaxes, and how they relate to events."@en ,
+                                              "Events with their participants, locations and temporal ordering, using the W3C Time ontology to describe time."@en ,
+                                              "Intentional doings: agents, patients, instruments, themes; linked to events via sub-event links and participant entailments."@en ,
+                                              "Non-familial social ties between characters, such as allegiance, enmity or membership in a house or group."@en ,
+                                              "Places and spatial relations that are relevant for describing a story plot."@en ,
+                                              """Story intervals use Allen's endpoints Is and Ie via stime:hasStart and stime:hasEnd on top of the W3C Time ontology.
+
+The thirteen Allen relations (b, bi, m, mi, o, oi, s, si, d, di, f, fi, eq) are not redefined here: use the corresponding OWL-Time object properties between time:ProperInterval individuals — time:intervalBefore (b), time:intervalAfter (bi), time:intervalMeets (m), time:intervalMetBy (mi), time:intervalOverlaps (o), time:intervalOverlappedBy (oi), time:intervalStarts (s), time:intervalStartedBy (si), time:intervalDuring (d), time:intervalContains (di), time:intervalFinishes (f), time:intervalFinishedBy (fi), time:intervalEquals (eq).
+
+time:intervalOverlaps (Allen o) is not symmetric: the inverse is time:intervalOverlappedBy (oi). Do not model story 'overlaps' as a symmetric relation.
+
+stime:StoryTimeInterval is a proper interval so those relations (domain/range ProperInterval in OWL Time) apply when asserting temporal structure between story intervals. Below, sound property chains link endpoint ordering (time:before / time:after on instants) to intervalBefore / intervalAfter."""@en ;
+                                 rdfs:label "Actions in story plots"@en ,
+                                            "Allen-style time for story plots"@en ,
+                                            "Events and temporal relations in stories"@en ,
+                                            "Locations for story plots"@en ,
+                                            "Narrative structure of stories"@en ,
+                                            "Social relations in stories"@en ,
+                                            "The RCC8 ontology" .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://purl.org/story/action/hasAgent
+<http://purl.org/story/action/hasAgent> rdf:type owl:ObjectProperty ;
+                                        rdfs:subPropertyOf <http://purl.org/story/event/hasParticipant> ;
+                                        rdfs:domain <http://purl.org/story/action/Action> ;
+                                        rdfs:range <http://purl.org/story/social/Character> ;
+                                        rdfs:comment "The character who performs the action on purpose."@en ;
+                                        rdfs:label "has agent"@en .
+
+
+###  http://purl.org/story/action/hasInstrument
+<http://purl.org/story/action/hasInstrument> rdf:type owl:ObjectProperty ;
+                                             rdfs:subPropertyOf <http://purl.org/story/event/usesItem> ;
+                                             rdfs:domain <http://purl.org/story/action/Action> ;
+                                             rdfs:comment "Tool or means used to carry out the action."@en ;
+                                             rdfs:label "has instrument"@en .
+
+
+###  http://purl.org/story/action/hasPatient
+<http://purl.org/story/action/hasPatient> rdf:type owl:ObjectProperty ;
+                                          rdfs:subPropertyOf <http://purl.org/story/event/hasParticipant> ;
+                                          rdfs:domain <http://purl.org/story/action/Action> ;
+                                          rdfs:range <http://purl.org/story/social/Character> ;
+                                          rdfs:comment "Character the action is directed at or primarily affects."@en ;
+                                          rdfs:label "has patient"@en .
+
+
+###  http://purl.org/story/action/hasTheme
+<http://purl.org/story/action/hasTheme> rdf:type owl:ObjectProperty ;
+                                        rdfs:domain <http://purl.org/story/action/Action> ;
+                                        rdfs:range owl:Thing ;
+                                        rdfs:comment "Primary object in view: token given, thing seized, subject of counsel, etc."@en ;
+                                        rdfs:label "has theme"@en .
+
+
+###  http://purl.org/story/action/subActionOf
+<http://purl.org/story/action/subActionOf> rdf:type owl:ObjectProperty ;
+                                           rdfs:subPropertyOf <http://purl.org/story/event/subEventOf> ;
+                                           rdfs:domain <http://purl.org/story/action/Action> ;
+                                           rdfs:range <http://purl.org/story/event/Event> ;
+                                           rdfs:comment "Nests this intentional act under a larger event or action."@en ;
+                                           rdfs:label "sub-action of"@en .
+
+
+###  http://purl.org/story/event/after
+<http://purl.org/story/event/after> rdf:type owl:ObjectProperty ;
+                                    owl:inverseOf <http://purl.org/story/event/before> ;
+                                    owl:propertyChainAxiom ( <http://purl.org/story/event/hasStartInstant>
+                                                             <http://www.w3.org/2006/time#after>
+                                                             [ owl:inverseOf <http://purl.org/story/event/hasEndInstant>
+                                                             ]
+                                                           ) ,
+                                                           ( <http://purl.org/story/event/hasTemporalExtent>
+                                                             <http://www.w3.org/2006/time#intervalAfter>
+                                                             [ owl:inverseOf <http://purl.org/story/event/hasTemporalExtent>
+                                                             ]
+                                                           ) ;
+                                    rdfs:label "after"@en .
+
+
+###  http://purl.org/story/event/b
+<http://purl.org/story/event/b> rdf:type owl:ObjectProperty ;
+                                rdfs:subPropertyOf <http://purl.org/story/event/before> ;
+                                rdfs:domain <http://purl.org/story/event/Event> ;
+                                rdfs:range <http://purl.org/story/event/Event> ;
+                                rdfs:label "b"@en .
+
+
+###  http://purl.org/story/event/before
+<http://purl.org/story/event/before> rdf:type owl:ObjectProperty ,
+                                              owl:TransitiveProperty ;
+                                     rdfs:domain <http://purl.org/story/event/Event> ;
+                                     rdfs:range <http://purl.org/story/event/Event> ;
+                                     owl:propertyChainAxiom ( <http://purl.org/story/event/hasEndInstant>
+                                                              <http://www.w3.org/2006/time#before>
+                                                              [ owl:inverseOf <http://purl.org/story/event/hasStartInstant>
+                                                              ]
+                                                            ) ,
+                                                            ( <http://purl.org/story/event/hasTemporalExtent>
+                                                              <http://www.w3.org/2006/time#intervalBefore>
+                                                              [ owl:inverseOf <http://purl.org/story/event/hasTemporalExtent>
+                                                              ]
+                                                            ) ;
+                                     rdfs:comment "Allen b: first event ends strictly before the second begins; inverse after/bi. Entailed from time:intervalBefore on extents or time:before on endpoint instants (OWL Time)."@en ;
+                                     rdfs:label "before"@en .
+
+
+###  http://purl.org/story/event/bi
+<http://purl.org/story/event/bi> rdf:type owl:ObjectProperty ;
+                                 rdfs:subPropertyOf <http://purl.org/story/event/after> ;
+                                 owl:inverseOf <http://purl.org/story/event/b> ;
+                                 rdfs:domain <http://purl.org/story/event/Event> ;
+                                 rdfs:range <http://purl.org/story/event/Event> ;
+                                 rdfs:label "bi"@en .
+
+
+###  http://purl.org/story/event/contains
+<http://purl.org/story/event/contains> rdf:type owl:ObjectProperty ;
+                                       owl:inverseOf <http://purl.org/story/event/during> ;
+                                       owl:propertyChainAxiom ( <http://purl.org/story/event/hasTemporalExtent>
+                                                                <http://www.w3.org/2006/time#intervalContains>
+                                                                [ owl:inverseOf <http://purl.org/story/event/hasTemporalExtent>
+                                                                ]
+                                                              ) ;
+                                       rdfs:label "contains"@en .
+
+
+###  http://purl.org/story/event/d
+<http://purl.org/story/event/d> rdf:type owl:ObjectProperty ;
+                                rdfs:subPropertyOf <http://purl.org/story/event/during> ;
+                                rdfs:domain <http://purl.org/story/event/Event> ;
+                                rdfs:range <http://purl.org/story/event/Event> ;
+                                rdfs:label "d"@en .
+
+
+###  http://purl.org/story/event/di
+<http://purl.org/story/event/di> rdf:type owl:ObjectProperty ;
+                                 rdfs:subPropertyOf <http://purl.org/story/event/contains> ;
+                                 owl:inverseOf <http://purl.org/story/event/d> ;
+                                 rdfs:domain <http://purl.org/story/event/Event> ;
+                                 rdfs:range <http://purl.org/story/event/Event> ;
+                                 rdfs:label "di"@en .
+
+
+###  http://purl.org/story/event/during
+<http://purl.org/story/event/during> rdf:type owl:ObjectProperty ;
+                                     rdfs:domain <http://purl.org/story/event/Event> ;
+                                     rdfs:range <http://purl.org/story/event/Event> ;
+                                     owl:propertyChainAxiom ( <http://purl.org/story/event/hasTemporalExtent>
+                                                              <http://www.w3.org/2006/time#intervalDuring>
+                                                              [ owl:inverseOf <http://purl.org/story/event/hasTemporalExtent>
+                                                              ]
+                                                            ) ;
+                                     rdfs:comment "Allen relation: an event is entirely contained within the time of a longer event."@en ;
+                                     rdfs:label "during"@en .
+
+
+###  http://purl.org/story/event/eq
+<http://purl.org/story/event/eq> rdf:type owl:ObjectProperty ;
+                                 rdfs:subPropertyOf <http://purl.org/story/event/equals> ;
+                                 rdf:type owl:SymmetricProperty ;
+                                 rdfs:domain <http://purl.org/story/event/Event> ;
+                                 rdfs:range <http://purl.org/story/event/Event> ;
+                                 rdfs:label "eq"@en .
+
+
+###  http://purl.org/story/event/equals
+<http://purl.org/story/event/equals> rdf:type owl:ObjectProperty ,
+                                              owl:SymmetricProperty ;
+                                     rdfs:domain <http://purl.org/story/event/Event> ;
+                                     rdfs:range <http://purl.org/story/event/Event> ;
+                                     owl:propertyChainAxiom ( <http://purl.org/story/event/hasTemporalExtent>
+                                                              <http://www.w3.org/2006/time#intervalEquals>
+                                                              [ owl:inverseOf <http://purl.org/story/event/hasTemporalExtent>
+                                                              ]
+                                                            ) ;
+                                     rdfs:comment "Allen relation: two events share exactly the same temporal interval."@en ;
+                                     rdfs:label "equals in time"@en .
+
+
+###  http://purl.org/story/event/f
+<http://purl.org/story/event/f> rdf:type owl:ObjectProperty ;
+                                rdfs:subPropertyOf <http://purl.org/story/event/finishes> ;
+                                rdfs:domain <http://purl.org/story/event/Event> ;
+                                rdfs:range <http://purl.org/story/event/Event> ;
+                                rdfs:label "f"@en .
+
+
+###  http://purl.org/story/event/fi
+<http://purl.org/story/event/fi> rdf:type owl:ObjectProperty ;
+                                 rdfs:subPropertyOf <http://purl.org/story/event/finishedBy> ;
+                                 owl:inverseOf <http://purl.org/story/event/f> ;
+                                 rdfs:domain <http://purl.org/story/event/Event> ;
+                                 rdfs:range <http://purl.org/story/event/Event> ;
+                                 rdfs:label "fi"@en .
+
+
+###  http://purl.org/story/event/finishedBy
+<http://purl.org/story/event/finishedBy> rdf:type owl:ObjectProperty ;
+                                         owl:inverseOf <http://purl.org/story/event/finishes> ;
+                                         owl:propertyChainAxiom ( <http://purl.org/story/event/hasTemporalExtent>
+                                                                  <http://www.w3.org/2006/time#intervalFinishedBy>
+                                                                  [ owl:inverseOf <http://purl.org/story/event/hasTemporalExtent>
+                                                                  ]
+                                                                ) ;
+                                         rdfs:label "finished by"@en .
+
+
+###  http://purl.org/story/event/finishes
+<http://purl.org/story/event/finishes> rdf:type owl:ObjectProperty ;
+                                       rdfs:domain <http://purl.org/story/event/Event> ;
+                                       rdfs:range <http://purl.org/story/event/Event> ;
+                                       owl:propertyChainAxiom ( <http://purl.org/story/event/hasTemporalExtent>
+                                                                <http://www.w3.org/2006/time#intervalFinishes>
+                                                                [ owl:inverseOf <http://purl.org/story/event/hasTemporalExtent>
+                                                                ]
+                                                              ) ;
+                                       rdfs:comment "Allen relation: two events end together, but the first one starts later."@en ;
+                                       rdfs:label "finishes"@en .
+
+
+###  http://purl.org/story/event/hasEndInstant
+<http://purl.org/story/event/hasEndInstant> rdf:type owl:ObjectProperty ;
+                                            rdfs:domain <http://purl.org/story/event/Event> ;
+                                            rdfs:range <http://www.w3.org/2006/time#Instant> ;
+                                            owl:propertyChainAxiom ( <http://purl.org/story/event/hasTemporalExtent>
+                                                                     <http://www.w3.org/2006/time#hasEnd>
+                                                                   ) ;
+                                            rdfs:comment "Relates an event to the instant when it ends (Allen: Ie)."@en ;
+                                            rdfs:label "has end instant"@en .
+
+
+###  http://purl.org/story/event/hasParticipant
+<http://purl.org/story/event/hasParticipant> rdf:type owl:ObjectProperty ;
+                                             rdfs:domain <http://purl.org/story/event/Event> ;
+                                             rdfs:range <http://purl.org/story/social/Character> ;
+                                             rdfs:comment "Relates an event to a character who takes part in it in some way."@en ;
+                                             rdfs:label "has participant"@en .
+
+
+###  http://purl.org/story/event/hasStartInstant
+<http://purl.org/story/event/hasStartInstant> rdf:type owl:ObjectProperty ;
+                                              rdfs:domain <http://purl.org/story/event/Event> ;
+                                              rdfs:range <http://www.w3.org/2006/time#Instant> ;
+                                              owl:propertyChainAxiom ( <http://purl.org/story/event/hasTemporalExtent>
+                                                                       <http://www.w3.org/2006/time#hasBeginning>
+                                                                     ) ;
+                                              rdfs:comment "Relates an event to the instant when it starts (Allen: Is)."@en ;
+                                              rdfs:label "has start instant"@en .
+
+
+###  http://purl.org/story/event/hasSubEvent
+<http://purl.org/story/event/hasSubEvent> rdf:type owl:ObjectProperty ;
+                                          owl:inverseOf <http://purl.org/story/event/subEventOf> ;
+                                          rdfs:label "has sub-event"@en .
+
+
+###  http://purl.org/story/event/hasTemporalExtent
+<http://purl.org/story/event/hasTemporalExtent> rdf:type owl:ObjectProperty ;
+                                                rdfs:domain <http://purl.org/story/event/Event> ;
+                                                rdfs:range <http://www.w3.org/2006/time#TemporalEntity> ;
+                                                rdfs:comment "Relates an event to a time instant or interval describing when it happens."@en ;
+                                                rdfs:label "has temporal extent"@en .
+
+
+###  http://purl.org/story/event/m
+<http://purl.org/story/event/m> rdf:type owl:ObjectProperty ;
+                                rdfs:subPropertyOf <http://purl.org/story/event/meets> ;
+                                rdfs:domain <http://purl.org/story/event/Event> ;
+                                rdfs:range <http://purl.org/story/event/Event> ;
+                                rdfs:label "m"@en .
+
+
+###  http://purl.org/story/event/meets
+<http://purl.org/story/event/meets> rdf:type owl:ObjectProperty ;
+                                    rdfs:domain <http://purl.org/story/event/Event> ;
+                                    rdfs:range <http://purl.org/story/event/Event> ;
+                                    owl:propertyChainAxiom ( <http://purl.org/story/event/hasTemporalExtent>
+                                                             <http://www.w3.org/2006/time#intervalMeets>
+                                                             [ owl:inverseOf <http://purl.org/story/event/hasTemporalExtent>
+                                                             ]
+                                                           ) ;
+                                    rdfs:comment "Allen relation: one event finishes exactly when the next one starts."@en ;
+                                    rdfs:label "meets"@en .
+
+
+###  http://purl.org/story/event/metBy
+<http://purl.org/story/event/metBy> rdf:type owl:ObjectProperty ;
+                                    owl:inverseOf <http://purl.org/story/event/meets> ;
+                                    owl:propertyChainAxiom ( <http://purl.org/story/event/hasTemporalExtent>
+                                                             <http://www.w3.org/2006/time#intervalMetBy>
+                                                             [ owl:inverseOf <http://purl.org/story/event/hasTemporalExtent>
+                                                             ]
+                                                           ) ;
+                                    rdfs:label "met by"@en .
+
+
+###  http://purl.org/story/event/mi
+<http://purl.org/story/event/mi> rdf:type owl:ObjectProperty ;
+                                 rdfs:subPropertyOf <http://purl.org/story/event/metBy> ;
+                                 owl:inverseOf <http://purl.org/story/event/m> ;
+                                 rdfs:domain <http://purl.org/story/event/Event> ;
+                                 rdfs:range <http://purl.org/story/event/Event> ;
+                                 rdfs:label "mi"@en .
+
+
+###  http://purl.org/story/event/o
+<http://purl.org/story/event/o> rdf:type owl:ObjectProperty ;
+                                rdfs:subPropertyOf <http://purl.org/story/event/overlaps> ;
+                                rdfs:domain <http://purl.org/story/event/Event> ;
+                                rdfs:range <http://purl.org/story/event/Event> ;
+                                rdfs:label "o"@en .
+
+
+###  http://purl.org/story/event/occursAt
+<http://purl.org/story/event/occursAt> rdf:type owl:ObjectProperty ;
+                                       rdfs:domain <http://purl.org/story/event/Event> ;
+                                       rdfs:range <http://purl.org/story/location/Place> ;
+                                       rdfs:comment "Main place where the event happens."@en ;
+                                       rdfs:label "occurs at"@en .
+
+
+###  http://purl.org/story/event/oi
+<http://purl.org/story/event/oi> rdf:type owl:ObjectProperty ;
+                                 rdfs:subPropertyOf <http://purl.org/story/event/overlappedBy> ;
+                                 owl:inverseOf <http://purl.org/story/event/o> ;
+                                 rdfs:domain <http://purl.org/story/event/Event> ;
+                                 rdfs:range <http://purl.org/story/event/Event> ;
+                                 rdfs:label "oi"@en .
+
+
+###  http://purl.org/story/event/overlappedBy
+<http://purl.org/story/event/overlappedBy> rdf:type owl:ObjectProperty ;
+                                           owl:inverseOf <http://purl.org/story/event/overlaps> ;
+                                           owl:propertyChainAxiom ( <http://purl.org/story/event/hasTemporalExtent>
+                                                                    <http://www.w3.org/2006/time#intervalOverlappedBy>
+                                                                    [ owl:inverseOf <http://purl.org/story/event/hasTemporalExtent>
+                                                                    ]
+                                                                  ) ;
+                                           rdfs:label "overlapped by"@en .
+
+
+###  http://purl.org/story/event/overlaps
+<http://purl.org/story/event/overlaps> rdf:type owl:ObjectProperty ;
+                                       rdfs:domain <http://purl.org/story/event/Event> ;
+                                       rdfs:range <http://purl.org/story/event/Event> ;
+                                       owl:propertyChainAxiom ( <http://purl.org/story/event/hasTemporalExtent>
+                                                                <http://www.w3.org/2006/time#intervalOverlaps>
+                                                                [ owl:inverseOf <http://purl.org/story/event/hasTemporalExtent>
+                                                                ]
+                                                              ) ;
+                                       rdfs:comment "Allen o (not symmetric): first starts before second, overlaps in time, ends before second ends; inverse overlappedBy/oi. Matches time:intervalOverlaps in OWL Time."@en ;
+                                       rdfs:label "overlaps"@en .
+
+
+###  http://purl.org/story/event/s
+<http://purl.org/story/event/s> rdf:type owl:ObjectProperty ;
+                                rdfs:subPropertyOf <http://purl.org/story/event/starts> ;
+                                rdfs:domain <http://purl.org/story/event/Event> ;
+                                rdfs:range <http://purl.org/story/event/Event> ;
+                                rdfs:label "s"@en .
+
+
+###  http://purl.org/story/event/si
+<http://purl.org/story/event/si> rdf:type owl:ObjectProperty ;
+                                 rdfs:subPropertyOf <http://purl.org/story/event/startedBy> ;
+                                 owl:inverseOf <http://purl.org/story/event/s> ;
+                                 rdfs:domain <http://purl.org/story/event/Event> ;
+                                 rdfs:range <http://purl.org/story/event/Event> ;
+                                 rdfs:label "si"@en .
+
+
+###  http://purl.org/story/event/startedBy
+<http://purl.org/story/event/startedBy> rdf:type owl:ObjectProperty ;
+                                        owl:inverseOf <http://purl.org/story/event/starts> ;
+                                        owl:propertyChainAxiom ( <http://purl.org/story/event/hasTemporalExtent>
+                                                                 <http://www.w3.org/2006/time#intervalStartedBy>
+                                                                 [ owl:inverseOf <http://purl.org/story/event/hasTemporalExtent>
+                                                                 ]
+                                                               ) ;
+                                        rdfs:label "started by"@en .
+
+
+###  http://purl.org/story/event/starts
+<http://purl.org/story/event/starts> rdf:type owl:ObjectProperty ;
+                                     rdfs:domain <http://purl.org/story/event/Event> ;
+                                     rdfs:range <http://purl.org/story/event/Event> ;
+                                     owl:propertyChainAxiom ( <http://purl.org/story/event/hasTemporalExtent>
+                                                              <http://www.w3.org/2006/time#intervalStarts>
+                                                              [ owl:inverseOf <http://purl.org/story/event/hasTemporalExtent>
+                                                              ]
+                                                            ) ;
+                                     rdfs:comment "Allen relation: two events start together, but the first one ends earlier."@en ;
+                                     rdfs:label "starts"@en .
+
+
+###  http://purl.org/story/event/subEventOf
+<http://purl.org/story/event/subEventOf> rdf:type owl:ObjectProperty ,
+                                                  owl:TransitiveProperty ;
+                                         rdfs:domain <http://purl.org/story/event/Event> ;
+                                         rdfs:range <http://purl.org/story/event/Event> ;
+                                         rdfs:comment "Relates a smaller event to a larger one it belongs to."@en ;
+                                         rdfs:label "sub-event of"@en .
+
+
+###  http://purl.org/story/event/usesItem
+<http://purl.org/story/event/usesItem> rdf:type owl:ObjectProperty ;
+                                       rdfs:domain <http://purl.org/story/event/Event> ;
+                                       rdfs:comment "An item that is used as part of an event, for instance a weapon or artefact."@en ;
+                                       rdfs:label "uses item"@en .
+
+
+###  http://purl.org/story/location/capitalOf
+<http://purl.org/story/location/capitalOf> rdf:type owl:ObjectProperty ;
+                                           rdfs:domain <http://purl.org/story/location/Settlement> ;
+                                           rdfs:range <http://purl.org/story/location/Region> ;
+                                           rdfs:comment "The settlement is the chief or ruling seat of the region (e.g. a realm's capital)."@en ;
+                                           rdfs:label "capital of"@en .
+
+
+###  http://purl.org/story/location/containsPlace
+<http://purl.org/story/location/containsPlace> rdf:type owl:ObjectProperty ;
+                                               owl:inverseOf <http://purl.org/story/location/isPartOf> ;
+                                               rdfs:comment "Inverse of 'is part of'."@en ;
+                                               rdfs:label "contains place"@en .
+
+
+###  http://purl.org/story/location/hasCapital
+<http://purl.org/story/location/hasCapital> rdf:type owl:ObjectProperty ;
+                                            owl:inverseOf <http://purl.org/story/location/capitalOf> ;
+                                            rdfs:domain <http://purl.org/story/location/Region> ;
+                                            rdfs:range <http://purl.org/story/location/Settlement> ;
+                                            rdfs:comment "The chief settlement of the region."@en ;
+                                            rdfs:label "has capital"@en .
+
+
+###  http://purl.org/story/location/isPartOf
+<http://purl.org/story/location/isPartOf> rdf:type owl:ObjectProperty ,
+                                                   owl:TransitiveProperty ;
+                                          rdfs:domain <http://purl.org/story/location/Place> ;
+                                          rdfs:range <http://purl.org/story/location/Place> ;
+                                          rdfs:comment "Relates a place to a larger place it belongs to, for example a city to a region."@en ;
+                                          rdfs:label "is part of"@en .
+
+
+###  http://purl.org/story/plot/endsWithEvent
+<http://purl.org/story/plot/endsWithEvent> rdf:type owl:ObjectProperty ,
+                                                    owl:FunctionalProperty ;
+                                           rdfs:domain <http://purl.org/story/plot/Story> ;
+                                           rdfs:range <http://purl.org/story/event/Event> ;
+                                           rdfs:comment "The event that closes the story; each story has at most one such ending event."@en ;
+                                           rdfs:label "ends with event"@en .
+
+
+###  http://purl.org/story/plot/hasProtagonist
+<http://purl.org/story/plot/hasProtagonist> rdf:type owl:ObjectProperty ;
+                                            rdfs:domain <http://purl.org/story/plot/Story> ;
+                                            rdfs:range <http://purl.org/story/social/Character> ;
+                                            rdfs:comment "Main character whose fate drives the story as a whole (e.g. Túrin in the Narn)."@en ;
+                                            rdfs:label "has protagonist"@en .
+
+
+###  http://purl.org/story/plot/hasUnit
+<http://purl.org/story/plot/hasUnit> rdf:type owl:ObjectProperty ;
+                                     rdfs:domain <http://purl.org/story/plot/Story> ;
+                                     rdfs:range <http://purl.org/story/plot/NarrativeUnit> ;
+                                     rdfs:comment "Relates a story to one of its narrative units (chapter, scene, etc.)."@en ;
+                                     rdfs:label "has unit"@en .
+
+
+###  http://purl.org/story/plot/isUnitOf
+<http://purl.org/story/plot/isUnitOf> rdf:type owl:ObjectProperty ;
+                                      owl:inverseOf <http://purl.org/story/plot/hasUnit> ;
+                                      rdfs:label "is unit of"@en .
+
+
+###  http://purl.org/story/plot/precedesUnit
+<http://purl.org/story/plot/precedesUnit> rdf:type owl:ObjectProperty ,
+                                                   owl:TransitiveProperty ;
+                                          rdfs:domain <http://purl.org/story/plot/NarrativeUnit> ;
+                                          rdfs:range <http://purl.org/story/plot/NarrativeUnit> ;
+                                          rdfs:comment "One narrative unit comes before another in the order of telling."@en ;
+                                          rdfs:label "precedes unit"@en .
+
+
+###  http://purl.org/story/plot/tellsEvent
+<http://purl.org/story/plot/tellsEvent> rdf:type owl:ObjectProperty ;
+                                        rdfs:domain <http://purl.org/story/plot/NarrativeUnit> ;
+                                        rdfs:range <http://purl.org/story/event/Event> ;
+                                        rdfs:comment "Relates a narrative unit to an event it narrates."@en ;
+                                        rdfs:label "tells event"@en .
+
+
+###  http://purl.org/story/social/belongsToHouse
+<http://purl.org/story/social/belongsToHouse> rdf:type owl:ObjectProperty ;
+                                              rdfs:domain <http://purl.org/story/social/Character> ;
+                                              rdfs:range <http://purl.org/story/social/House> ;
+                                              rdfs:comment "Relates a character to the house, clan or similar group they are part of."@en ;
+                                              rdfs:label "belongs to house"@en .
+
+
+###  http://purl.org/story/social/hasAllegianceTo
+<http://purl.org/story/social/hasAllegianceTo> rdf:type owl:ObjectProperty ;
+                                               rdfs:domain <http://purl.org/story/social/Character> ;
+                                               rdfs:range <http://purl.org/story/social/Character> ;
+                                               rdfs:comment "Links a character to the person they have pledged allegiance or service to."@en ;
+                                               rdfs:label "has allegiance to"@en .
+
+
+###  http://purl.org/story/social/hasOccupation
+<http://purl.org/story/social/hasOccupation> rdf:type owl:ObjectProperty ;
+                                             rdfs:subPropertyOf <http://purl.org/story/social/hasSocialRole> ;
+                                             rdfs:domain <http://purl.org/story/social/Character> ;
+                                             rdfs:range <http://purl.org/story/social/Occupation> ;
+                                             rdfs:comment "Job or trade; narrows hasSocialRole to soc:Occupation individuals."@en ;
+                                             rdfs:label "has occupation"@en .
+
+
+###  http://purl.org/story/social/hasSocialRole
+<http://purl.org/story/social/hasSocialRole> rdf:type owl:ObjectProperty ;
+                                             rdfs:domain <http://purl.org/story/social/Character> ;
+                                             rdfs:range <http://purl.org/story/social/SocialRole> ;
+                                             rdfs:comment "Relates a character to a social role they occupy in the story."@en ;
+                                             rdfs:label "has social role"@en .
+
+
+###  http://purl.org/story/social/swornEnemyOf
+<http://purl.org/story/social/swornEnemyOf> rdf:type owl:ObjectProperty ,
+                                                     owl:SymmetricProperty ;
+                                            rdfs:domain <http://purl.org/story/social/Character> ;
+                                            rdfs:range <http://purl.org/story/social/Character> ;
+                                            rdfs:comment "Two characters that are openly hostile to each other."@en ;
+                                            rdfs:label "sworn enemy of"@en .
+
+
+###  http://purl.org/story/time/hasEnd
+<http://purl.org/story/time/hasEnd> rdf:type owl:ObjectProperty ;
+                                    rdfs:subPropertyOf <http://www.w3.org/2006/time#hasEnd> ;
+                                    rdf:type owl:FunctionalProperty ;
+                                    rdfs:domain <http://www.w3.org/2006/time#TemporalEntity> ;
+                                    rdfs:range <http://www.w3.org/2006/time#Instant> ;
+                                    rdfs:comment "Allen-style end function Ie: associates each temporal entity with the instant when it ends."@en ;
+                                    rdfs:label "has end instant"@en .
+
+
+###  http://purl.org/story/time/hasStart
+<http://purl.org/story/time/hasStart> rdf:type owl:ObjectProperty ;
+                                      rdfs:subPropertyOf <http://www.w3.org/2006/time#hasBeginning> ;
+                                      rdf:type owl:FunctionalProperty ;
+                                      rdfs:domain <http://www.w3.org/2006/time#TemporalEntity> ;
+                                      rdfs:range <http://www.w3.org/2006/time#Instant> ;
+                                      rdfs:comment "Allen-style start function Is: associates each temporal entity with the instant when it starts."@en ;
+                                      rdfs:label "has start instant"@en .
+
+
+###  http://www.w3.org/2006/time#intervalAfter
+<http://www.w3.org/2006/time#intervalAfter> owl:propertyChainAxiom ( <http://purl.org/story/time/hasStart>
+                                                                     <http://www.w3.org/2006/time#after>
+                                                                     [ owl:inverseOf <http://purl.org/story/time/hasEnd>
+                                                                     ]
+                                                                   ) .
+
+
+###  http://www.w3.org/2006/time#intervalBefore
+<http://www.w3.org/2006/time#intervalBefore> owl:propertyChainAxiom ( <http://purl.org/story/time/hasEnd>
+                                                                      <http://www.w3.org/2006/time#before>
+                                                                      [ owl:inverseOf <http://purl.org/story/time/hasStart>
+                                                                      ]
+                                                                    ) .
+
+
+###  https://purl.org/region/rcc8/dc
+:dc rdf:type owl:ObjectProperty ,
+             owl:SymmetricProperty ,
+             owl:IrreflexiveProperty ;
+    rdfs:domain :Region ;
+    rdfs:range :Region ;
+    rdfs:comment "The two regions are completely disconnected (there are no common pieces)."@en ;
+    rdfs:label "disconnected"@en .
+
+
+###  https://purl.org/region/rcc8/ec
+:ec rdf:type owl:ObjectProperty ,
+             owl:SymmetricProperty ,
+             owl:IrreflexiveProperty ;
+    rdfs:domain :Region ;
+    rdfs:range :Region ;
+    rdfs:comment "the boundaries of the regions touch, but their interiors are disjoint"@en ;
+    rdfs:label "externally connected"@en .
+
+
+###  https://purl.org/region/rcc8/eq
+:eq rdf:type owl:ObjectProperty ,
+             owl:SymmetricProperty ;
+    rdfs:domain :Region ;
+    rdfs:range :Region ;
+    rdfs:comment "two regions have the same spatial extent"@en ;
+    rdfs:label "equal"@en .
+
+
+###  https://purl.org/region/rcc8/ntpp
+:ntpp rdf:type owl:ObjectProperty ;
+      owl:inverseOf :ntppi ;
+      rdf:type owl:AsymmetricProperty ,
+               owl:IrreflexiveProperty ;
+      rdfs:domain :Region ;
+      rdfs:range :Region ;
+      rdfs:comment "the first region is entirely inside the second region and their boundaries do not touch"@en ;
+      rdfs:label "non-tangential proper part"@en .
+
+
+###  https://purl.org/region/rcc8/ntppi
+:ntppi rdf:type owl:ObjectProperty ,
+                owl:AsymmetricProperty ,
+                owl:IrreflexiveProperty ;
+       rdfs:domain :Region ;
+       rdfs:range :Region ;
+       rdfs:comment "the first region entirely contains the second region and their boundaries do not touch"@en ;
+       rdfs:label "non-tangential proper part inverse"@en .
+
+
+###  https://purl.org/region/rcc8/po
+:po rdf:type owl:ObjectProperty ,
+             owl:SymmetricProperty ,
+             owl:IrreflexiveProperty ;
+    rdfs:domain :Region ;
+    rdfs:range :Region ;
+    rdfs:comment "the two regions partially overlap (there are disjoint sub parts, and some part of one is included in some part of the other"@en ;
+    rdfs:label "partially overlapping"@en .
+
+
+###  https://purl.org/region/rcc8/tpp
+:tpp rdf:type owl:ObjectProperty ;
+     owl:inverseOf :tppi ;
+     rdf:type owl:AsymmetricProperty ,
+              owl:IrreflexiveProperty ;
+     rdfs:domain :Region ;
+     rdfs:range :Region ;
+     rdfs:comment "the first region is entirely inside the second region and their boundaries touch each other from the inside"@en ;
+     rdfs:label "tangential proper part"@en .
+
+
+###  https://purl.org/region/rcc8/tppi
+:tppi rdf:type owl:ObjectProperty ,
+               owl:AsymmetricProperty ,
+               owl:IrreflexiveProperty ;
+      rdfs:domain :Region ;
+      rdfs:range :Region ;
+      rdfs:comment "the first region entirely contains the second region and their boundaries touch each other from the inside"@en ;
+      rdfs:label "tangential proper part inverse"@en .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://purl.org/meo/Atan
+<http://purl.org/meo/Atan> rdf:type owl:Class ;
+                           rdfs:subClassOf <http://purl.org/story/social/Character> .
+
+
+###  http://purl.org/meo/Casar
+<http://purl.org/meo/Casar> rdf:type owl:Class ;
+                            rdfs:subClassOf <http://purl.org/story/social/Character> .
+
+
+###  http://purl.org/meo/Elda
+<http://purl.org/meo/Elda> rdf:type owl:Class ;
+                           rdfs:subClassOf <http://purl.org/story/social/Character> .
+
+
+###  http://purl.org/meo/Lócë
+<http://purl.org/meo/Lócë> rdf:type owl:Class ;
+                           rdfs:subClassOf <http://purl.org/story/social/Character> .
+
+
+###  http://purl.org/story/action/Action
+<http://purl.org/story/action/Action> rdf:type owl:Class ;
+                                      rdfs:subClassOf <http://purl.org/story/event/Event> ;
+                                      rdfs:comment "An event viewed as something done on purpose by an agent (possibly affecting a patient, object, or place)."@en ;
+                                      rdfs:label "action"@en .
+
+
+###  http://purl.org/story/action/Arrive
+<http://purl.org/story/action/Arrive> rdf:type owl:Class ;
+                                      rdfs:subClassOf <http://purl.org/story/action/TravelAction> ,
+                                                      [ rdf:type owl:Restriction ;
+                                                        owl:onProperty <http://purl.org/story/action/hasAgent> ;
+                                                        owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                      ] ;
+                                      rdfs:comment "Reaching or entering a destination."@en ;
+                                      rdfs:label "arrive"@en .
+
+
+###  http://purl.org/story/action/Assist
+<http://purl.org/story/action/Assist> rdf:type owl:Class ;
+                                      rdfs:subClassOf <http://purl.org/story/action/Action> ,
+                                                      [ rdf:type owl:Restriction ;
+                                                        owl:onProperty <http://purl.org/story/action/hasAgent> ;
+                                                        owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                      ] ,
+                                                      [ rdf:type owl:Restriction ;
+                                                        owl:onProperty <http://purl.org/story/action/hasPatient> ;
+                                                        owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                      ] ;
+                                      rdfs:comment "Helping another carry out their aim (joint agency possible in data)."@en ;
+                                      rdfs:label "assist"@en .
+
+
+###  http://purl.org/story/action/Attack
+<http://purl.org/story/action/Attack> rdf:type owl:Class ;
+                                      rdfs:subClassOf <http://purl.org/story/action/Action> ,
+                                                      [ rdf:type owl:Restriction ;
+                                                        owl:onProperty <http://purl.org/story/action/hasAgent> ;
+                                                        owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                      ] ,
+                                                      [ rdf:type owl:Restriction ;
+                                                        owl:onProperty <http://purl.org/story/action/hasPatient> ;
+                                                        owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                      ] ;
+                                      rdfs:comment "An agent tries to harm or overcome a patient (battle, duel, ambush)."@en ;
+                                      rdfs:label "attack"@en .
+
+
+###  http://purl.org/story/action/Capture
+<http://purl.org/story/action/Capture> rdf:type owl:Class ;
+                                       rdfs:subClassOf <http://purl.org/story/action/Action> ,
+                                                       [ rdf:type owl:Restriction ;
+                                                         owl:onProperty <http://purl.org/story/action/hasAgent> ;
+                                                         owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                       ] ,
+                                                       [ rdf:type owl:Restriction ;
+                                                         owl:onProperty <http://purl.org/story/action/hasPatient> ;
+                                                         owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                       ] ;
+                                       rdfs:comment "Making a patient prisoner or captive."@en ;
+                                       rdfs:label "capture"@en .
+
+
+###  http://purl.org/story/action/Command
+<http://purl.org/story/action/Command> rdf:type owl:Class ;
+                                       rdfs:subClassOf <http://purl.org/story/action/SpeechAct> ,
+                                                       [ rdf:type owl:Restriction ;
+                                                         owl:onProperty <http://purl.org/story/action/hasAgent> ;
+                                                         owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                       ] ,
+                                                       [ rdf:type owl:Restriction ;
+                                                         owl:onProperty <http://purl.org/story/action/hasPatient> ;
+                                                         owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                       ] ;
+                                       rdfs:comment "Ordering or directing another character to act."@en ;
+                                       rdfs:label "command"@en .
+
+
+###  http://purl.org/story/action/Counsel
+<http://purl.org/story/action/Counsel> rdf:type owl:Class ;
+                                       rdfs:subClassOf <http://purl.org/story/action/SpeechAct> ,
+                                                       [ rdf:type owl:Restriction ;
+                                                         owl:onProperty <http://purl.org/story/action/hasAgent> ;
+                                                         owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                       ] ,
+                                                       [ rdf:type owl:Restriction ;
+                                                         owl:onProperty <http://purl.org/story/action/hasPatient> ;
+                                                         owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                       ] ;
+                                       rdfs:comment "Advice or warning offered to a patient."@en ;
+                                       rdfs:label "counsel"@en .
+
+
+###  http://purl.org/story/action/Decide
+<http://purl.org/story/action/Decide> rdf:type owl:Class ;
+                                      rdfs:subClassOf <http://purl.org/story/action/Action> ,
+                                                      [ rdf:type owl:Restriction ;
+                                                        owl:onProperty <http://purl.org/story/action/hasAgent> ;
+                                                        owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                      ] ;
+                                      rdfs:comment "A deliberate choice or resolution (agent may be the only required role)."@en ;
+                                      rdfs:label "decide"@en .
+
+
+###  http://purl.org/story/action/Defend
+<http://purl.org/story/action/Defend> rdf:type owl:Class ;
+                                      rdfs:subClassOf <http://purl.org/story/action/Action> ,
+                                                      [ rdf:type owl:Restriction ;
+                                                        owl:onProperty <http://purl.org/story/action/hasAgent> ;
+                                                        owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                      ] ,
+                                                      [ rdf:type owl:Restriction ;
+                                                        owl:onProperty <http://purl.org/story/action/hasPatient> ;
+                                                        owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                      ] ;
+                                      rdfs:comment "Protecting or standing for a patient against harm."@en ;
+                                      rdfs:label "defend"@en .
+
+
+###  http://purl.org/story/action/Flee
+<http://purl.org/story/action/Flee> rdf:type owl:Class ;
+                                    rdfs:subClassOf <http://purl.org/story/action/TravelAction> ,
+                                                    [ rdf:type owl:Restriction ;
+                                                      owl:onProperty <http://purl.org/story/action/hasAgent> ;
+                                                      owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                    ] ;
+                                    rdfs:comment "Evasive flight, often with an implied or explicit pursuer (patient optional)."@en ;
+                                    rdfs:label "flee"@en .
+
+
+###  http://purl.org/story/action/Give
+<http://purl.org/story/action/Give> rdf:type owl:Class ;
+                                    rdfs:subClassOf <http://purl.org/story/action/Action> ,
+                                                    [ rdf:type owl:Restriction ;
+                                                      owl:onProperty <http://purl.org/story/action/hasAgent> ;
+                                                      owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                    ] ,
+                                                    [ rdf:type owl:Restriction ;
+                                                      owl:onProperty <http://purl.org/story/action/hasTheme> ;
+                                                      owl:minCardinality "1"^^xsd:nonNegativeInteger
+                                                    ] ;
+                                    rdfs:comment "Transfer of something (theme) toward a recipient; recipient can be act:hasPatient when they are a character."@en ;
+                                    rdfs:label "give"@en .
+
+
+###  http://purl.org/story/action/LeavePlace
+<http://purl.org/story/action/LeavePlace> rdf:type owl:Class ;
+                                          rdfs:subClassOf <http://purl.org/story/action/TravelAction> ,
+                                                          [ rdf:type owl:Restriction ;
+                                                            owl:onProperty <http://purl.org/story/action/hasAgent> ;
+                                                            owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                          ] ;
+                                          rdfs:comment "Departing from a location (start of a leg of travel)."@en ;
+                                          rdfs:label "leave place"@en .
+
+
+###  http://purl.org/story/action/Oath
+<http://purl.org/story/action/Oath> rdf:type owl:Class ;
+                                    rdfs:subClassOf <http://purl.org/story/action/SpeechAct> ,
+                                                    [ rdf:type owl:Restriction ;
+                                                      owl:onProperty <http://purl.org/story/action/hasAgent> ;
+                                                      owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                    ] ;
+                                    rdfs:comment "A binding promise or self-curse; one utterance, long consequences."@en ;
+                                    rdfs:label "oath"@en .
+
+
+###  http://purl.org/story/action/Rescue
+<http://purl.org/story/action/Rescue> rdf:type owl:Class ;
+                                      rdfs:subClassOf <http://purl.org/story/action/Action> ,
+                                                      [ rdf:type owl:Restriction ;
+                                                        owl:onProperty <http://purl.org/story/action/hasAgent> ;
+                                                        owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                      ] ,
+                                                      [ rdf:type owl:Restriction ;
+                                                        owl:onProperty <http://purl.org/story/action/hasPatient> ;
+                                                        owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                      ] ;
+                                      rdfs:comment "Freeing or saving a patient from danger or captivity."@en ;
+                                      rdfs:label "rescue"@en .
+
+
+###  http://purl.org/story/action/SpeechAct
+<http://purl.org/story/action/SpeechAct> rdf:type owl:Class ;
+                                         rdfs:subClassOf <http://purl.org/story/action/Action> ,
+                                                         [ rdf:type owl:Restriction ;
+                                                           owl:onProperty <http://purl.org/story/action/hasAgent> ;
+                                                           owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                         ] ;
+                                         rdfs:comment "Speaking: threats, oaths, commands, counsel, and other illocutionary moves that move the plot."@en ;
+                                         rdfs:label "speech act"@en .
+
+
+###  http://purl.org/story/action/Take
+<http://purl.org/story/action/Take> rdf:type owl:Class ;
+                                    rdfs:subClassOf <http://purl.org/story/action/Action> ,
+                                                    [ rdf:type owl:Restriction ;
+                                                      owl:onProperty <http://purl.org/story/action/hasAgent> ;
+                                                      owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                    ] ,
+                                                    [ rdf:type owl:Restriction ;
+                                                      owl:onProperty <http://purl.org/story/action/hasTheme> ;
+                                                      owl:minCardinality "1"^^xsd:nonNegativeInteger
+                                                    ] ;
+                                    rdfs:comment "Taking or seizing act:hasTheme, often from a source (patient as holder)."@en ;
+                                    rdfs:label "take"@en .
+
+
+###  http://purl.org/story/action/Threat
+<http://purl.org/story/action/Threat> rdf:type owl:Class ;
+                                      rdfs:subClassOf <http://purl.org/story/action/SpeechAct> ,
+                                                      [ rdf:type owl:Restriction ;
+                                                        owl:onProperty <http://purl.org/story/action/hasAgent> ;
+                                                        owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                      ] ,
+                                                      [ rdf:type owl:Restriction ;
+                                                        owl:onProperty <http://purl.org/story/action/hasPatient> ;
+                                                        owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                      ] ;
+                                      rdfs:comment "A speech act meant to intimidate or constrain a patient."@en ;
+                                      rdfs:label "threat"@en .
+
+
+###  http://purl.org/story/action/TravelAction
+<http://purl.org/story/action/TravelAction> rdf:type owl:Class ;
+                                            rdfs:subClassOf <http://purl.org/story/action/Action> ,
+                                                            [ rdf:type owl:Restriction ;
+                                                              owl:onProperty <http://purl.org/story/action/hasAgent> ;
+                                                              owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                            ] ;
+                                            rdfs:comment "A step of movement: leave, arrive, flee, pass through."@en ;
+                                            rdfs:label "travel action"@en .
+
+
+###  http://purl.org/story/event/Battle
+<http://purl.org/story/event/Battle> rdf:type owl:Class ;
+                                     rdfs:subClassOf <http://purl.org/story/event/Event> ,
+                                                     [ rdf:type owl:Restriction ;
+                                                       owl:onProperty <http://purl.org/story/event/hasParticipant> ;
+                                                       owl:minQualifiedCardinality "2"^^xsd:nonNegativeInteger ;
+                                                       owl:onClass <http://purl.org/story/social/Character>
+                                                     ] ;
+                                     rdfs:comment "An event where at least two opposing sides fight each other; in the Narn this covers large clashes as well as smaller armed encounters."@en ;
+                                     rdfs:label "battle"@en .
+
+
+###  http://purl.org/story/event/Birth
+<http://purl.org/story/event/Birth> rdf:type owl:Class ;
+                                    rdfs:subClassOf <http://purl.org/story/event/Event> ;
+                                    rdfs:comment "An event where a new character is born."@en ;
+                                    rdfs:label "birth"@en .
+
+
+###  http://purl.org/story/event/Death
+<http://purl.org/story/event/Death> rdf:type owl:Class ;
+                                    rdfs:subClassOf <http://purl.org/story/event/Event> ;
+                                    rdfs:comment "An event where a character dies."@en ;
+                                    rdfs:label "death"@en .
+
+
+###  http://purl.org/story/event/Event
+<http://purl.org/story/event/Event> rdf:type owl:Class ;
+                                    rdfs:comment "Something that happens in the story and can be located in time and space."@en ;
+                                    rdfs:label "event"@en .
+
+
+###  http://purl.org/story/event/Journey
+<http://purl.org/story/event/Journey> rdf:type owl:Class ;
+                                      rdfs:subClassOf <http://purl.org/story/event/Event> ,
+                                                      [ rdf:type owl:Restriction ;
+                                                        owl:onProperty <http://purl.org/story/event/hasParticipant> ;
+                                                        owl:someValuesFrom <http://purl.org/story/social/Character>
+                                                      ] ,
+                                                      [ rdf:type owl:Restriction ;
+                                                        owl:onProperty <http://purl.org/story/event/occursAt> ;
+                                                        owl:someValuesFrom <http://purl.org/story/location/Place>
+                                                      ] ;
+                                      rdfs:comment "An event where one or more characters travel from one place to another, possibly broken down into several smaller travel actions."@en ;
+                                      rdfs:label "journey"@en .
+
+
+###  http://purl.org/story/event/Meeting
+<http://purl.org/story/event/Meeting> rdf:type owl:Class ;
+                                      rdfs:subClassOf <http://purl.org/story/event/Event> ;
+                                      rdfs:comment "An event where characters come together to talk or decide something."@en ;
+                                      rdfs:label "meeting"@en .
+
+
+###  http://purl.org/story/location/BodyOfWater
+<http://purl.org/story/location/BodyOfWater> rdf:type owl:Class ;
+                                             rdfs:subClassOf <http://purl.org/story/location/Place> ;
+                                             rdfs:comment "Sea, ocean, bay, or large lake as a spatial region."@en ;
+                                             rdfs:label "body of water"@en .
+
+
+###  http://purl.org/story/location/City
+<http://purl.org/story/location/City> rdf:type owl:Class ;
+                                      rdfs:subClassOf <http://purl.org/story/location/Settlement> ;
+                                      rdfs:comment "A large settlement, often walled or densely built."@en ;
+                                      rdfs:label "city"@en .
+
+
+###  http://purl.org/story/location/District
+<http://purl.org/story/location/District> rdf:type owl:Class ;
+                                          rdfs:subClassOf <http://purl.org/story/location/Place> ,
+                                                          [ rdf:type owl:Restriction ;
+                                                            owl:onProperty <http://purl.org/story/location/isPartOf> ;
+                                                            owl:someValuesFrom <http://purl.org/story/location/Settlement>
+                                                          ] ;
+                                          rdfs:comment "A named part of a larger settlement (ward, quarter, suburb); use loc:isPartOf to link it to the city or town."@en ;
+                                          rdfs:label "district"@en .
+
+
+###  http://purl.org/story/location/Forest
+<http://purl.org/story/location/Forest> rdf:type owl:Class ;
+                                        rdfs:subClassOf <http://purl.org/story/location/WildArea> ;
+                                        rdfs:comment "Woodland or forested region."@en ;
+                                        rdfs:label "forest"@en .
+
+
+###  http://purl.org/story/location/Fortress
+<http://purl.org/story/location/Fortress> rdf:type owl:Class ;
+                                          rdfs:subClassOf <http://purl.org/story/location/Settlement> ;
+                                          rdfs:comment "A fortified settlement mainly used for defence or war."@en ;
+                                          rdfs:label "fortress"@en .
+
+
+###  http://purl.org/story/location/Marsh
+<http://purl.org/story/location/Marsh> rdf:type owl:Class ;
+                                       rdfs:subClassOf <http://purl.org/story/location/WildArea> ;
+                                       rdfs:comment "Wetland, fen, or marsh."@en ;
+                                       rdfs:label "marsh"@en .
+
+
+###  http://purl.org/story/location/MountainRange
+<http://purl.org/story/location/MountainRange> rdf:type owl:Class ;
+                                               rdfs:subClassOf <http://purl.org/story/location/WildArea> ;
+                                               rdfs:comment "Highlands or connected mountains."@en ;
+                                               rdfs:label "mountain range"@en .
+
+
+###  http://purl.org/story/location/Ocean
+<http://purl.org/story/location/Ocean> rdf:type owl:Class ;
+                                       rdfs:subClassOf <http://purl.org/story/location/BodyOfWater> ;
+                                       rdfs:comment "Open ocean."@en ;
+                                       rdfs:label "ocean"@en .
+
+
+###  http://purl.org/story/location/Place
+<http://purl.org/story/location/Place> rdf:type owl:Class ;
+                                       rdfs:subClassOf :Region ;
+                                       rdfs:comment "Any spatial region that can be referred to in the story, from a room to a whole country."@en ;
+                                       rdfs:label "place"@en .
+
+
+###  http://purl.org/story/location/Region
+<http://purl.org/story/location/Region> rdf:type owl:Class ;
+                                        rdfs:subClassOf <http://purl.org/story/location/Place> ,
+                                                        :Region ;
+                                        rdfs:comment "A larger territory that may contain towns, fortresses and wild areas; treated as an RCC8 region for topological reasoning."@en ;
+                                        rdfs:label "region"@en .
+
+
+###  http://purl.org/story/location/River
+<http://purl.org/story/location/River> rdf:type owl:Class ;
+                                       rdfs:subClassOf <http://purl.org/story/location/WildArea> ;
+                                       rdfs:comment "River or large stream as a place reference."@en ;
+                                       rdfs:label "river"@en .
+
+
+###  http://purl.org/story/location/Sea
+<http://purl.org/story/location/Sea> rdf:type owl:Class ;
+                                     rdfs:subClassOf <http://purl.org/story/location/BodyOfWater> ;
+                                     rdfs:comment "Sea or gulf."@en ;
+                                     rdfs:label "sea"@en .
+
+
+###  http://purl.org/story/location/Settlement
+<http://purl.org/story/location/Settlement> rdf:type owl:Class ;
+                                            rdfs:subClassOf <http://purl.org/story/location/Place> ,
+                                                            [ rdf:type owl:Restriction ;
+                                                              owl:onProperty <http://purl.org/story/location/isPartOf> ;
+                                                              owl:someValuesFrom <http://purl.org/story/location/Region>
+                                                            ] ;
+                                            rdfs:comment "A place where people live in a relatively permanent way: village, town, city, fortress, etc."@en ;
+                                            rdfs:label "settlement"@en .
+
+
+###  http://purl.org/story/location/Town
+<http://purl.org/story/location/Town> rdf:type owl:Class ;
+                                      rdfs:subClassOf <http://purl.org/story/location/Settlement> ;
+                                      rdfs:comment "A mid-sized settlement, larger than a village."@en ;
+                                      rdfs:label "town"@en .
+
+
+###  http://purl.org/story/location/Valley
+<http://purl.org/story/location/Valley> rdf:type owl:Class ;
+                                        rdfs:subClassOf <http://purl.org/story/location/WildArea> ;
+                                        rdfs:comment "River valley or enclosed lowland."@en ;
+                                        rdfs:label "valley"@en .
+
+
+###  http://purl.org/story/location/Village
+<http://purl.org/story/location/Village> rdf:type owl:Class ;
+                                         rdfs:subClassOf <http://purl.org/story/location/Settlement> ;
+                                         rdfs:comment "A small settlement."@en ;
+                                         rdfs:label "village"@en .
+
+
+###  http://purl.org/story/location/WildArea
+<http://purl.org/story/location/WildArea> rdf:type owl:Class ;
+                                          rdfs:subClassOf <http://purl.org/story/location/Place> ;
+                                          rdfs:comment "Unsettled land: forests, mountains, marshes, etc."@en ;
+                                          rdfs:label "wild area"@en .
+
+
+###  http://purl.org/story/plot/Chapter
+<http://purl.org/story/plot/Chapter> rdf:type owl:Class ;
+                                     rdfs:subClassOf <http://purl.org/story/plot/NarrativeUnit> ;
+                                     rdfs:comment "A named division of a written story, usually corresponding to one or more scenes."@en ;
+                                     rdfs:label "chapter"@en .
+
+
+###  http://purl.org/story/plot/Climax
+<http://purl.org/story/plot/Climax> rdf:type owl:Class ;
+                                    rdfs:subClassOf <http://purl.org/story/plot/NarrativeUnit> ;
+                                    rdfs:comment "A narrative unit that marks the peak of the central conflict of the story."@en ;
+                                    rdfs:label "climax"@en .
+
+
+###  http://purl.org/story/plot/NarrativeUnit
+<http://purl.org/story/plot/NarrativeUnit> rdf:type owl:Class ;
+                                           rdfs:comment "A self-contained part of a story such as a chapter, scene or episode (chapter titles in the Narn, or shorter scenes inside them)."@en ;
+                                           rdfs:label "narrative unit"@en .
+
+
+###  http://purl.org/story/plot/Story
+<http://purl.org/story/plot/Story> rdf:type owl:Class ;
+                                   rdfs:comment "A complete narrative work, for example a tale, book or saga. In this assignment the main example is the Narn i Chîn Húrin."@en ;
+                                   rdfs:label "story"@en .
+
+
+###  http://purl.org/story/plot/TragicEnding
+<http://purl.org/story/plot/TragicEnding> rdf:type owl:Class ;
+                                          rdfs:subClassOf <http://purl.org/story/plot/NarrativeUnit> ;
+                                          rdfs:comment "A narrative unit where the main tragic outcome of the story occurs (for the Narn this can be linked to Túrin's death)."@en ;
+                                          rdfs:label "tragic ending"@en .
+
+
+###  http://purl.org/story/social/Character
+<http://purl.org/story/social/Character> rdf:type owl:Class ;
+                                         rdfs:comment "An individual that can act, speak or simply be mentioned in the story world (for the Narn: people like Túrin, Húrin, Morwen, but also dragons or Valar if needed)."@en ;
+                                         rdfs:label "character"@en .
+
+
+###  http://purl.org/story/social/House
+<http://purl.org/story/social/House> rdf:type owl:Class ;
+                                     rdfs:comment "A named social group or lineage, such as a house, clan, order or company (e.g. the House of Hador in the Narn)."@en ;
+                                     rdfs:label "house or clan"@en .
+
+
+###  http://purl.org/story/social/Lord
+<http://purl.org/story/social/Lord> rdf:type owl:Class ;
+                                    rdfs:subClassOf <http://purl.org/story/social/Character> ;
+                                    rdfs:comment "A character recognised as lord over others, usually with vassals or followers."@en ;
+                                    rdfs:label "lord"@en .
+
+
+###  http://purl.org/story/social/Occupation
+<http://purl.org/story/social/Occupation> rdf:type owl:Class ;
+                                          rdfs:subClassOf <http://purl.org/story/social/SocialRole> ;
+                                          rdfs:comment "Trade, craft, or habitual work (farmer, smith, thief, etc.); use as object of hasOccupation or hasSocialRole."@en ;
+                                          rdfs:label "occupation"@en .
+
+
+###  http://purl.org/story/social/SocialRole
+<http://purl.org/story/social/SocialRole> rdf:type owl:Class ;
+                                          rdfs:comment "A social position that a character may hold in the world of the story: lord, captain, messenger, servant, prisoner, and so on."@en ;
+                                          rdfs:label "social role"@en .
+
+
+###  http://purl.org/story/social/Vassal
+<http://purl.org/story/social/Vassal> rdf:type owl:Class ;
+                                      rdfs:subClassOf <http://purl.org/story/social/Character> ;
+                                      rdfs:comment "A character who owes allegiance or service to a lord."@en ;
+                                      rdfs:label "vassal"@en .
+
+
+###  http://purl.org/story/time/StoryTimeInstant
+<http://purl.org/story/time/StoryTimeInstant> rdf:type owl:Class ;
+                                              rdfs:subClassOf <http://www.w3.org/2006/time#Instant> ;
+                                              rdfs:comment "A time instant that marks a punctual event such as a death or a single decisive action."@en ;
+                                              rdfs:label "story time instant"@en .
+
+
+###  http://purl.org/story/time/StoryTimeInterval
+<http://purl.org/story/time/StoryTimeInterval> rdf:type owl:Class ;
+                                               rdfs:subClassOf <http://www.w3.org/2006/time#ProperInterval> ,
+                                                               [ rdf:type owl:Restriction ;
+                                                                 owl:onProperty <http://purl.org/story/time/hasEnd> ;
+                                                                 owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                                                 owl:onClass <http://www.w3.org/2006/time#Instant>
+                                                               ] ,
+                                                               [ rdf:type owl:Restriction ;
+                                                                 owl:onProperty <http://purl.org/story/time/hasStart> ;
+                                                                 owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                                                 owl:onClass <http://www.w3.org/2006/time#Instant>
+                                                               ] ;
+                                               rdfs:comment "A non-punctual time interval for an event or episode; subclass of time:ProperInterval so OWL-Time Allen relations apply between intervals."@en ;
+                                               rdfs:label "story time interval"@en .
+
+
+###  https://purl.org/region/rcc8/Region
+:Region rdf:type owl:Class ;
+        rdfs:comment "A continuous extent of space. Mathematically, given a topological space, this concepts corresponds to a compact subspace with finite diameter."@en ;
+        rdfs:label "region"@en .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://purl.org/story/social/Blacksmith
+<http://purl.org/story/social/Blacksmith> rdf:type owl:NamedIndividual ,
+                                                   <http://purl.org/story/social/Occupation> ;
+                                          rdfs:label "blacksmith"@en .
+
+
+###  http://purl.org/story/social/Burglar
+<http://purl.org/story/social/Burglar> rdf:type owl:NamedIndividual ,
+                                                <http://purl.org/story/social/Occupation> ;
+                                       rdfs:label "burglar"@en .
+
+
+###  http://purl.org/story/social/Farmer
+<http://purl.org/story/social/Farmer> rdf:type owl:NamedIndividual ,
+                                               <http://purl.org/story/social/Occupation> ;
+                                      rdfs:label "farmer"@en .
+
+
+###  http://purl.org/story/social/Innkeeper
+<http://purl.org/story/social/Innkeeper> rdf:type owl:NamedIndividual ,
+                                                  <http://purl.org/story/social/Occupation> ;
+                                         rdfs:label "innkeeper"@en .
+
+
+###  http://purl.org/story/social/Merchant
+<http://purl.org/story/social/Merchant> rdf:type owl:NamedIndividual ,
+                                                 <http://purl.org/story/social/Occupation> ;
+                                        rdfs:label "merchant"@en .
+
+
+###  http://purl.org/story/social/Messenger
+<http://purl.org/story/social/Messenger> rdf:type owl:NamedIndividual ,
+                                                  <http://purl.org/story/social/Occupation> ;
+                                         rdfs:label "messenger"@en .
+
+
+###  http://purl.org/story/social/Physician
+<http://purl.org/story/social/Physician> rdf:type owl:NamedIndividual ,
+                                                  <http://purl.org/story/social/Occupation> ;
+                                         rdfs:label "physician"@en .
+
+
+###  http://purl.org/story/social/Soldier
+<http://purl.org/story/social/Soldier> rdf:type owl:NamedIndividual ,
+                                                <http://purl.org/story/social/Occupation> ;
+                                       rdfs:label "soldier"@en .
+
+
+###  http://purl.org/story/social/Thief
+<http://purl.org/story/social/Thief> rdf:type owl:NamedIndividual ,
+                                              <http://purl.org/story/social/Occupation> ;
+                                     rdfs:label "thief"@en .
+
+
+#################################################################
+#    General axioms
+#################################################################
+
+[ owl:intersectionOf ( <http://purl.org/story/social/Character>
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty <http://purl.org/story/social/hasAllegianceTo> ;
+                         owl:someValuesFrom <http://purl.org/story/social/Lord>
+                       ]
+                     ) ;
+  rdf:type owl:Class ;
+  rdfs:subClassOf <http://purl.org/story/social/Vassal>
+] .
+
+
+[ rdf:type owl:AllDifferent ;
+  owl:distinctMembers ( <http://purl.org/story/social/Blacksmith>
+                        <http://purl.org/story/social/Burglar>
+                        <http://purl.org/story/social/Farmer>
+                        <http://purl.org/story/social/Innkeeper>
+                        <http://purl.org/story/social/Merchant>
+                        <http://purl.org/story/social/Messenger>
+                        <http://purl.org/story/social/Physician>
+                        <http://purl.org/story/social/Soldier>
+                        <http://purl.org/story/social/Thief>
+                      )
+] .
+
+
+[ rdf:type owl:AllDisjointProperties ;
+  owl:members ( :dc
+                :ec
+                :eq
+                :ntpp
+                :ntppi
+                :po
+                :tpp
+                :tppi
+              )
+] .
+
+
+###  Generated by the OWL API (version 5.1.18) https://github.com/owlcs/owlapi/

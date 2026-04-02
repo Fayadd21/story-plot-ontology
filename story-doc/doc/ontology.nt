@@ -1,0 +1,1328 @@
+<https://purl.org/region/rcc8/> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Ontology> .
+<https://purl.org/region/rcc8/> <http://www.w3.org/2002/07/owl#imports> <http://purl.org/family/> .
+<https://purl.org/region/rcc8/> <http://www.w3.org/2002/07/owl#imports> <http://purl.org/meo/> .
+<https://purl.org/region/rcc8/> <http://www.w3.org/2002/07/owl#imports> <http://purl.org/story/event/> .
+<https://purl.org/region/rcc8/> <http://www.w3.org/2002/07/owl#imports> <http://purl.org/story/location/> .
+<https://purl.org/region/rcc8/> <http://www.w3.org/2002/07/owl#imports> <http://purl.org/story/social/> .
+<https://purl.org/region/rcc8/> <http://www.w3.org/2002/07/owl#imports> <http://www.w3.org/2006/time#> .
+<https://purl.org/region/rcc8/> <http://www.w3.org/2002/07/owl#imports> <https://purl.org/region/rcc8/> .
+<https://purl.org/region/rcc8/> <http://www.w3.org/2000/01/rdf-schema#comment> "An ontology for the Region Connection Calculus."@en .
+<https://purl.org/region/rcc8/> <http://www.w3.org/2000/01/rdf-schema#comment> "Classes and properties for the narrated structure of a story, such as stories, chapters and climaxes, and how they relate to events."@en .
+<https://purl.org/region/rcc8/> <http://www.w3.org/2000/01/rdf-schema#comment> "Events with their participants, locations and temporal ordering, using the W3C Time ontology to describe time."@en .
+<https://purl.org/region/rcc8/> <http://www.w3.org/2000/01/rdf-schema#comment> "Intentional doings: agents, patients, instruments, themes; linked to events via sub-event links and participant entailments."@en .
+<https://purl.org/region/rcc8/> <http://www.w3.org/2000/01/rdf-schema#comment> "Non-familial social ties between characters, such as allegiance, enmity or membership in a house or group."@en .
+<https://purl.org/region/rcc8/> <http://www.w3.org/2000/01/rdf-schema#comment> "Places and spatial relations that are relevant for describing a story plot."@en .
+<https://purl.org/region/rcc8/> <http://www.w3.org/2000/01/rdf-schema#comment> "Story intervals use Allen's endpoints Is and Ie via stime:hasStart and stime:hasEnd on top of the W3C Time ontology.\r\n\r\nThe thirteen Allen relations (b, bi, m, mi, o, oi, s, si, d, di, f, fi, eq) are not redefined here: use the corresponding OWL-Time object properties between time:ProperInterval individuals — time:intervalBefore (b), time:intervalAfter (bi), time:intervalMeets (m), time:intervalMetBy (mi), time:intervalOverlaps (o), time:intervalOverlappedBy (oi), time:intervalStarts (s), time:intervalStartedBy (si), time:intervalDuring (d), time:intervalContains (di), time:intervalFinishes (f), time:intervalFinishedBy (fi), time:intervalEquals (eq).\r\n\r\ntime:intervalOverlaps (Allen o) is not symmetric: the inverse is time:intervalOverlappedBy (oi). Do not model story 'overlaps' as a symmetric relation.\r\n\r\nstime:StoryTimeInterval is a proper interval so those relations (domain/range ProperInterval in OWL Time) apply when asserting temporal structure between story intervals. Below, sound property chains link endpoint ordering (time:before / time:after on instants) to intervalBefore / intervalAfter."@en .
+<https://purl.org/region/rcc8/> <http://www.w3.org/2000/01/rdf-schema#label> "Actions in story plots"@en .
+<https://purl.org/region/rcc8/> <http://www.w3.org/2000/01/rdf-schema#label> "Allen-style time for story plots"@en .
+<https://purl.org/region/rcc8/> <http://www.w3.org/2000/01/rdf-schema#label> "Events and temporal relations in stories"@en .
+<https://purl.org/region/rcc8/> <http://www.w3.org/2000/01/rdf-schema#label> "Locations for story plots"@en .
+<https://purl.org/region/rcc8/> <http://www.w3.org/2000/01/rdf-schema#label> "Narrative structure of stories"@en .
+<https://purl.org/region/rcc8/> <http://www.w3.org/2000/01/rdf-schema#label> "Social relations in stories"@en .
+<https://purl.org/region/rcc8/> <http://www.w3.org/2000/01/rdf-schema#label> "The RCC8 ontology" .
+# 
+# 
+# #################################################################
+# #
+# #    Object Properties
+# #
+# #################################################################
+# 
+# 
+# http://purl.org/story/action/hasAgent
+<http://purl.org/story/action/hasAgent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/action/hasAgent> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://purl.org/story/event/hasParticipant> .
+<http://purl.org/story/action/hasAgent> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/action/Action> .
+<http://purl.org/story/action/hasAgent> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/social/Character> .
+<http://purl.org/story/action/hasAgent> <http://www.w3.org/2000/01/rdf-schema#comment> "The character who performs the action on purpose."@en .
+<http://purl.org/story/action/hasAgent> <http://www.w3.org/2000/01/rdf-schema#label> "has agent"@en .
+# 
+# http://purl.org/story/action/hasInstrument
+<http://purl.org/story/action/hasInstrument> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/action/hasInstrument> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://purl.org/story/event/usesItem> .
+<http://purl.org/story/action/hasInstrument> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/action/Action> .
+<http://purl.org/story/action/hasInstrument> <http://www.w3.org/2000/01/rdf-schema#comment> "Tool or means used to carry out the action."@en .
+<http://purl.org/story/action/hasInstrument> <http://www.w3.org/2000/01/rdf-schema#label> "has instrument"@en .
+# 
+# http://purl.org/story/action/hasPatient
+<http://purl.org/story/action/hasPatient> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/action/hasPatient> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://purl.org/story/event/hasParticipant> .
+<http://purl.org/story/action/hasPatient> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/action/Action> .
+<http://purl.org/story/action/hasPatient> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/social/Character> .
+<http://purl.org/story/action/hasPatient> <http://www.w3.org/2000/01/rdf-schema#comment> "Character the action is directed at or primarily affects."@en .
+<http://purl.org/story/action/hasPatient> <http://www.w3.org/2000/01/rdf-schema#label> "has patient"@en .
+# 
+# http://purl.org/story/action/hasTheme
+<http://purl.org/story/action/hasTheme> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/action/hasTheme> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/action/Action> .
+<http://purl.org/story/action/hasTheme> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2002/07/owl#Thing> .
+<http://purl.org/story/action/hasTheme> <http://www.w3.org/2000/01/rdf-schema#comment> "Primary object in view: token given, thing seized, subject of counsel, etc."@en .
+<http://purl.org/story/action/hasTheme> <http://www.w3.org/2000/01/rdf-schema#label> "has theme"@en .
+# 
+# http://purl.org/story/action/subActionOf
+<http://purl.org/story/action/subActionOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/action/subActionOf> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://purl.org/story/event/subEventOf> .
+<http://purl.org/story/action/subActionOf> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/action/Action> .
+<http://purl.org/story/action/subActionOf> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/event/Event> .
+<http://purl.org/story/action/subActionOf> <http://www.w3.org/2000/01/rdf-schema#comment> "Nests this intentional act under a larger event or action."@en .
+<http://purl.org/story/action/subActionOf> <http://www.w3.org/2000/01/rdf-schema#label> "sub-action of"@en .
+# 
+# http://purl.org/story/event/after
+<http://purl.org/story/event/after> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/after> <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/before> .
+<http://purl.org/story/event/after> <http://www.w3.org/2002/07/owl#propertyChainAxiom> _:genid4 .
+_:genid4 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid3 .
+_:genid3 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid1 .
+_:genid1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid2 .
+_:genid2 <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/hasEndInstant> .
+_:genid1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid3 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://www.w3.org/2006/time#after> .
+_:genid3 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid4 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/event/hasStartInstant> .
+_:genid4 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+<http://purl.org/story/event/after> <http://www.w3.org/2002/07/owl#propertyChainAxiom> _:genid8 .
+_:genid8 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid7 .
+_:genid7 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid5 .
+_:genid5 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid5 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid6 .
+_:genid6 <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid5 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid7 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://www.w3.org/2006/time#intervalAfter> .
+_:genid7 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid8 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid8 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+<http://purl.org/story/event/after> <http://www.w3.org/2000/01/rdf-schema#label> "after"@en .
+# 
+# http://purl.org/story/event/b
+<http://purl.org/story/event/b> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/b> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://purl.org/story/event/before> .
+<http://purl.org/story/event/b> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/b> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/b> <http://www.w3.org/2000/01/rdf-schema#label> "b"@en .
+# 
+# http://purl.org/story/event/before
+<http://purl.org/story/event/before> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/before> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#TransitiveProperty> .
+<http://purl.org/story/event/before> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/before> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/before> <http://www.w3.org/2002/07/owl#propertyChainAxiom> _:genid12 .
+_:genid12 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid11 .
+_:genid11 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid9 .
+_:genid9 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid9 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid10 .
+_:genid10 <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/hasStartInstant> .
+_:genid9 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid11 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://www.w3.org/2006/time#before> .
+_:genid11 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid12 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/event/hasEndInstant> .
+_:genid12 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+<http://purl.org/story/event/before> <http://www.w3.org/2002/07/owl#propertyChainAxiom> _:genid16 .
+_:genid16 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid15 .
+_:genid15 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid13 .
+_:genid13 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid13 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid14 .
+_:genid14 <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid13 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid15 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://www.w3.org/2006/time#intervalBefore> .
+_:genid15 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid16 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid16 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+<http://purl.org/story/event/before> <http://www.w3.org/2000/01/rdf-schema#comment> "Allen b: first event ends strictly before the second begins; inverse after/bi. Entailed from time:intervalBefore on extents or time:before on endpoint instants (OWL Time)."@en .
+<http://purl.org/story/event/before> <http://www.w3.org/2000/01/rdf-schema#label> "before"@en .
+# 
+# http://purl.org/story/event/bi
+<http://purl.org/story/event/bi> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/bi> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://purl.org/story/event/after> .
+<http://purl.org/story/event/bi> <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/b> .
+<http://purl.org/story/event/bi> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/bi> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/bi> <http://www.w3.org/2000/01/rdf-schema#label> "bi"@en .
+# 
+# http://purl.org/story/event/contains
+<http://purl.org/story/event/contains> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/contains> <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/during> .
+<http://purl.org/story/event/contains> <http://www.w3.org/2002/07/owl#propertyChainAxiom> _:genid20 .
+_:genid20 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid19 .
+_:genid19 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid17 .
+_:genid17 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid17 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid18 .
+_:genid18 <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid17 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid19 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://www.w3.org/2006/time#intervalContains> .
+_:genid19 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid20 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid20 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+<http://purl.org/story/event/contains> <http://www.w3.org/2000/01/rdf-schema#label> "contains"@en .
+# 
+# http://purl.org/story/event/d
+<http://purl.org/story/event/d> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/d> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://purl.org/story/event/during> .
+<http://purl.org/story/event/d> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/d> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/d> <http://www.w3.org/2000/01/rdf-schema#label> "d"@en .
+# 
+# http://purl.org/story/event/di
+<http://purl.org/story/event/di> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/di> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://purl.org/story/event/contains> .
+<http://purl.org/story/event/di> <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/d> .
+<http://purl.org/story/event/di> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/di> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/di> <http://www.w3.org/2000/01/rdf-schema#label> "di"@en .
+# 
+# http://purl.org/story/event/during
+<http://purl.org/story/event/during> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/during> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/during> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/during> <http://www.w3.org/2002/07/owl#propertyChainAxiom> _:genid24 .
+_:genid24 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid23 .
+_:genid23 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid21 .
+_:genid21 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid21 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid22 .
+_:genid22 <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid21 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid23 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://www.w3.org/2006/time#intervalDuring> .
+_:genid23 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid24 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid24 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+<http://purl.org/story/event/during> <http://www.w3.org/2000/01/rdf-schema#comment> "Allen relation: an event is entirely contained within the time of a longer event."@en .
+<http://purl.org/story/event/during> <http://www.w3.org/2000/01/rdf-schema#label> "during"@en .
+# 
+# http://purl.org/story/event/eq
+<http://purl.org/story/event/eq> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/eq> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://purl.org/story/event/equals> .
+<http://purl.org/story/event/eq> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#SymmetricProperty> .
+<http://purl.org/story/event/eq> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/eq> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/eq> <http://www.w3.org/2000/01/rdf-schema#label> "eq"@en .
+# 
+# http://purl.org/story/event/equals
+<http://purl.org/story/event/equals> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/equals> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#SymmetricProperty> .
+<http://purl.org/story/event/equals> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/equals> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/equals> <http://www.w3.org/2002/07/owl#propertyChainAxiom> _:genid28 .
+_:genid28 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid27 .
+_:genid27 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid25 .
+_:genid25 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid25 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid26 .
+_:genid26 <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid25 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid27 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://www.w3.org/2006/time#intervalEquals> .
+_:genid27 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid28 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid28 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+<http://purl.org/story/event/equals> <http://www.w3.org/2000/01/rdf-schema#comment> "Allen relation: two events share exactly the same temporal interval."@en .
+<http://purl.org/story/event/equals> <http://www.w3.org/2000/01/rdf-schema#label> "equals in time"@en .
+# 
+# http://purl.org/story/event/f
+<http://purl.org/story/event/f> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/f> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://purl.org/story/event/finishes> .
+<http://purl.org/story/event/f> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/f> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/f> <http://www.w3.org/2000/01/rdf-schema#label> "f"@en .
+# 
+# http://purl.org/story/event/fi
+<http://purl.org/story/event/fi> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/fi> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://purl.org/story/event/finishedBy> .
+<http://purl.org/story/event/fi> <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/f> .
+<http://purl.org/story/event/fi> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/fi> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/fi> <http://www.w3.org/2000/01/rdf-schema#label> "fi"@en .
+# 
+# http://purl.org/story/event/finishedBy
+<http://purl.org/story/event/finishedBy> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/finishedBy> <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/finishes> .
+<http://purl.org/story/event/finishedBy> <http://www.w3.org/2002/07/owl#propertyChainAxiom> _:genid32 .
+_:genid32 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid31 .
+_:genid31 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid29 .
+_:genid29 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid29 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid30 .
+_:genid30 <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid29 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid31 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://www.w3.org/2006/time#intervalFinishedBy> .
+_:genid31 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid32 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid32 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+<http://purl.org/story/event/finishedBy> <http://www.w3.org/2000/01/rdf-schema#label> "finished by"@en .
+# 
+# http://purl.org/story/event/finishes
+<http://purl.org/story/event/finishes> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/finishes> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/finishes> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/finishes> <http://www.w3.org/2002/07/owl#propertyChainAxiom> _:genid36 .
+_:genid36 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid35 .
+_:genid35 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid33 .
+_:genid33 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid33 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid34 .
+_:genid34 <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid33 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid35 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://www.w3.org/2006/time#intervalFinishes> .
+_:genid35 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid36 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid36 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+<http://purl.org/story/event/finishes> <http://www.w3.org/2000/01/rdf-schema#comment> "Allen relation: two events end together, but the first one starts later."@en .
+<http://purl.org/story/event/finishes> <http://www.w3.org/2000/01/rdf-schema#label> "finishes"@en .
+# 
+# http://purl.org/story/event/hasEndInstant
+<http://purl.org/story/event/hasEndInstant> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/hasEndInstant> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/hasEndInstant> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2006/time#Instant> .
+<http://purl.org/story/event/hasEndInstant> <http://www.w3.org/2002/07/owl#propertyChainAxiom> _:genid38 .
+_:genid38 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid37 .
+_:genid37 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid37 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://www.w3.org/2006/time#hasEnd> .
+_:genid37 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid38 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid38 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+<http://purl.org/story/event/hasEndInstant> <http://www.w3.org/2000/01/rdf-schema#comment> "Relates an event to the instant when it ends (Allen: Ie)."@en .
+<http://purl.org/story/event/hasEndInstant> <http://www.w3.org/2000/01/rdf-schema#label> "has end instant"@en .
+# 
+# http://purl.org/story/event/hasParticipant
+<http://purl.org/story/event/hasParticipant> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/hasParticipant> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/hasParticipant> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/social/Character> .
+<http://purl.org/story/event/hasParticipant> <http://www.w3.org/2000/01/rdf-schema#comment> "Relates an event to a character who takes part in it in some way."@en .
+<http://purl.org/story/event/hasParticipant> <http://www.w3.org/2000/01/rdf-schema#label> "has participant"@en .
+# 
+# http://purl.org/story/event/hasStartInstant
+<http://purl.org/story/event/hasStartInstant> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/hasStartInstant> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/hasStartInstant> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2006/time#Instant> .
+<http://purl.org/story/event/hasStartInstant> <http://www.w3.org/2002/07/owl#propertyChainAxiom> _:genid40 .
+_:genid40 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid39 .
+_:genid39 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid39 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://www.w3.org/2006/time#hasBeginning> .
+_:genid39 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid40 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid40 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+<http://purl.org/story/event/hasStartInstant> <http://www.w3.org/2000/01/rdf-schema#comment> "Relates an event to the instant when it starts (Allen: Is)."@en .
+<http://purl.org/story/event/hasStartInstant> <http://www.w3.org/2000/01/rdf-schema#label> "has start instant"@en .
+# 
+# http://purl.org/story/event/hasSubEvent
+<http://purl.org/story/event/hasSubEvent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/hasSubEvent> <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/subEventOf> .
+<http://purl.org/story/event/hasSubEvent> <http://www.w3.org/2000/01/rdf-schema#label> "has sub-event"@en .
+# 
+# http://purl.org/story/event/hasTemporalExtent
+<http://purl.org/story/event/hasTemporalExtent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/hasTemporalExtent> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/hasTemporalExtent> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2006/time#TemporalEntity> .
+<http://purl.org/story/event/hasTemporalExtent> <http://www.w3.org/2000/01/rdf-schema#comment> "Relates an event to a time instant or interval describing when it happens."@en .
+<http://purl.org/story/event/hasTemporalExtent> <http://www.w3.org/2000/01/rdf-schema#label> "has temporal extent"@en .
+# 
+# http://purl.org/story/event/m
+<http://purl.org/story/event/m> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/m> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://purl.org/story/event/meets> .
+<http://purl.org/story/event/m> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/m> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/m> <http://www.w3.org/2000/01/rdf-schema#label> "m"@en .
+# 
+# http://purl.org/story/event/meets
+<http://purl.org/story/event/meets> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/meets> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/meets> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/meets> <http://www.w3.org/2002/07/owl#propertyChainAxiom> _:genid44 .
+_:genid44 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid43 .
+_:genid43 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid41 .
+_:genid41 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid41 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid42 .
+_:genid42 <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid41 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid43 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://www.w3.org/2006/time#intervalMeets> .
+_:genid43 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid44 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid44 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+<http://purl.org/story/event/meets> <http://www.w3.org/2000/01/rdf-schema#comment> "Allen relation: one event finishes exactly when the next one starts."@en .
+<http://purl.org/story/event/meets> <http://www.w3.org/2000/01/rdf-schema#label> "meets"@en .
+# 
+# http://purl.org/story/event/metBy
+<http://purl.org/story/event/metBy> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/metBy> <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/meets> .
+<http://purl.org/story/event/metBy> <http://www.w3.org/2002/07/owl#propertyChainAxiom> _:genid48 .
+_:genid48 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid47 .
+_:genid47 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid45 .
+_:genid45 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid45 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid46 .
+_:genid46 <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid45 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid47 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://www.w3.org/2006/time#intervalMetBy> .
+_:genid47 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid48 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid48 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+<http://purl.org/story/event/metBy> <http://www.w3.org/2000/01/rdf-schema#label> "met by"@en .
+# 
+# http://purl.org/story/event/mi
+<http://purl.org/story/event/mi> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/mi> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://purl.org/story/event/metBy> .
+<http://purl.org/story/event/mi> <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/m> .
+<http://purl.org/story/event/mi> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/mi> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/mi> <http://www.w3.org/2000/01/rdf-schema#label> "mi"@en .
+# 
+# http://purl.org/story/event/o
+<http://purl.org/story/event/o> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/o> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://purl.org/story/event/overlaps> .
+<http://purl.org/story/event/o> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/o> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/o> <http://www.w3.org/2000/01/rdf-schema#label> "o"@en .
+# 
+# http://purl.org/story/event/occursAt
+<http://purl.org/story/event/occursAt> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/occursAt> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/occursAt> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/location/Place> .
+<http://purl.org/story/event/occursAt> <http://www.w3.org/2000/01/rdf-schema#comment> "Main place where the event happens."@en .
+<http://purl.org/story/event/occursAt> <http://www.w3.org/2000/01/rdf-schema#label> "occurs at"@en .
+# 
+# http://purl.org/story/event/oi
+<http://purl.org/story/event/oi> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/oi> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://purl.org/story/event/overlappedBy> .
+<http://purl.org/story/event/oi> <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/o> .
+<http://purl.org/story/event/oi> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/oi> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/oi> <http://www.w3.org/2000/01/rdf-schema#label> "oi"@en .
+# 
+# http://purl.org/story/event/overlappedBy
+<http://purl.org/story/event/overlappedBy> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/overlappedBy> <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/overlaps> .
+<http://purl.org/story/event/overlappedBy> <http://www.w3.org/2002/07/owl#propertyChainAxiom> _:genid52 .
+_:genid52 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid51 .
+_:genid51 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid49 .
+_:genid49 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid49 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid50 .
+_:genid50 <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid49 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid51 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://www.w3.org/2006/time#intervalOverlappedBy> .
+_:genid51 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid52 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid52 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+<http://purl.org/story/event/overlappedBy> <http://www.w3.org/2000/01/rdf-schema#label> "overlapped by"@en .
+# 
+# http://purl.org/story/event/overlaps
+<http://purl.org/story/event/overlaps> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/overlaps> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/overlaps> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/overlaps> <http://www.w3.org/2002/07/owl#propertyChainAxiom> _:genid56 .
+_:genid56 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid55 .
+_:genid55 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid53 .
+_:genid53 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid53 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid54 .
+_:genid54 <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid53 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid55 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://www.w3.org/2006/time#intervalOverlaps> .
+_:genid55 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid56 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid56 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+<http://purl.org/story/event/overlaps> <http://www.w3.org/2000/01/rdf-schema#comment> "Allen o (not symmetric): first starts before second, overlaps in time, ends before second ends; inverse overlappedBy/oi. Matches time:intervalOverlaps in OWL Time."@en .
+<http://purl.org/story/event/overlaps> <http://www.w3.org/2000/01/rdf-schema#label> "overlaps"@en .
+# 
+# http://purl.org/story/event/s
+<http://purl.org/story/event/s> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/s> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://purl.org/story/event/starts> .
+<http://purl.org/story/event/s> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/s> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/s> <http://www.w3.org/2000/01/rdf-schema#label> "s"@en .
+# 
+# http://purl.org/story/event/si
+<http://purl.org/story/event/si> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/si> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://purl.org/story/event/startedBy> .
+<http://purl.org/story/event/si> <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/s> .
+<http://purl.org/story/event/si> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/si> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/si> <http://www.w3.org/2000/01/rdf-schema#label> "si"@en .
+# 
+# http://purl.org/story/event/startedBy
+<http://purl.org/story/event/startedBy> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/startedBy> <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/starts> .
+<http://purl.org/story/event/startedBy> <http://www.w3.org/2002/07/owl#propertyChainAxiom> _:genid60 .
+_:genid60 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid59 .
+_:genid59 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid57 .
+_:genid57 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid57 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid58 .
+_:genid58 <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid57 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid59 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://www.w3.org/2006/time#intervalStartedBy> .
+_:genid59 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid60 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid60 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+<http://purl.org/story/event/startedBy> <http://www.w3.org/2000/01/rdf-schema#label> "started by"@en .
+# 
+# http://purl.org/story/event/starts
+<http://purl.org/story/event/starts> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/starts> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/starts> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/starts> <http://www.w3.org/2002/07/owl#propertyChainAxiom> _:genid64 .
+_:genid64 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid63 .
+_:genid63 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid61 .
+_:genid61 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid61 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid62 .
+_:genid62 <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid61 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid63 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://www.w3.org/2006/time#intervalStarts> .
+_:genid63 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid64 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/event/hasTemporalExtent> .
+_:genid64 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+<http://purl.org/story/event/starts> <http://www.w3.org/2000/01/rdf-schema#comment> "Allen relation: two events start together, but the first one ends earlier."@en .
+<http://purl.org/story/event/starts> <http://www.w3.org/2000/01/rdf-schema#label> "starts"@en .
+# 
+# http://purl.org/story/event/subEventOf
+<http://purl.org/story/event/subEventOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/subEventOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#TransitiveProperty> .
+<http://purl.org/story/event/subEventOf> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/subEventOf> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/subEventOf> <http://www.w3.org/2000/01/rdf-schema#comment> "Relates a smaller event to a larger one it belongs to."@en .
+<http://purl.org/story/event/subEventOf> <http://www.w3.org/2000/01/rdf-schema#label> "sub-event of"@en .
+# 
+# http://purl.org/story/event/usesItem
+<http://purl.org/story/event/usesItem> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/event/usesItem> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/usesItem> <http://www.w3.org/2000/01/rdf-schema#comment> "An item that is used as part of an event, for instance a weapon or artefact."@en .
+<http://purl.org/story/event/usesItem> <http://www.w3.org/2000/01/rdf-schema#label> "uses item"@en .
+# 
+# http://purl.org/story/location/capitalOf
+<http://purl.org/story/location/capitalOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/location/capitalOf> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/location/Settlement> .
+<http://purl.org/story/location/capitalOf> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/location/Region> .
+<http://purl.org/story/location/capitalOf> <http://www.w3.org/2000/01/rdf-schema#comment> "The settlement is the chief or ruling seat of the region (e.g. a realm's capital)."@en .
+<http://purl.org/story/location/capitalOf> <http://www.w3.org/2000/01/rdf-schema#label> "capital of"@en .
+# 
+# http://purl.org/story/location/containsPlace
+<http://purl.org/story/location/containsPlace> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/location/containsPlace> <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/location/isPartOf> .
+<http://purl.org/story/location/containsPlace> <http://www.w3.org/2000/01/rdf-schema#comment> "Inverse of 'is part of'."@en .
+<http://purl.org/story/location/containsPlace> <http://www.w3.org/2000/01/rdf-schema#label> "contains place"@en .
+# 
+# http://purl.org/story/location/hasCapital
+<http://purl.org/story/location/hasCapital> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/location/hasCapital> <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/location/capitalOf> .
+<http://purl.org/story/location/hasCapital> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/location/Region> .
+<http://purl.org/story/location/hasCapital> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/location/Settlement> .
+<http://purl.org/story/location/hasCapital> <http://www.w3.org/2000/01/rdf-schema#comment> "The chief settlement of the region."@en .
+<http://purl.org/story/location/hasCapital> <http://www.w3.org/2000/01/rdf-schema#label> "has capital"@en .
+# 
+# http://purl.org/story/location/isPartOf
+<http://purl.org/story/location/isPartOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/location/isPartOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#TransitiveProperty> .
+<http://purl.org/story/location/isPartOf> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/location/Place> .
+<http://purl.org/story/location/isPartOf> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/location/Place> .
+<http://purl.org/story/location/isPartOf> <http://www.w3.org/2000/01/rdf-schema#comment> "Relates a place to a larger place it belongs to, for example a city to a region."@en .
+<http://purl.org/story/location/isPartOf> <http://www.w3.org/2000/01/rdf-schema#label> "is part of"@en .
+# 
+# http://purl.org/story/plot/endsWithEvent
+<http://purl.org/story/plot/endsWithEvent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/plot/endsWithEvent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#FunctionalProperty> .
+<http://purl.org/story/plot/endsWithEvent> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/plot/Story> .
+<http://purl.org/story/plot/endsWithEvent> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/event/Event> .
+<http://purl.org/story/plot/endsWithEvent> <http://www.w3.org/2000/01/rdf-schema#comment> "The event that closes the story; each story has at most one such ending event."@en .
+<http://purl.org/story/plot/endsWithEvent> <http://www.w3.org/2000/01/rdf-schema#label> "ends with event"@en .
+# 
+# http://purl.org/story/plot/hasProtagonist
+<http://purl.org/story/plot/hasProtagonist> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/plot/hasProtagonist> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/plot/Story> .
+<http://purl.org/story/plot/hasProtagonist> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/social/Character> .
+<http://purl.org/story/plot/hasProtagonist> <http://www.w3.org/2000/01/rdf-schema#comment> "Main character whose fate drives the story as a whole (e.g. Túrin in the Narn)."@en .
+<http://purl.org/story/plot/hasProtagonist> <http://www.w3.org/2000/01/rdf-schema#label> "has protagonist"@en .
+# 
+# http://purl.org/story/plot/hasUnit
+<http://purl.org/story/plot/hasUnit> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/plot/hasUnit> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/plot/Story> .
+<http://purl.org/story/plot/hasUnit> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/plot/NarrativeUnit> .
+<http://purl.org/story/plot/hasUnit> <http://www.w3.org/2000/01/rdf-schema#comment> "Relates a story to one of its narrative units (chapter, scene, etc.)."@en .
+<http://purl.org/story/plot/hasUnit> <http://www.w3.org/2000/01/rdf-schema#label> "has unit"@en .
+# 
+# http://purl.org/story/plot/isUnitOf
+<http://purl.org/story/plot/isUnitOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/plot/isUnitOf> <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/plot/hasUnit> .
+<http://purl.org/story/plot/isUnitOf> <http://www.w3.org/2000/01/rdf-schema#label> "is unit of"@en .
+# 
+# http://purl.org/story/plot/precedesUnit
+<http://purl.org/story/plot/precedesUnit> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/plot/precedesUnit> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#TransitiveProperty> .
+<http://purl.org/story/plot/precedesUnit> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/plot/NarrativeUnit> .
+<http://purl.org/story/plot/precedesUnit> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/plot/NarrativeUnit> .
+<http://purl.org/story/plot/precedesUnit> <http://www.w3.org/2000/01/rdf-schema#comment> "One narrative unit comes before another in the order of telling."@en .
+<http://purl.org/story/plot/precedesUnit> <http://www.w3.org/2000/01/rdf-schema#label> "precedes unit"@en .
+# 
+# http://purl.org/story/plot/tellsEvent
+<http://purl.org/story/plot/tellsEvent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/plot/tellsEvent> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/plot/NarrativeUnit> .
+<http://purl.org/story/plot/tellsEvent> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/event/Event> .
+<http://purl.org/story/plot/tellsEvent> <http://www.w3.org/2000/01/rdf-schema#comment> "Relates a narrative unit to an event it narrates."@en .
+<http://purl.org/story/plot/tellsEvent> <http://www.w3.org/2000/01/rdf-schema#label> "tells event"@en .
+# 
+# http://purl.org/story/social/belongsToHouse
+<http://purl.org/story/social/belongsToHouse> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/social/belongsToHouse> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/social/Character> .
+<http://purl.org/story/social/belongsToHouse> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/social/House> .
+<http://purl.org/story/social/belongsToHouse> <http://www.w3.org/2000/01/rdf-schema#comment> "Relates a character to the house, clan or similar group they are part of."@en .
+<http://purl.org/story/social/belongsToHouse> <http://www.w3.org/2000/01/rdf-schema#label> "belongs to house"@en .
+# 
+# http://purl.org/story/social/hasAllegianceTo
+<http://purl.org/story/social/hasAllegianceTo> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/social/hasAllegianceTo> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/social/Character> .
+<http://purl.org/story/social/hasAllegianceTo> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/social/Character> .
+<http://purl.org/story/social/hasAllegianceTo> <http://www.w3.org/2000/01/rdf-schema#comment> "Links a character to the person they have pledged allegiance or service to."@en .
+<http://purl.org/story/social/hasAllegianceTo> <http://www.w3.org/2000/01/rdf-schema#label> "has allegiance to"@en .
+# 
+# http://purl.org/story/social/hasOccupation
+<http://purl.org/story/social/hasOccupation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/social/hasOccupation> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://purl.org/story/social/hasSocialRole> .
+<http://purl.org/story/social/hasOccupation> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/social/Character> .
+<http://purl.org/story/social/hasOccupation> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/social/Occupation> .
+<http://purl.org/story/social/hasOccupation> <http://www.w3.org/2000/01/rdf-schema#comment> "Job or trade; narrows hasSocialRole to soc:Occupation individuals."@en .
+<http://purl.org/story/social/hasOccupation> <http://www.w3.org/2000/01/rdf-schema#label> "has occupation"@en .
+# 
+# http://purl.org/story/social/hasSocialRole
+<http://purl.org/story/social/hasSocialRole> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/social/hasSocialRole> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/social/Character> .
+<http://purl.org/story/social/hasSocialRole> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/social/SocialRole> .
+<http://purl.org/story/social/hasSocialRole> <http://www.w3.org/2000/01/rdf-schema#comment> "Relates a character to a social role they occupy in the story."@en .
+<http://purl.org/story/social/hasSocialRole> <http://www.w3.org/2000/01/rdf-schema#label> "has social role"@en .
+# 
+# http://purl.org/story/social/swornEnemyOf
+<http://purl.org/story/social/swornEnemyOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/social/swornEnemyOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#SymmetricProperty> .
+<http://purl.org/story/social/swornEnemyOf> <http://www.w3.org/2000/01/rdf-schema#domain> <http://purl.org/story/social/Character> .
+<http://purl.org/story/social/swornEnemyOf> <http://www.w3.org/2000/01/rdf-schema#range> <http://purl.org/story/social/Character> .
+<http://purl.org/story/social/swornEnemyOf> <http://www.w3.org/2000/01/rdf-schema#comment> "Two characters that are openly hostile to each other."@en .
+<http://purl.org/story/social/swornEnemyOf> <http://www.w3.org/2000/01/rdf-schema#label> "sworn enemy of"@en .
+# 
+# http://purl.org/story/time/hasEnd
+<http://purl.org/story/time/hasEnd> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/time/hasEnd> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://www.w3.org/2006/time#hasEnd> .
+<http://purl.org/story/time/hasEnd> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#FunctionalProperty> .
+<http://purl.org/story/time/hasEnd> <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.w3.org/2006/time#TemporalEntity> .
+<http://purl.org/story/time/hasEnd> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2006/time#Instant> .
+<http://purl.org/story/time/hasEnd> <http://www.w3.org/2000/01/rdf-schema#comment> "Allen-style end function Ie: associates each temporal entity with the instant when it ends."@en .
+<http://purl.org/story/time/hasEnd> <http://www.w3.org/2000/01/rdf-schema#label> "has end instant"@en .
+# 
+# http://purl.org/story/time/hasStart
+<http://purl.org/story/time/hasStart> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<http://purl.org/story/time/hasStart> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://www.w3.org/2006/time#hasBeginning> .
+<http://purl.org/story/time/hasStart> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#FunctionalProperty> .
+<http://purl.org/story/time/hasStart> <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.w3.org/2006/time#TemporalEntity> .
+<http://purl.org/story/time/hasStart> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2006/time#Instant> .
+<http://purl.org/story/time/hasStart> <http://www.w3.org/2000/01/rdf-schema#comment> "Allen-style start function Is: associates each temporal entity with the instant when it starts."@en .
+<http://purl.org/story/time/hasStart> <http://www.w3.org/2000/01/rdf-schema#label> "has start instant"@en .
+# 
+# http://www.w3.org/2006/time#intervalAfter
+<http://www.w3.org/2006/time#intervalAfter> <http://www.w3.org/2002/07/owl#propertyChainAxiom> _:genid68 .
+_:genid68 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid67 .
+_:genid67 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid65 .
+_:genid65 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid65 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid66 .
+_:genid66 <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/time/hasEnd> .
+_:genid65 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid67 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://www.w3.org/2006/time#after> .
+_:genid67 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid68 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/time/hasStart> .
+_:genid68 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+# 
+# http://www.w3.org/2006/time#intervalBefore
+<http://www.w3.org/2006/time#intervalBefore> <http://www.w3.org/2002/07/owl#propertyChainAxiom> _:genid72 .
+_:genid72 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid71 .
+_:genid71 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid69 .
+_:genid69 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid69 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid70 .
+_:genid70 <http://www.w3.org/2002/07/owl#inverseOf> <http://purl.org/story/time/hasStart> .
+_:genid69 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid71 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://www.w3.org/2006/time#before> .
+_:genid71 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid72 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/time/hasEnd> .
+_:genid72 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+# 
+# https://purl.org/region/rcc8/dc
+<https://purl.org/region/rcc8/dc> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://purl.org/region/rcc8/dc> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#SymmetricProperty> .
+<https://purl.org/region/rcc8/dc> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#IrreflexiveProperty> .
+<https://purl.org/region/rcc8/dc> <http://www.w3.org/2000/01/rdf-schema#domain> <https://purl.org/region/rcc8/Region> .
+<https://purl.org/region/rcc8/dc> <http://www.w3.org/2000/01/rdf-schema#range> <https://purl.org/region/rcc8/Region> .
+<https://purl.org/region/rcc8/dc> <http://www.w3.org/2000/01/rdf-schema#comment> "The two regions are completely disconnected (there are no common pieces)."@en .
+<https://purl.org/region/rcc8/dc> <http://www.w3.org/2000/01/rdf-schema#label> "disconnected"@en .
+# 
+# https://purl.org/region/rcc8/ec
+<https://purl.org/region/rcc8/ec> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://purl.org/region/rcc8/ec> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#SymmetricProperty> .
+<https://purl.org/region/rcc8/ec> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#IrreflexiveProperty> .
+<https://purl.org/region/rcc8/ec> <http://www.w3.org/2000/01/rdf-schema#domain> <https://purl.org/region/rcc8/Region> .
+<https://purl.org/region/rcc8/ec> <http://www.w3.org/2000/01/rdf-schema#range> <https://purl.org/region/rcc8/Region> .
+<https://purl.org/region/rcc8/ec> <http://www.w3.org/2000/01/rdf-schema#comment> "the boundaries of the regions touch, but their interiors are disjoint"@en .
+<https://purl.org/region/rcc8/ec> <http://www.w3.org/2000/01/rdf-schema#label> "externally connected"@en .
+# 
+# https://purl.org/region/rcc8/eq
+<https://purl.org/region/rcc8/eq> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://purl.org/region/rcc8/eq> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#SymmetricProperty> .
+<https://purl.org/region/rcc8/eq> <http://www.w3.org/2000/01/rdf-schema#domain> <https://purl.org/region/rcc8/Region> .
+<https://purl.org/region/rcc8/eq> <http://www.w3.org/2000/01/rdf-schema#range> <https://purl.org/region/rcc8/Region> .
+<https://purl.org/region/rcc8/eq> <http://www.w3.org/2000/01/rdf-schema#comment> "two regions have the same spatial extent"@en .
+<https://purl.org/region/rcc8/eq> <http://www.w3.org/2000/01/rdf-schema#label> "equal"@en .
+# 
+# https://purl.org/region/rcc8/ntpp
+<https://purl.org/region/rcc8/ntpp> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://purl.org/region/rcc8/ntpp> <http://www.w3.org/2002/07/owl#inverseOf> <https://purl.org/region/rcc8/ntppi> .
+<https://purl.org/region/rcc8/ntpp> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AsymmetricProperty> .
+<https://purl.org/region/rcc8/ntpp> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#IrreflexiveProperty> .
+<https://purl.org/region/rcc8/ntpp> <http://www.w3.org/2000/01/rdf-schema#domain> <https://purl.org/region/rcc8/Region> .
+<https://purl.org/region/rcc8/ntpp> <http://www.w3.org/2000/01/rdf-schema#range> <https://purl.org/region/rcc8/Region> .
+<https://purl.org/region/rcc8/ntpp> <http://www.w3.org/2000/01/rdf-schema#comment> "the first region is entirely inside the second region and their boundaries do not touch"@en .
+<https://purl.org/region/rcc8/ntpp> <http://www.w3.org/2000/01/rdf-schema#label> "non-tangential proper part"@en .
+# 
+# https://purl.org/region/rcc8/ntppi
+<https://purl.org/region/rcc8/ntppi> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://purl.org/region/rcc8/ntppi> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AsymmetricProperty> .
+<https://purl.org/region/rcc8/ntppi> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#IrreflexiveProperty> .
+<https://purl.org/region/rcc8/ntppi> <http://www.w3.org/2000/01/rdf-schema#domain> <https://purl.org/region/rcc8/Region> .
+<https://purl.org/region/rcc8/ntppi> <http://www.w3.org/2000/01/rdf-schema#range> <https://purl.org/region/rcc8/Region> .
+<https://purl.org/region/rcc8/ntppi> <http://www.w3.org/2000/01/rdf-schema#comment> "the first region entirely contains the second region and their boundaries do not touch"@en .
+<https://purl.org/region/rcc8/ntppi> <http://www.w3.org/2000/01/rdf-schema#label> "non-tangential proper part inverse"@en .
+# 
+# https://purl.org/region/rcc8/po
+<https://purl.org/region/rcc8/po> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://purl.org/region/rcc8/po> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#SymmetricProperty> .
+<https://purl.org/region/rcc8/po> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#IrreflexiveProperty> .
+<https://purl.org/region/rcc8/po> <http://www.w3.org/2000/01/rdf-schema#domain> <https://purl.org/region/rcc8/Region> .
+<https://purl.org/region/rcc8/po> <http://www.w3.org/2000/01/rdf-schema#range> <https://purl.org/region/rcc8/Region> .
+<https://purl.org/region/rcc8/po> <http://www.w3.org/2000/01/rdf-schema#comment> "the two regions partially overlap (there are disjoint sub parts, and some part of one is included in some part of the other"@en .
+<https://purl.org/region/rcc8/po> <http://www.w3.org/2000/01/rdf-schema#label> "partially overlapping"@en .
+# 
+# https://purl.org/region/rcc8/tpp
+<https://purl.org/region/rcc8/tpp> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://purl.org/region/rcc8/tpp> <http://www.w3.org/2002/07/owl#inverseOf> <https://purl.org/region/rcc8/tppi> .
+<https://purl.org/region/rcc8/tpp> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AsymmetricProperty> .
+<https://purl.org/region/rcc8/tpp> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#IrreflexiveProperty> .
+<https://purl.org/region/rcc8/tpp> <http://www.w3.org/2000/01/rdf-schema#domain> <https://purl.org/region/rcc8/Region> .
+<https://purl.org/region/rcc8/tpp> <http://www.w3.org/2000/01/rdf-schema#range> <https://purl.org/region/rcc8/Region> .
+<https://purl.org/region/rcc8/tpp> <http://www.w3.org/2000/01/rdf-schema#comment> "the first region is entirely inside the second region and their boundaries touch each other from the inside"@en .
+<https://purl.org/region/rcc8/tpp> <http://www.w3.org/2000/01/rdf-schema#label> "tangential proper part"@en .
+# 
+# https://purl.org/region/rcc8/tppi
+<https://purl.org/region/rcc8/tppi> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://purl.org/region/rcc8/tppi> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AsymmetricProperty> .
+<https://purl.org/region/rcc8/tppi> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#IrreflexiveProperty> .
+<https://purl.org/region/rcc8/tppi> <http://www.w3.org/2000/01/rdf-schema#domain> <https://purl.org/region/rcc8/Region> .
+<https://purl.org/region/rcc8/tppi> <http://www.w3.org/2000/01/rdf-schema#range> <https://purl.org/region/rcc8/Region> .
+<https://purl.org/region/rcc8/tppi> <http://www.w3.org/2000/01/rdf-schema#comment> "the first region entirely contains the second region and their boundaries touch each other from the inside"@en .
+<https://purl.org/region/rcc8/tppi> <http://www.w3.org/2000/01/rdf-schema#label> "tangential proper part inverse"@en .
+# 
+# 
+# 
+# #################################################################
+# #
+# #    Classes
+# #
+# #################################################################
+# 
+# 
+# http://purl.org/meo/Atan
+<http://purl.org/meo/Atan> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/meo/Atan> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/social/Character> .
+# 
+# http://purl.org/meo/Casar
+<http://purl.org/meo/Casar> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/meo/Casar> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/social/Character> .
+# 
+# http://purl.org/meo/Elda
+<http://purl.org/meo/Elda> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/meo/Elda> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/social/Character> .
+# 
+# http://purl.org/meo/Lócë
+<http://purl.org/meo/Lócë> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/meo/Lócë> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/social/Character> .
+# 
+# http://purl.org/story/action/Action
+<http://purl.org/story/action/Action> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/action/Action> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/event/Event> .
+<http://purl.org/story/action/Action> <http://www.w3.org/2000/01/rdf-schema#comment> "An event viewed as something done on purpose by an agent (possibly affecting a patient, object, or place)."@en .
+<http://purl.org/story/action/Action> <http://www.w3.org/2000/01/rdf-schema#label> "action"@en .
+# 
+# http://purl.org/story/action/Arrive
+<http://purl.org/story/action/Arrive> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/action/Arrive> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/action/TravelAction> .
+<http://purl.org/story/action/Arrive> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid73 .
+_:genid73 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid73 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasAgent> .
+_:genid73 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/Arrive> <http://www.w3.org/2000/01/rdf-schema#comment> "Reaching or entering a destination."@en .
+<http://purl.org/story/action/Arrive> <http://www.w3.org/2000/01/rdf-schema#label> "arrive"@en .
+# 
+# http://purl.org/story/action/Assist
+<http://purl.org/story/action/Assist> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/action/Assist> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/action/Action> .
+<http://purl.org/story/action/Assist> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid74 .
+_:genid74 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid74 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasAgent> .
+_:genid74 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/Assist> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid75 .
+_:genid75 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid75 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasPatient> .
+_:genid75 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/Assist> <http://www.w3.org/2000/01/rdf-schema#comment> "Helping another carry out their aim (joint agency possible in data)."@en .
+<http://purl.org/story/action/Assist> <http://www.w3.org/2000/01/rdf-schema#label> "assist"@en .
+# 
+# http://purl.org/story/action/Attack
+<http://purl.org/story/action/Attack> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/action/Attack> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/action/Action> .
+<http://purl.org/story/action/Attack> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid76 .
+_:genid76 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid76 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasAgent> .
+_:genid76 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/Attack> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid77 .
+_:genid77 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid77 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasPatient> .
+_:genid77 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/Attack> <http://www.w3.org/2000/01/rdf-schema#comment> "An agent tries to harm or overcome a patient (battle, duel, ambush)."@en .
+<http://purl.org/story/action/Attack> <http://www.w3.org/2000/01/rdf-schema#label> "attack"@en .
+# 
+# http://purl.org/story/action/Capture
+<http://purl.org/story/action/Capture> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/action/Capture> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/action/Action> .
+<http://purl.org/story/action/Capture> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid78 .
+_:genid78 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid78 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasAgent> .
+_:genid78 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/Capture> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid79 .
+_:genid79 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid79 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasPatient> .
+_:genid79 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/Capture> <http://www.w3.org/2000/01/rdf-schema#comment> "Making a patient prisoner or captive."@en .
+<http://purl.org/story/action/Capture> <http://www.w3.org/2000/01/rdf-schema#label> "capture"@en .
+# 
+# http://purl.org/story/action/Command
+<http://purl.org/story/action/Command> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/action/Command> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/action/SpeechAct> .
+<http://purl.org/story/action/Command> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid80 .
+_:genid80 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid80 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasAgent> .
+_:genid80 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/Command> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid81 .
+_:genid81 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid81 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasPatient> .
+_:genid81 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/Command> <http://www.w3.org/2000/01/rdf-schema#comment> "Ordering or directing another character to act."@en .
+<http://purl.org/story/action/Command> <http://www.w3.org/2000/01/rdf-schema#label> "command"@en .
+# 
+# http://purl.org/story/action/Counsel
+<http://purl.org/story/action/Counsel> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/action/Counsel> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/action/SpeechAct> .
+<http://purl.org/story/action/Counsel> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid82 .
+_:genid82 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid82 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasAgent> .
+_:genid82 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/Counsel> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid83 .
+_:genid83 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid83 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasPatient> .
+_:genid83 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/Counsel> <http://www.w3.org/2000/01/rdf-schema#comment> "Advice or warning offered to a patient."@en .
+<http://purl.org/story/action/Counsel> <http://www.w3.org/2000/01/rdf-schema#label> "counsel"@en .
+# 
+# http://purl.org/story/action/Decide
+<http://purl.org/story/action/Decide> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/action/Decide> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/action/Action> .
+<http://purl.org/story/action/Decide> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid84 .
+_:genid84 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid84 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasAgent> .
+_:genid84 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/Decide> <http://www.w3.org/2000/01/rdf-schema#comment> "A deliberate choice or resolution (agent may be the only required role)."@en .
+<http://purl.org/story/action/Decide> <http://www.w3.org/2000/01/rdf-schema#label> "decide"@en .
+# 
+# http://purl.org/story/action/Defend
+<http://purl.org/story/action/Defend> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/action/Defend> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/action/Action> .
+<http://purl.org/story/action/Defend> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid85 .
+_:genid85 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid85 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasAgent> .
+_:genid85 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/Defend> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid86 .
+_:genid86 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid86 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasPatient> .
+_:genid86 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/Defend> <http://www.w3.org/2000/01/rdf-schema#comment> "Protecting or standing for a patient against harm."@en .
+<http://purl.org/story/action/Defend> <http://www.w3.org/2000/01/rdf-schema#label> "defend"@en .
+# 
+# http://purl.org/story/action/Flee
+<http://purl.org/story/action/Flee> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/action/Flee> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/action/TravelAction> .
+<http://purl.org/story/action/Flee> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid87 .
+_:genid87 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid87 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasAgent> .
+_:genid87 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/Flee> <http://www.w3.org/2000/01/rdf-schema#comment> "Evasive flight, often with an implied or explicit pursuer (patient optional)."@en .
+<http://purl.org/story/action/Flee> <http://www.w3.org/2000/01/rdf-schema#label> "flee"@en .
+# 
+# http://purl.org/story/action/Give
+<http://purl.org/story/action/Give> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/action/Give> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/action/Action> .
+<http://purl.org/story/action/Give> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid88 .
+_:genid88 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid88 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasAgent> .
+_:genid88 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/Give> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid89 .
+_:genid89 <http://www.w3.org/2002/07/owl#minCardinality> "1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
+_:genid89 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasTheme> .
+_:genid89 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/Give> <http://www.w3.org/2000/01/rdf-schema#comment> "Transfer of something (theme) toward a recipient; recipient can be act:hasPatient when they are a character."@en .
+<http://purl.org/story/action/Give> <http://www.w3.org/2000/01/rdf-schema#label> "give"@en .
+# 
+# http://purl.org/story/action/LeavePlace
+<http://purl.org/story/action/LeavePlace> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/action/LeavePlace> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/action/TravelAction> .
+<http://purl.org/story/action/LeavePlace> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid90 .
+_:genid90 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid90 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasAgent> .
+_:genid90 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/LeavePlace> <http://www.w3.org/2000/01/rdf-schema#comment> "Departing from a location (start of a leg of travel)."@en .
+<http://purl.org/story/action/LeavePlace> <http://www.w3.org/2000/01/rdf-schema#label> "leave place"@en .
+# 
+# http://purl.org/story/action/Oath
+<http://purl.org/story/action/Oath> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/action/Oath> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/action/SpeechAct> .
+<http://purl.org/story/action/Oath> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid91 .
+_:genid91 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid91 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasAgent> .
+_:genid91 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/Oath> <http://www.w3.org/2000/01/rdf-schema#comment> "A binding promise or self-curse; one utterance, long consequences."@en .
+<http://purl.org/story/action/Oath> <http://www.w3.org/2000/01/rdf-schema#label> "oath"@en .
+# 
+# http://purl.org/story/action/Rescue
+<http://purl.org/story/action/Rescue> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/action/Rescue> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/action/Action> .
+<http://purl.org/story/action/Rescue> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid92 .
+_:genid92 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid92 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasAgent> .
+_:genid92 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/Rescue> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid93 .
+_:genid93 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid93 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasPatient> .
+_:genid93 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/Rescue> <http://www.w3.org/2000/01/rdf-schema#comment> "Freeing or saving a patient from danger or captivity."@en .
+<http://purl.org/story/action/Rescue> <http://www.w3.org/2000/01/rdf-schema#label> "rescue"@en .
+# 
+# http://purl.org/story/action/SpeechAct
+<http://purl.org/story/action/SpeechAct> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/action/SpeechAct> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/action/Action> .
+<http://purl.org/story/action/SpeechAct> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid94 .
+_:genid94 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid94 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasAgent> .
+_:genid94 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/SpeechAct> <http://www.w3.org/2000/01/rdf-schema#comment> "Speaking: threats, oaths, commands, counsel, and other illocutionary moves that move the plot."@en .
+<http://purl.org/story/action/SpeechAct> <http://www.w3.org/2000/01/rdf-schema#label> "speech act"@en .
+# 
+# http://purl.org/story/action/Take
+<http://purl.org/story/action/Take> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/action/Take> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/action/Action> .
+<http://purl.org/story/action/Take> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid95 .
+_:genid95 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid95 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasAgent> .
+_:genid95 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/Take> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid96 .
+_:genid96 <http://www.w3.org/2002/07/owl#minCardinality> "1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
+_:genid96 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasTheme> .
+_:genid96 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/Take> <http://www.w3.org/2000/01/rdf-schema#comment> "Taking or seizing act:hasTheme, often from a source (patient as holder)."@en .
+<http://purl.org/story/action/Take> <http://www.w3.org/2000/01/rdf-schema#label> "take"@en .
+# 
+# http://purl.org/story/action/Threat
+<http://purl.org/story/action/Threat> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/action/Threat> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/action/SpeechAct> .
+<http://purl.org/story/action/Threat> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid97 .
+_:genid97 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid97 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasAgent> .
+_:genid97 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/Threat> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid98 .
+_:genid98 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid98 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasPatient> .
+_:genid98 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/Threat> <http://www.w3.org/2000/01/rdf-schema#comment> "A speech act meant to intimidate or constrain a patient."@en .
+<http://purl.org/story/action/Threat> <http://www.w3.org/2000/01/rdf-schema#label> "threat"@en .
+# 
+# http://purl.org/story/action/TravelAction
+<http://purl.org/story/action/TravelAction> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/action/TravelAction> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/action/Action> .
+<http://purl.org/story/action/TravelAction> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid99 .
+_:genid99 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid99 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/action/hasAgent> .
+_:genid99 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/action/TravelAction> <http://www.w3.org/2000/01/rdf-schema#comment> "A step of movement: leave, arrive, flee, pass through."@en .
+<http://purl.org/story/action/TravelAction> <http://www.w3.org/2000/01/rdf-schema#label> "travel action"@en .
+# 
+# http://purl.org/story/event/Battle
+<http://purl.org/story/event/Battle> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/event/Battle> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/Battle> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid100 .
+_:genid100 <http://www.w3.org/2002/07/owl#onClass> <http://purl.org/story/social/Character> .
+_:genid100 <http://www.w3.org/2002/07/owl#minQualifiedCardinality> "2"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
+_:genid100 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/event/hasParticipant> .
+_:genid100 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/event/Battle> <http://www.w3.org/2000/01/rdf-schema#comment> "An event where at least two opposing sides fight each other; in the Narn this covers large clashes as well as smaller armed encounters."@en .
+<http://purl.org/story/event/Battle> <http://www.w3.org/2000/01/rdf-schema#label> "battle"@en .
+# 
+# http://purl.org/story/event/Birth
+<http://purl.org/story/event/Birth> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/event/Birth> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/Birth> <http://www.w3.org/2000/01/rdf-schema#comment> "An event where a new character is born."@en .
+<http://purl.org/story/event/Birth> <http://www.w3.org/2000/01/rdf-schema#label> "birth"@en .
+# 
+# http://purl.org/story/event/Death
+<http://purl.org/story/event/Death> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/event/Death> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/Death> <http://www.w3.org/2000/01/rdf-schema#comment> "An event where a character dies."@en .
+<http://purl.org/story/event/Death> <http://www.w3.org/2000/01/rdf-schema#label> "death"@en .
+# 
+# http://purl.org/story/event/Event
+<http://purl.org/story/event/Event> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/event/Event> <http://www.w3.org/2000/01/rdf-schema#comment> "Something that happens in the story and can be located in time and space."@en .
+<http://purl.org/story/event/Event> <http://www.w3.org/2000/01/rdf-schema#label> "event"@en .
+# 
+# http://purl.org/story/event/Journey
+<http://purl.org/story/event/Journey> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/event/Journey> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/Journey> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid101 .
+_:genid101 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Character> .
+_:genid101 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/event/hasParticipant> .
+_:genid101 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/event/Journey> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid102 .
+_:genid102 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/location/Place> .
+_:genid102 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/event/occursAt> .
+_:genid102 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/event/Journey> <http://www.w3.org/2000/01/rdf-schema#comment> "An event where one or more characters travel from one place to another, possibly broken down into several smaller travel actions."@en .
+<http://purl.org/story/event/Journey> <http://www.w3.org/2000/01/rdf-schema#label> "journey"@en .
+# 
+# http://purl.org/story/event/Meeting
+<http://purl.org/story/event/Meeting> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/event/Meeting> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/event/Event> .
+<http://purl.org/story/event/Meeting> <http://www.w3.org/2000/01/rdf-schema#comment> "An event where characters come together to talk or decide something."@en .
+<http://purl.org/story/event/Meeting> <http://www.w3.org/2000/01/rdf-schema#label> "meeting"@en .
+# 
+# http://purl.org/story/location/BodyOfWater
+<http://purl.org/story/location/BodyOfWater> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/location/BodyOfWater> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/location/Place> .
+<http://purl.org/story/location/BodyOfWater> <http://www.w3.org/2000/01/rdf-schema#comment> "Sea, ocean, bay, or large lake as a spatial region."@en .
+<http://purl.org/story/location/BodyOfWater> <http://www.w3.org/2000/01/rdf-schema#label> "body of water"@en .
+# 
+# http://purl.org/story/location/City
+<http://purl.org/story/location/City> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/location/City> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/location/Settlement> .
+<http://purl.org/story/location/City> <http://www.w3.org/2000/01/rdf-schema#comment> "A large settlement, often walled or densely built."@en .
+<http://purl.org/story/location/City> <http://www.w3.org/2000/01/rdf-schema#label> "city"@en .
+# 
+# http://purl.org/story/location/District
+<http://purl.org/story/location/District> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/location/District> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/location/Place> .
+<http://purl.org/story/location/District> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid103 .
+_:genid103 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/location/Settlement> .
+_:genid103 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/location/isPartOf> .
+_:genid103 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/location/District> <http://www.w3.org/2000/01/rdf-schema#comment> "A named part of a larger settlement (ward, quarter, suburb); use loc:isPartOf to link it to the city or town."@en .
+<http://purl.org/story/location/District> <http://www.w3.org/2000/01/rdf-schema#label> "district"@en .
+# 
+# http://purl.org/story/location/Forest
+<http://purl.org/story/location/Forest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/location/Forest> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/location/WildArea> .
+<http://purl.org/story/location/Forest> <http://www.w3.org/2000/01/rdf-schema#comment> "Woodland or forested region."@en .
+<http://purl.org/story/location/Forest> <http://www.w3.org/2000/01/rdf-schema#label> "forest"@en .
+# 
+# http://purl.org/story/location/Fortress
+<http://purl.org/story/location/Fortress> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/location/Fortress> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/location/Settlement> .
+<http://purl.org/story/location/Fortress> <http://www.w3.org/2000/01/rdf-schema#comment> "A fortified settlement mainly used for defence or war."@en .
+<http://purl.org/story/location/Fortress> <http://www.w3.org/2000/01/rdf-schema#label> "fortress"@en .
+# 
+# http://purl.org/story/location/Marsh
+<http://purl.org/story/location/Marsh> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/location/Marsh> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/location/WildArea> .
+<http://purl.org/story/location/Marsh> <http://www.w3.org/2000/01/rdf-schema#comment> "Wetland, fen, or marsh."@en .
+<http://purl.org/story/location/Marsh> <http://www.w3.org/2000/01/rdf-schema#label> "marsh"@en .
+# 
+# http://purl.org/story/location/MountainRange
+<http://purl.org/story/location/MountainRange> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/location/MountainRange> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/location/WildArea> .
+<http://purl.org/story/location/MountainRange> <http://www.w3.org/2000/01/rdf-schema#comment> "Highlands or connected mountains."@en .
+<http://purl.org/story/location/MountainRange> <http://www.w3.org/2000/01/rdf-schema#label> "mountain range"@en .
+# 
+# http://purl.org/story/location/Ocean
+<http://purl.org/story/location/Ocean> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/location/Ocean> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/location/BodyOfWater> .
+<http://purl.org/story/location/Ocean> <http://www.w3.org/2000/01/rdf-schema#comment> "Open ocean."@en .
+<http://purl.org/story/location/Ocean> <http://www.w3.org/2000/01/rdf-schema#label> "ocean"@en .
+# 
+# http://purl.org/story/location/Place
+<http://purl.org/story/location/Place> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/location/Place> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <https://purl.org/region/rcc8/Region> .
+<http://purl.org/story/location/Place> <http://www.w3.org/2000/01/rdf-schema#comment> "Any spatial region that can be referred to in the story, from a room to a whole country."@en .
+<http://purl.org/story/location/Place> <http://www.w3.org/2000/01/rdf-schema#label> "place"@en .
+# 
+# http://purl.org/story/location/Region
+<http://purl.org/story/location/Region> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/location/Region> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/location/Place> .
+<http://purl.org/story/location/Region> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <https://purl.org/region/rcc8/Region> .
+<http://purl.org/story/location/Region> <http://www.w3.org/2000/01/rdf-schema#comment> "A larger territory that may contain towns, fortresses and wild areas; treated as an RCC8 region for topological reasoning."@en .
+<http://purl.org/story/location/Region> <http://www.w3.org/2000/01/rdf-schema#label> "region"@en .
+# 
+# http://purl.org/story/location/River
+<http://purl.org/story/location/River> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/location/River> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/location/WildArea> .
+<http://purl.org/story/location/River> <http://www.w3.org/2000/01/rdf-schema#comment> "River or large stream as a place reference."@en .
+<http://purl.org/story/location/River> <http://www.w3.org/2000/01/rdf-schema#label> "river"@en .
+# 
+# http://purl.org/story/location/Sea
+<http://purl.org/story/location/Sea> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/location/Sea> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/location/BodyOfWater> .
+<http://purl.org/story/location/Sea> <http://www.w3.org/2000/01/rdf-schema#comment> "Sea or gulf."@en .
+<http://purl.org/story/location/Sea> <http://www.w3.org/2000/01/rdf-schema#label> "sea"@en .
+# 
+# http://purl.org/story/location/Settlement
+<http://purl.org/story/location/Settlement> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/location/Settlement> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/location/Place> .
+<http://purl.org/story/location/Settlement> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid104 .
+_:genid104 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/location/Region> .
+_:genid104 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/location/isPartOf> .
+_:genid104 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/location/Settlement> <http://www.w3.org/2000/01/rdf-schema#comment> "A place where people live in a relatively permanent way: village, town, city, fortress, etc."@en .
+<http://purl.org/story/location/Settlement> <http://www.w3.org/2000/01/rdf-schema#label> "settlement"@en .
+# 
+# http://purl.org/story/location/Town
+<http://purl.org/story/location/Town> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/location/Town> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/location/Settlement> .
+<http://purl.org/story/location/Town> <http://www.w3.org/2000/01/rdf-schema#comment> "A mid-sized settlement, larger than a village."@en .
+<http://purl.org/story/location/Town> <http://www.w3.org/2000/01/rdf-schema#label> "town"@en .
+# 
+# http://purl.org/story/location/Valley
+<http://purl.org/story/location/Valley> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/location/Valley> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/location/WildArea> .
+<http://purl.org/story/location/Valley> <http://www.w3.org/2000/01/rdf-schema#comment> "River valley or enclosed lowland."@en .
+<http://purl.org/story/location/Valley> <http://www.w3.org/2000/01/rdf-schema#label> "valley"@en .
+# 
+# http://purl.org/story/location/Village
+<http://purl.org/story/location/Village> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/location/Village> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/location/Settlement> .
+<http://purl.org/story/location/Village> <http://www.w3.org/2000/01/rdf-schema#comment> "A small settlement."@en .
+<http://purl.org/story/location/Village> <http://www.w3.org/2000/01/rdf-schema#label> "village"@en .
+# 
+# http://purl.org/story/location/WildArea
+<http://purl.org/story/location/WildArea> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/location/WildArea> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/location/Place> .
+<http://purl.org/story/location/WildArea> <http://www.w3.org/2000/01/rdf-schema#comment> "Unsettled land: forests, mountains, marshes, etc."@en .
+<http://purl.org/story/location/WildArea> <http://www.w3.org/2000/01/rdf-schema#label> "wild area"@en .
+# 
+# http://purl.org/story/plot/Chapter
+<http://purl.org/story/plot/Chapter> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/plot/Chapter> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/plot/NarrativeUnit> .
+<http://purl.org/story/plot/Chapter> <http://www.w3.org/2000/01/rdf-schema#comment> "A named division of a written story, usually corresponding to one or more scenes."@en .
+<http://purl.org/story/plot/Chapter> <http://www.w3.org/2000/01/rdf-schema#label> "chapter"@en .
+# 
+# http://purl.org/story/plot/Climax
+<http://purl.org/story/plot/Climax> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/plot/Climax> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/plot/NarrativeUnit> .
+<http://purl.org/story/plot/Climax> <http://www.w3.org/2000/01/rdf-schema#comment> "A narrative unit that marks the peak of the central conflict of the story."@en .
+<http://purl.org/story/plot/Climax> <http://www.w3.org/2000/01/rdf-schema#label> "climax"@en .
+# 
+# http://purl.org/story/plot/NarrativeUnit
+<http://purl.org/story/plot/NarrativeUnit> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/plot/NarrativeUnit> <http://www.w3.org/2000/01/rdf-schema#comment> "A self-contained part of a story such as a chapter, scene or episode (chapter titles in the Narn, or shorter scenes inside them)."@en .
+<http://purl.org/story/plot/NarrativeUnit> <http://www.w3.org/2000/01/rdf-schema#label> "narrative unit"@en .
+# 
+# http://purl.org/story/plot/Story
+<http://purl.org/story/plot/Story> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/plot/Story> <http://www.w3.org/2000/01/rdf-schema#comment> "A complete narrative work, for example a tale, book or saga. In this assignment the main example is the Narn i Chîn Húrin."@en .
+<http://purl.org/story/plot/Story> <http://www.w3.org/2000/01/rdf-schema#label> "story"@en .
+# 
+# http://purl.org/story/plot/TragicEnding
+<http://purl.org/story/plot/TragicEnding> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/plot/TragicEnding> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/plot/NarrativeUnit> .
+<http://purl.org/story/plot/TragicEnding> <http://www.w3.org/2000/01/rdf-schema#comment> "A narrative unit where the main tragic outcome of the story occurs (for the Narn this can be linked to Túrin's death)."@en .
+<http://purl.org/story/plot/TragicEnding> <http://www.w3.org/2000/01/rdf-schema#label> "tragic ending"@en .
+# 
+# http://purl.org/story/social/Character
+<http://purl.org/story/social/Character> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/social/Character> <http://www.w3.org/2000/01/rdf-schema#comment> "An individual that can act, speak or simply be mentioned in the story world (for the Narn: people like Túrin, Húrin, Morwen, but also dragons or Valar if needed)."@en .
+<http://purl.org/story/social/Character> <http://www.w3.org/2000/01/rdf-schema#label> "character"@en .
+# 
+# http://purl.org/story/social/House
+<http://purl.org/story/social/House> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/social/House> <http://www.w3.org/2000/01/rdf-schema#comment> "A named social group or lineage, such as a house, clan, order or company (e.g. the House of Hador in the Narn)."@en .
+<http://purl.org/story/social/House> <http://www.w3.org/2000/01/rdf-schema#label> "house or clan"@en .
+# 
+# http://purl.org/story/social/Lord
+<http://purl.org/story/social/Lord> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/social/Lord> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/social/Character> .
+<http://purl.org/story/social/Lord> <http://www.w3.org/2000/01/rdf-schema#comment> "A character recognised as lord over others, usually with vassals or followers."@en .
+<http://purl.org/story/social/Lord> <http://www.w3.org/2000/01/rdf-schema#label> "lord"@en .
+# 
+# http://purl.org/story/social/Occupation
+<http://purl.org/story/social/Occupation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/social/Occupation> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/social/SocialRole> .
+<http://purl.org/story/social/Occupation> <http://www.w3.org/2000/01/rdf-schema#comment> "Trade, craft, or habitual work (farmer, smith, thief, etc.); use as object of hasOccupation or hasSocialRole."@en .
+<http://purl.org/story/social/Occupation> <http://www.w3.org/2000/01/rdf-schema#label> "occupation"@en .
+# 
+# http://purl.org/story/social/SocialRole
+<http://purl.org/story/social/SocialRole> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/social/SocialRole> <http://www.w3.org/2000/01/rdf-schema#comment> "A social position that a character may hold in the world of the story: lord, captain, messenger, servant, prisoner, and so on."@en .
+<http://purl.org/story/social/SocialRole> <http://www.w3.org/2000/01/rdf-schema#label> "social role"@en .
+# 
+# http://purl.org/story/social/Vassal
+<http://purl.org/story/social/Vassal> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/social/Vassal> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/social/Character> .
+<http://purl.org/story/social/Vassal> <http://www.w3.org/2000/01/rdf-schema#comment> "A character who owes allegiance or service to a lord."@en .
+<http://purl.org/story/social/Vassal> <http://www.w3.org/2000/01/rdf-schema#label> "vassal"@en .
+# 
+# http://purl.org/story/time/StoryTimeInstant
+<http://purl.org/story/time/StoryTimeInstant> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/time/StoryTimeInstant> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.w3.org/2006/time#Instant> .
+<http://purl.org/story/time/StoryTimeInstant> <http://www.w3.org/2000/01/rdf-schema#comment> "A time instant that marks a punctual event such as a death or a single decisive action."@en .
+<http://purl.org/story/time/StoryTimeInstant> <http://www.w3.org/2000/01/rdf-schema#label> "story time instant"@en .
+# 
+# http://purl.org/story/time/StoryTimeInterval
+<http://purl.org/story/time/StoryTimeInterval> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<http://purl.org/story/time/StoryTimeInterval> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.w3.org/2006/time#ProperInterval> .
+<http://purl.org/story/time/StoryTimeInterval> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid105 .
+_:genid105 <http://www.w3.org/2002/07/owl#onClass> <http://www.w3.org/2006/time#Instant> .
+_:genid105 <http://www.w3.org/2002/07/owl#qualifiedCardinality> "1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
+_:genid105 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/time/hasEnd> .
+_:genid105 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/time/StoryTimeInterval> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid106 .
+_:genid106 <http://www.w3.org/2002/07/owl#onClass> <http://www.w3.org/2006/time#Instant> .
+_:genid106 <http://www.w3.org/2002/07/owl#qualifiedCardinality> "1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
+_:genid106 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/time/hasStart> .
+_:genid106 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<http://purl.org/story/time/StoryTimeInterval> <http://www.w3.org/2000/01/rdf-schema#comment> "A non-punctual time interval for an event or episode; subclass of time:ProperInterval so OWL-Time Allen relations apply between intervals."@en .
+<http://purl.org/story/time/StoryTimeInterval> <http://www.w3.org/2000/01/rdf-schema#label> "story time interval"@en .
+# 
+# https://purl.org/region/rcc8/Region
+<https://purl.org/region/rcc8/Region> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://purl.org/region/rcc8/Region> <http://www.w3.org/2000/01/rdf-schema#comment> "A continuous extent of space. Mathematically, given a topological space, this concepts corresponds to a compact subspace with finite diameter."@en .
+<https://purl.org/region/rcc8/Region> <http://www.w3.org/2000/01/rdf-schema#label> "region"@en .
+# 
+# 
+# 
+# #################################################################
+# #
+# #    Individuals
+# #
+# #################################################################
+# 
+# 
+# http://purl.org/story/social/Blacksmith
+<http://purl.org/story/social/Blacksmith> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<http://purl.org/story/social/Blacksmith> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/story/social/Occupation> .
+<http://purl.org/story/social/Blacksmith> <http://www.w3.org/2000/01/rdf-schema#label> "blacksmith"@en .
+# 
+# http://purl.org/story/social/Burglar
+<http://purl.org/story/social/Burglar> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<http://purl.org/story/social/Burglar> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/story/social/Occupation> .
+<http://purl.org/story/social/Burglar> <http://www.w3.org/2000/01/rdf-schema#label> "burglar"@en .
+# 
+# http://purl.org/story/social/Farmer
+<http://purl.org/story/social/Farmer> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<http://purl.org/story/social/Farmer> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/story/social/Occupation> .
+<http://purl.org/story/social/Farmer> <http://www.w3.org/2000/01/rdf-schema#label> "farmer"@en .
+# 
+# http://purl.org/story/social/Innkeeper
+<http://purl.org/story/social/Innkeeper> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<http://purl.org/story/social/Innkeeper> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/story/social/Occupation> .
+<http://purl.org/story/social/Innkeeper> <http://www.w3.org/2000/01/rdf-schema#label> "innkeeper"@en .
+# 
+# http://purl.org/story/social/Merchant
+<http://purl.org/story/social/Merchant> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<http://purl.org/story/social/Merchant> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/story/social/Occupation> .
+<http://purl.org/story/social/Merchant> <http://www.w3.org/2000/01/rdf-schema#label> "merchant"@en .
+# 
+# http://purl.org/story/social/Messenger
+<http://purl.org/story/social/Messenger> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<http://purl.org/story/social/Messenger> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/story/social/Occupation> .
+<http://purl.org/story/social/Messenger> <http://www.w3.org/2000/01/rdf-schema#label> "messenger"@en .
+# 
+# http://purl.org/story/social/Physician
+<http://purl.org/story/social/Physician> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<http://purl.org/story/social/Physician> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/story/social/Occupation> .
+<http://purl.org/story/social/Physician> <http://www.w3.org/2000/01/rdf-schema#label> "physician"@en .
+# 
+# http://purl.org/story/social/Soldier
+<http://purl.org/story/social/Soldier> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<http://purl.org/story/social/Soldier> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/story/social/Occupation> .
+<http://purl.org/story/social/Soldier> <http://www.w3.org/2000/01/rdf-schema#label> "soldier"@en .
+# 
+# http://purl.org/story/social/Thief
+<http://purl.org/story/social/Thief> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<http://purl.org/story/social/Thief> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/story/social/Occupation> .
+<http://purl.org/story/social/Thief> <http://www.w3.org/2000/01/rdf-schema#label> "thief"@en .
+# 
+# 
+# 
+# #################################################################
+# #
+# #    General axioms
+# #
+# #################################################################
+# 
+# 
+_:genid107 <http://www.w3.org/2002/07/owl#intersectionOf> _:genid110 .
+_:genid110 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid108 .
+_:genid108 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid108 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid109 .
+_:genid109 <http://www.w3.org/2002/07/owl#someValuesFrom> <http://purl.org/story/social/Lord> .
+_:genid109 <http://www.w3.org/2002/07/owl#onProperty> <http://purl.org/story/social/hasAllegianceTo> .
+_:genid109 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+_:genid108 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid110 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/social/Character> .
+_:genid110 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid107 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+_:genid107 <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.org/story/social/Vassal> .
+# 
+_:genid111 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AllDifferent> .
+_:genid111 <http://www.w3.org/2002/07/owl#distinctMembers> _:genid120 .
+_:genid120 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid119 .
+_:genid119 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid118 .
+_:genid118 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid117 .
+_:genid117 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid116 .
+_:genid116 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid115 .
+_:genid115 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid114 .
+_:genid114 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid113 .
+_:genid113 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid112 .
+_:genid112 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid112 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/social/Thief> .
+_:genid112 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid113 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/social/Soldier> .
+_:genid113 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid114 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/social/Physician> .
+_:genid114 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid115 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/social/Messenger> .
+_:genid115 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid116 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/social/Merchant> .
+_:genid116 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid117 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/social/Innkeeper> .
+_:genid117 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid118 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/social/Farmer> .
+_:genid118 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid119 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/social/Burglar> .
+_:genid119 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid120 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://purl.org/story/social/Blacksmith> .
+_:genid120 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+# 
+_:genid121 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AllDisjointProperties> .
+_:genid121 <http://www.w3.org/2002/07/owl#members> _:genid129 .
+_:genid129 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid128 .
+_:genid128 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid127 .
+_:genid127 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid126 .
+_:genid126 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid125 .
+_:genid125 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid124 .
+_:genid124 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid123 .
+_:genid123 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid122 .
+_:genid122 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid122 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <https://purl.org/region/rcc8/tppi> .
+_:genid122 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid123 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <https://purl.org/region/rcc8/tpp> .
+_:genid123 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid124 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <https://purl.org/region/rcc8/po> .
+_:genid124 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid125 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <https://purl.org/region/rcc8/ntppi> .
+_:genid125 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid126 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <https://purl.org/region/rcc8/ntpp> .
+_:genid126 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid127 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <https://purl.org/region/rcc8/eq> .
+_:genid127 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid128 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <https://purl.org/region/rcc8/ec> .
+_:genid128 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid129 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <https://purl.org/region/rcc8/dc> .
+_:genid129 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+# 
+# Generated by the OWL API (version 5.1.18) https://github.com/owlcs/owlapi/

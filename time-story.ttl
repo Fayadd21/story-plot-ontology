@@ -1,0 +1,67 @@
+@prefix stime: <http://purl.org/story/time/> .
+@prefix time:  <http://www.w3.org/2006/time#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+
+stime: a owl:Ontology ;
+  owl:imports <http://www.w3.org/2006/time#> ;
+  rdfs:label "Allen-style time for story plots"@en ;
+  rdfs:comment """Story intervals use Allen's endpoints Is and Ie via stime:hasStart and stime:hasEnd on top of the W3C Time ontology.
+
+The thirteen Allen relations (b, bi, m, mi, o, oi, s, si, d, di, f, fi, eq) are not redefined here: use the corresponding OWL-Time object properties between time:ProperInterval individuals — time:intervalBefore (b), time:intervalAfter (bi), time:intervalMeets (m), time:intervalMetBy (mi), time:intervalOverlaps (o), time:intervalOverlappedBy (oi), time:intervalStarts (s), time:intervalStartedBy (si), time:intervalDuring (d), time:intervalContains (di), time:intervalFinishes (f), time:intervalFinishedBy (fi), time:intervalEquals (eq).
+
+time:intervalOverlaps (Allen o) is not symmetric: the inverse is time:intervalOverlappedBy (oi). Do not model story 'overlaps' as a symmetric relation.
+
+stime:StoryTimeInterval is a proper interval so those relations (domain/range ProperInterval in OWL Time) apply when asserting temporal structure between story intervals. Below, sound property chains link endpoint ordering (time:before / time:after on instants) to intervalBefore / intervalAfter."""@en .
+
+### Story-specific time classes
+
+stime:StoryTimeInterval a owl:Class ;
+  rdfs:subClassOf time:ProperInterval ;
+  rdfs:label "story time interval"@en ;
+  rdfs:comment "A non-punctual time interval for an event or episode; subclass of time:ProperInterval so OWL-Time Allen relations apply between intervals."@en .
+
+stime:StoryTimeInstant a owl:Class ;
+  rdfs:subClassOf time:Instant ;
+  rdfs:label "story time instant"@en ;
+  rdfs:comment "A time instant that marks a punctual event such as a death or a single decisive action."@en .
+
+### Start and end functions in the sense of Allen (Is and Ie)
+
+stime:hasStart a owl:ObjectProperty, owl:FunctionalProperty ;
+  rdfs:domain time:TemporalEntity ;
+  rdfs:range  time:Instant ;
+  rdfs:subPropertyOf time:hasBeginning ;
+  rdfs:label "has start instant"@en ;
+  rdfs:comment "Allen-style start function Is: associates each temporal entity with the instant when it starts."@en .
+
+stime:hasEnd a owl:ObjectProperty, owl:FunctionalProperty ;
+  rdfs:domain time:TemporalEntity ;
+  rdfs:range  time:Instant ;
+  rdfs:subPropertyOf time:hasEnd ;
+  rdfs:label "has end instant"@en ;
+  rdfs:comment "Allen-style end function Ie: associates each temporal entity with the instant when it ends."@en .
+
+### Intervals have exactly one start and one end
+
+stime:StoryTimeInterval rdfs:subClassOf
+  [ a owl:Restriction ;
+    owl:onProperty stime:hasStart ;
+    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+    owl:onClass time:Instant
+  ],
+  [ a owl:Restriction ;
+    owl:onProperty stime:hasEnd ;
+    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+    owl:onClass time:Instant
+  ] .
+
+### Axiomatisation: endpoint order → Allen 'before' / 'after' between intervals (OWL-Time)
+
+# If end(I1) time:before start(I2), then I1 time:intervalBefore I2 (Allen b on intervals).
+time:intervalBefore owl:propertyChainAxiom ( stime:hasEnd time:before [ owl:inverseOf stime:hasStart ] ) .
+
+# If start(I1) time:after end(I2), then I1 time:intervalAfter I2 (Allen bi on intervals).
+time:intervalAfter owl:propertyChainAxiom ( stime:hasStart time:after [ owl:inverseOf stime:hasEnd ] ) .

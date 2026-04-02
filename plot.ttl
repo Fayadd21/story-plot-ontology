@@ -1,0 +1,74 @@
+@prefix plot: <http://purl.org/story/plot/> .
+@prefix ev:   <http://purl.org/story/event/> .
+@prefix soc:  <http://purl.org/story/social/> .
+@prefix soc:  <http://purl.org/story/social/> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+plot: a owl:Ontology ;
+  owl:imports ev:, soc: ;
+  rdfs:label "Narrative structure of stories"@en ;
+  rdfs:comment "Classes and properties for the narrated structure of a story, such as stories, chapters and climaxes, and how they relate to events."@en .
+
+### Classes
+
+plot:Story a owl:Class ;
+  rdfs:label "story"@en ;
+  rdfs:comment "A complete narrative work, for example a tale, book or saga. In this assignment the main example is the Narn i Chîn Húrin."@en .
+
+plot:NarrativeUnit a owl:Class ;
+  rdfs:label "narrative unit"@en ;
+  rdfs:comment "A self-contained part of a story such as a chapter, scene or episode (chapter titles in the Narn, or shorter scenes inside them)."@en .
+
+plot:Chapter a owl:Class ;
+  rdfs:subClassOf plot:NarrativeUnit ;
+  rdfs:label "chapter"@en ;
+  rdfs:comment "A named division of a written story, usually corresponding to one or more scenes."@en .
+
+plot:Climax a owl:Class ;
+  rdfs:subClassOf plot:NarrativeUnit ;
+  rdfs:label "climax"@en ;
+  rdfs:comment "A narrative unit that marks the peak of the central conflict of the story."@en .
+
+plot:TragicEnding a owl:Class ;
+  rdfs:subClassOf plot:NarrativeUnit ;
+  rdfs:label "tragic ending"@en ;
+  rdfs:comment "A narrative unit where the main tragic outcome of the story occurs (for the Narn this can be linked to Túrin's death)."@en .
+
+### Object properties
+
+plot:hasUnit a owl:ObjectProperty ;
+  rdfs:domain plot:Story ;
+  rdfs:range  plot:NarrativeUnit ;
+  rdfs:label "has unit"@en ;
+  rdfs:comment "Relates a story to one of its narrative units (chapter, scene, etc.)."@en .
+
+plot:isUnitOf a owl:ObjectProperty ;
+  owl:inverseOf plot:hasUnit ;
+  rdfs:label "is unit of"@en .
+
+plot:precedesUnit a owl:ObjectProperty, owl:TransitiveProperty ;
+  rdfs:domain plot:NarrativeUnit ;
+  rdfs:range  plot:NarrativeUnit ;
+  rdfs:label "precedes unit"@en ;
+  rdfs:comment "One narrative unit comes before another in the order of telling."@en .
+
+plot:tellsEvent a owl:ObjectProperty ;
+  rdfs:domain plot:NarrativeUnit ;
+  rdfs:range  ev:Event ;
+  rdfs:label "tells event"@en ;
+  rdfs:comment "Relates a narrative unit to an event it narrates."@en .
+
+plot:endsWithEvent a owl:ObjectProperty, owl:FunctionalProperty ;
+  rdfs:domain plot:Story ;
+  rdfs:range  ev:Event ;
+  rdfs:label "ends with event"@en ;
+  rdfs:comment "The event that closes the story; each story has at most one such ending event."@en .
+
+plot:hasProtagonist a owl:ObjectProperty ;
+  rdfs:domain plot:Story ;
+  rdfs:range  soc:Character ;
+  rdfs:label "has protagonist"@en ;
+  rdfs:comment "Main character whose fate drives the story as a whole (e.g. Túrin in the Narn)."@en .

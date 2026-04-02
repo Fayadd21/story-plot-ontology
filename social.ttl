@@ -1,0 +1,128 @@
+﻿@prefix soc:  <http://purl.org/story/social/> .
+@prefix fo:   <http://purl.org/family/> .
+@prefix meo:  <http://purl.org/meo/> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+soc: a owl:Ontology ;
+  owl:imports fo:, meo: ;
+  rdfs:label "Social relations in stories"@en ;
+  rdfs:comment "Non-familial social ties between characters, such as allegiance, enmity or membership in a house or group."@en .
+
+### Classes
+
+soc:Character a owl:Class ;
+  rdfs:label "character"@en ;
+  rdfs:comment "An individual that can act, speak or simply be mentioned in the story world (for the Narn: people like Túrin, Húrin, Morwen, but also dragons or Valar if needed)."@en .
+
+soc:House a owl:Class ;
+  rdfs:label "house or clan"@en ;
+  rdfs:comment "A named social group or lineage, such as a house, clan, order or company (e.g. the House of Hador in the Narn)."@en .
+
+soc:SocialRole a owl:Class ;
+  rdfs:label "social role"@en ;
+  rdfs:comment "A social position that a character may hold in the world of the story: lord, captain, messenger, servant, prisoner, and so on."@en .
+
+soc:Occupation a owl:Class ;
+  rdfs:subClassOf soc:SocialRole ;
+  rdfs:label "occupation"@en ;
+  rdfs:comment "Trade, craft, or habitual work (farmer, smith, thief, etc.); use as object of hasOccupation or hasSocialRole."@en .
+
+soc:Lord a owl:Class ;
+  rdfs:subClassOf soc:Character ;
+  rdfs:label "lord"@en ;
+  rdfs:comment "A character recognised as lord over others, usually with vassals or followers."@en .
+
+soc:Vassal a owl:Class ;
+  rdfs:subClassOf soc:Character ;
+  rdfs:label "vassal"@en ;
+  rdfs:comment "A character who owes allegiance or service to a lord."@en .
+
+### Object properties
+
+soc:belongsToHouse a owl:ObjectProperty ;
+  rdfs:domain soc:Character ;
+  rdfs:range  soc:House ;
+  rdfs:label "belongs to house"@en ;
+  rdfs:comment "Relates a character to the house, clan or similar group they are part of."@en .
+
+soc:hasAllegianceTo a owl:ObjectProperty ;
+  rdfs:domain soc:Character ;
+  rdfs:range  soc:Character ;
+  rdfs:label "has allegiance to"@en ;
+  rdfs:comment "Links a character to the person they have pledged allegiance or service to."@en .
+
+soc:swornEnemyOf a owl:ObjectProperty, owl:SymmetricProperty ;
+  rdfs:domain soc:Character ;
+  rdfs:range  soc:Character ;
+  rdfs:label "sworn enemy of"@en ;
+  rdfs:comment "Two characters that are openly hostile to each other."@en .
+
+soc:hasSocialRole a owl:ObjectProperty ;
+  rdfs:domain soc:Character ;
+  rdfs:range  soc:SocialRole ;
+  rdfs:label "has social role"@en ;
+  rdfs:comment "Relates a character to a social role they occupy in the story."@en .
+
+soc:hasOccupation a owl:ObjectProperty ;
+  rdfs:subPropertyOf soc:hasSocialRole ;
+  rdfs:domain soc:Character ;
+  rdfs:range  soc:Occupation ;
+  rdfs:label "has occupation"@en ;
+  rdfs:comment "Job or trade; narrows hasSocialRole to soc:Occupation individuals."@en .
+
+### Rich axiom: infer vassals from allegiance to lords
+
+[ a owl:Class ;
+  owl:intersectionOf (
+    soc:Character
+    [ a owl:Restriction ;
+      owl:onProperty soc:hasAllegianceTo ;
+      owl:someValuesFrom soc:Lord
+    ]
+  )
+] rdfs:subClassOf soc:Vassal .
+
+### Connecting Middle-earth peoples to generic characters
+
+meo:Elda rdfs:subClassOf soc:Character .
+meo:Atan rdfs:subClassOf soc:Character .
+meo:Casar rdfs:subClassOf soc:Character .
+meo:Lócë rdfs:subClassOf soc:Character .
+
+### Occupation individuals (examples for hasOccupation / hasSocialRole)
+
+soc:Farmer a owl:NamedIndividual, soc:Occupation ;
+  rdfs:label "farmer"@en .
+
+soc:Blacksmith a owl:NamedIndividual, soc:Occupation ;
+  rdfs:label "blacksmith"@en .
+
+soc:Thief a owl:NamedIndividual, soc:Occupation ;
+  rdfs:label "thief"@en .
+
+soc:Burglar a owl:NamedIndividual, soc:Occupation ;
+  rdfs:label "burglar"@en .
+
+soc:Merchant a owl:NamedIndividual, soc:Occupation ;
+  rdfs:label "merchant"@en .
+
+soc:Messenger a owl:NamedIndividual, soc:Occupation ;
+  rdfs:label "messenger"@en .
+
+soc:Innkeeper a owl:NamedIndividual, soc:Occupation ;
+  rdfs:label "innkeeper"@en .
+
+soc:Soldier a owl:NamedIndividual, soc:Occupation ;
+  rdfs:label "soldier"@en .
+
+soc:Physician a owl:NamedIndividual, soc:Occupation ;
+  rdfs:label "physician"@en .
+
+[] a owl:AllDifferent ;
+  owl:members (
+    soc:Farmer soc:Blacksmith soc:Thief soc:Burglar soc:Merchant
+    soc:Messenger soc:Innkeeper soc:Soldier soc:Physician
+  ) .

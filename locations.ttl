@@ -1,0 +1,138 @@
+@prefix loc:  <http://purl.org/story/location/> .
+@prefix rcc:  <https://purl.org/region/rcc8/> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+loc: a owl:Ontology ;
+  owl:imports rcc: ;
+  rdfs:label "Locations for story plots"@en ;
+  rdfs:comment "Places and spatial relations that are relevant for describing a story plot."@en .
+
+### Classes
+
+loc:Place a owl:Class ;
+  rdfs:label "place"@en ;
+  rdfs:comment "Any spatial region that can be referred to in the story, from a room to a whole country."@en ;
+  rdfs:subClassOf rcc:Region .
+
+loc:Region a owl:Class ;
+  rdfs:subClassOf loc:Place, rcc:Region ;
+  rdfs:label "region"@en ;
+  rdfs:comment "A larger territory that may contain towns, fortresses and wild areas; treated as an RCC8 region for topological reasoning."@en .
+
+loc:Settlement a owl:Class ;
+  rdfs:subClassOf loc:Place ;
+  rdfs:label "settlement"@en ;
+  rdfs:comment "A place where people live in a relatively permanent way: village, town, city, fortress, etc."@en .
+
+loc:Village a owl:Class ;
+  rdfs:subClassOf loc:Settlement ;
+  rdfs:label "village"@en ;
+  rdfs:comment "A small settlement."@en .
+
+loc:Town a owl:Class ;
+  rdfs:subClassOf loc:Settlement ;
+  rdfs:label "town"@en ;
+  rdfs:comment "A mid-sized settlement, larger than a village."@en .
+
+loc:City a owl:Class ;
+  rdfs:subClassOf loc:Settlement ;
+  rdfs:label "city"@en ;
+  rdfs:comment "A large settlement, often walled or densely built."@en .
+
+loc:Fortress a owl:Class ;
+  rdfs:subClassOf loc:Settlement ;
+  rdfs:label "fortress"@en ;
+  rdfs:comment "A fortified settlement mainly used for defence or war."@en .
+
+loc:District a owl:Class ;
+  rdfs:subClassOf loc:Place ;
+  rdfs:label "district"@en ;
+  rdfs:comment "A named part of a larger settlement (ward, quarter, suburb); use loc:isPartOf to link it to the city or town."@en .
+
+loc:WildArea a owl:Class ;
+  rdfs:subClassOf loc:Place ;
+  rdfs:label "wild area"@en ;
+  rdfs:comment "Unsettled land: forests, mountains, marshes, etc."@en .
+
+loc:Forest a owl:Class ;
+  rdfs:subClassOf loc:WildArea ;
+  rdfs:label "forest"@en ;
+  rdfs:comment "Woodland or forested region."@en .
+
+loc:MountainRange a owl:Class ;
+  rdfs:subClassOf loc:WildArea ;
+  rdfs:label "mountain range"@en ;
+  rdfs:comment "Highlands or connected mountains."@en .
+
+loc:River a owl:Class ;
+  rdfs:subClassOf loc:WildArea ;
+  rdfs:label "river"@en ;
+  rdfs:comment "River or large stream as a place reference."@en .
+
+loc:Marsh a owl:Class ;
+  rdfs:subClassOf loc:WildArea ;
+  rdfs:label "marsh"@en ;
+  rdfs:comment "Wetland, fen, or marsh."@en .
+
+loc:Valley a owl:Class ;
+  rdfs:subClassOf loc:WildArea ;
+  rdfs:label "valley"@en ;
+  rdfs:comment "River valley or enclosed lowland."@en .
+
+loc:BodyOfWater a owl:Class ;
+  rdfs:subClassOf loc:Place ;
+  rdfs:label "body of water"@en ;
+  rdfs:comment "Sea, ocean, bay, or large lake as a spatial region."@en .
+
+loc:Sea a owl:Class ;
+  rdfs:subClassOf loc:BodyOfWater ;
+  rdfs:label "sea"@en ;
+  rdfs:comment "Sea or gulf."@en .
+
+loc:Ocean a owl:Class ;
+  rdfs:subClassOf loc:BodyOfWater ;
+  rdfs:label "ocean"@en ;
+  rdfs:comment "Open ocean."@en .
+
+### Spatial relations
+
+loc:isPartOf a owl:ObjectProperty, owl:TransitiveProperty ;
+  rdfs:domain loc:Place ;
+  rdfs:range  loc:Place ;
+  rdfs:label "is part of"@en ;
+  rdfs:comment "Relates a place to a larger place it belongs to, for example a city to a region."@en .
+
+loc:containsPlace a owl:ObjectProperty ;
+  owl:inverseOf loc:isPartOf ;
+  rdfs:label "contains place"@en ;
+  rdfs:comment "Inverse of 'is part of'."@en .
+
+loc:capitalOf a owl:ObjectProperty ;
+  rdfs:domain loc:Settlement ;
+  rdfs:range  loc:Region ;
+  rdfs:label "capital of"@en ;
+  rdfs:comment "The settlement is the chief or ruling seat of the region (e.g. a realm's capital)."@en .
+
+loc:hasCapital a owl:ObjectProperty ;
+  owl:inverseOf loc:capitalOf ;
+  rdfs:domain loc:Region ;
+  rdfs:range  loc:Settlement ;
+  rdfs:label "has capital"@en ;
+  rdfs:comment "The chief settlement of the region."@en .
+
+### General constraints
+
+loc:Settlement rdfs:subClassOf
+  [ a owl:Restriction ;
+    owl:onProperty loc:isPartOf ;
+    owl:someValuesFrom loc:Region
+  ] .
+
+loc:District rdfs:subClassOf
+  [ a owl:Restriction ;
+    owl:onProperty loc:isPartOf ;
+    owl:someValuesFrom loc:Settlement
+  ] .

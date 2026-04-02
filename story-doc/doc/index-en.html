@@ -1,0 +1,3780 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" href="resources/primer.css" media="screen"/>
+<link rel="stylesheet" href="resources/rec.css" media="screen"/>
+<link rel="stylesheet" href="resources/extra.css" media="screen"/>
+<link rel="stylesheet" href="resources/owl.css" media="screen"/>
+<link rel="stylesheet" href="resources/dark.css" media="(prefers-color-scheme: dark)"/>
+<link rel="stylesheet" href="resources/light.css" media="(prefers-color-scheme: light)"/>
+<link rel="stylesheet" href="resources/slider.css" media="screen"/>
+<meta name="color-scheme" content="dark light">
+<script type="module" src="resources/dark-mode-toggle.mjs"></script><div class="darkmode">
+	<dark-mode-toggle class="slider"></dark-mode-toggle>
+</div>
+ <title>Story plot ontology</title>
+
+
+<!-- SCHEMA.ORG METADATA -->
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","url":"http://purl.org/story/ontology/","image":"http://vowl.visualdataweb.org/webvowl/#iri=http://purl.org/story/ontology/","name":"Story plot ontology", "headline":"This ontology models story plots in terms of characters, events, locations, and temporal relations. It is designed to answer competency questions about kinship, where characters go, who participates in events, temporal ordering, spatial overlap, story endings, and items used in actions. The Narn i Chîn Húrin (The Tale of the Children of Húrin) is used as the main example.", "dateReleased":"2026-04-01", "dateModified":"2026-04-01"}</script>
+
+<script src="resources/jquery.js"></script> 
+<script src="resources/marked.min.js"></script> 
+    <script> 
+function loadHash() {
+  jQuery(".markdown").each(function(el){jQuery(this).after(marked.parse(jQuery(this).text())).remove()});
+	var hash = location.hash;
+	if($(hash).offset()!=null){
+	  $('html, body').animate({scrollTop: $(hash).offset().top}, 0);
+}
+	loadTOC();
+}
+function loadTOC(){
+	//process toc dynamically
+	  var t='<h2>Table of contents</h2><ul>';i = 1;j=0;
+	  jQuery(".list").each(function(){
+		if(jQuery(this).is('h2')){
+			if(j>0){
+				t+='</ul>';
+				j=0;
+			}
+			t+= '<li>'+i+'. <a href=#'+ jQuery(this).attr('id')+'>'+ jQuery(this).ignore("span").text()+'</a></li>';
+			i++;
+		}
+		if(jQuery(this).is('h3')){
+			if(j==0){
+				t+='<ul>';
+			}
+			j++;
+			t+= '<li>'+(i-1)+'.'+j+'. '+'<a href=#'+ jQuery(this).attr('id')+'>'+ jQuery(this).ignore("span").text()+'</a></li>';
+		}
+	  });
+	  t+='</ul>';
+	  $("#toc").html(t); 
+}
+$(function(){
+    loadHash();
+}); $.fn.ignore = function(sel){
+        return this.clone().find(sel||">*").remove().end();
+ }; 
+   </script> 
+  </head> 
+
+<body>
+<div class="container">
+<div class="head">
+<div style="float:right">language <a href="index-en.html"><b>en</b></a> </div>
+<h1>Story plot ontology</h1>
+<h2>Release: 2026-04-01</h2>
+
+
+<dl>
+<dt>Modified on: 2026-04-01</dt>
+<dt>This version:</dt>
+<dd><a href="http://purl.org/story/ontology/">http://purl.org/story/ontology/</a></dd>
+<dt>Issued on:</dt>
+<dd>2026-04-01</dd>
+<dt>Download serialization:</dt><dd><span><a href="ontology.jsonld" target="_blank"><img src="https://img.shields.io/badge/Format-JSON_LD-blue.svg" alt="JSON-LD" /></a> </span><span><a href="ontology.owl" target="_blank"><img src="https://img.shields.io/badge/Format-RDF/XML-blue.svg" alt="RDF/XML" /></a> </span><span><a href="ontology.nt" target="_blank"><img src="https://img.shields.io/badge/Format-N_Triples-blue.svg" alt="N-Triples" /></a> </span><span><a href="ontology.ttl" target="_blank"><img src="https://img.shields.io/badge/Format-TTL-blue.svg" alt="TTL" /></a> </span></dd>
+</dd><!-- <dt>Evaluation:</dt><dd><a href="OOPSevaluation/oopsEval.html#" target="_blank"><img src="https://img.shields.io/badge/Evaluate_with-OOPS! (OntOlogy Pitfall Scanner!)-blue.svg" alt="Evaluate with OOPS!" /></a></dd> --></dl>
+
+<a href="provenance/provenance-en.html" target="_blank">Provenance of this page</a><hr/>
+</div>
+<div class="status">
+<div>
+<span>Specification Draft</span>
+</div>
+</div>     <div id="abstract"><h2>Abstract</h2><span class="markdown">
+This ontology models story plots in terms of characters, events, locations, and temporal relations. It is designed to answer competency questions about kinship, where characters go, who participates in events, temporal ordering, spatial overlap, story endings, and items used in actions. The Narn i Chîn Húrin (The Tale of the Children of Húrin) is used as the main example.</span>
+</div>
+<div id="toc"></div> 
+
+<!--INTRODUCTION SECTION-->
+    <div id="introduction"><h2 id="intro" class="list">Introduction <span class="backlink"> back to <a href="#toc">ToC</a></span></h2>
+
+<span class="markdown">
+Stories are built from characters who act, move between places, and participate in events that unfold over time. To reason about such narratives in a machine-readable way, we need a formal representation that captures these elements and how they relate.
+
+The ontology is organised into modules: RCC8 for spatial reasoning, locations and regions, story time (Allen-style intervals), events with participants and locations, actions as intentional events, social roles (allegiance, enmity), and plot structure (stories, chapters, climaxes). The Narn i Chîn Húrin—the Tale of the Children of Húrin—serves as the main example. It models Túrin, Húrin, and Morwen, Túrin's journey from Dor-lómin to Doriath, and his death by his sword Gurthang.
+
+## Competency questions
+
+Using the ontology, it should be possible to answer the following competency questions. Under each question, **example triples** are written as three tokens per line: *subject predicate object* (as in Turtle, using `example-narn.ttl` IRIs such as `narn:`, `ev:`, `loc:`, `fo:`, `plot:`, `rcc:`, `act:`, `soc:`).
+
+### Who is parent of X? married to X? relative to X?
+
+```
+narn:Húrin fo:isTheFatherOf narn:Túrin
+narn:Morwen fo:isTheMotherOf narn:Túrin
+narn:Húrin fo:isMarriedTo narn:Morwen
+```
+
+### Where did character X go during the story?
+
+```
+narn:Túrin ev:hasParticipant narn:DepartureFromDorLómin
+narn:DepartureFromDorLómin ev:hasOrigin narn:HouseOfHúrinPlace
+narn:DepartureFromDorLómin ev:hasDestination narn:Doriath
+narn:TúrinLeavesHouse act:subActionOf narn:DepartureFromDorLómin
+```
+
+### Who was involved in event E?
+
+```
+narn:DepartureFromDorLómin ev:hasParticipant narn:Túrin
+narn:FallOfGlaurung ev:hasParticipant narn:Glaurung
+narn:FarewellToMorwen act:hasAgent narn:Túrin
+```
+
+### Did event E1 happen before event E2?
+
+```
+narn:DepartureFromDorLómin ev:before narn:FallOfGlaurung
+narn:FallOfGlaurung ev:before narn:DeathOfTúrin
+```
+
+### Where did event E occur?
+
+```
+narn:DepartureFromDorLómin ev:occursAt narn:HouseOfHúrinPlace
+narn:AudienceWithThingol ev:occursAt narn:ThousandCavesHall
+```
+
+### Is it possible to be in location L1 and L2 at the same time?
+
+```
+narn:HouseOfHúrinPlace rcc:tpp narn:DorLómin
+narn:DorLómin rcc:dc narn:Doriath
+```
+
+### What event ends story S?
+
+```
+narn:TheNarn plot:endsWithEvent narn:DeathOfTúrin
+```
+
+### What item was used as part of event E (or action A)?
+
+```
+narn:DeathOfTúrin ev:usesItem narn:Gurthang
+narn:TúrinStrikesGlaurung act:hasInstrument narn:Gurthang
+```
+
+### Which smaller events or actions are part of a larger event?
+
+```
+narn:DepartureFromDorLómin ev:hasSubEvent narn:FarewellToMorwen
+narn:FarewellToMorwen ev:subEventOf narn:DepartureFromDorLómin
+narn:FarewellToMorwen act:subActionOf narn:DepartureFromDorLómin
+narn:FallOfGlaurung ev:hasSubEvent narn:TúrinStrikesGlaurung
+```
+
+### Who is the agent or patient of action A, or what object is the theme of a give/take?
+
+```
+narn:FarewellToMorwen act:hasAgent narn:Túrin
+narn:FarewellToMorwen act:hasPatient narn:Morwen
+narn:MorwenGivesKeepsake act:hasTheme narn:KeepsakeFromMorwen
+narn:TúrinTakesDragonHelm act:hasTheme narn:DragonHelm
+```
+
+### Which narrative unit tells event E, and what precedes what in the telling?
+
+```
+narn:Ch1_Childhood plot:tellsEvent narn:DepartureFromDorLómin
+narn:Climax_Glaurung plot:tellsEvent narn:FallOfGlaurung
+narn:Ch1_Childhood plot:precedesUnit narn:Climax_Glaurung
+narn:Climax_Glaurung plot:precedesUnit narn:Ch2_FateOfTúrin
+```
+
+### What occupation, house, sworn enemy, or allegiance applies to character X?
+
+```
+narn:Túrin soc:belongsToHouse narn:HouseOfHador
+narn:Beleg soc:hasOccupation soc:Soldier
+narn:Túrin soc:hasAllegianceTo narn:Thingol
+narn:Glaurung soc:swornEnemyOf narn:Túrin
+```
+
+---
+</span>
+</div>
+  
+
+<!--OVERVIEW SECTION-->
+    <div id="overview"><h2 id="overv" class="list">Story plot ontology: Overview <span class="backlink"> back to <a href="#toc">ToC</a></span></h2>
+<span class="markdown">
+This ontology has the following classes and properties.</span>
+<h4>Classes</h4>
+<ul xmlns:widoco="https://w3id.org/widoco/vocab#"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    class="hlist">
+   <li>
+      <a href="#http://purl.org/story/action/Action" title="http://purl.org/story/action/Action">action</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/action/Arrive" title="http://purl.org/story/action/Arrive">arrive</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/action/Assist" title="http://purl.org/story/action/Assist">assist</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/meo/Atan" title="http://purl.org/meo/Atan">
+         <span>Atan</span>
+      </a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/action/Attack" title="http://purl.org/story/action/Attack">attack</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/Battle" title="http://purl.org/story/event/Battle">battle</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/Birth" title="http://purl.org/story/event/Birth">birth</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/location/BodyOfWater" title="http://purl.org/story/location/BodyOfWater">body of water</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/action/Capture" title="http://purl.org/story/action/Capture">capture</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/meo/Casar" title="http://purl.org/meo/Casar">
+         <span>Casar</span>
+      </a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/plot/Chapter" title="http://purl.org/story/plot/Chapter">chapter</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/social/Character" title="http://purl.org/story/social/Character">character</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/location/City" title="http://purl.org/story/location/City">city</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/plot/Climax" title="http://purl.org/story/plot/Climax">climax</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/action/Command" title="http://purl.org/story/action/Command">command</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/action/Counsel" title="http://purl.org/story/action/Counsel">counsel</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/Death" title="http://purl.org/story/event/Death">death</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/action/Decide" title="http://purl.org/story/action/Decide">decide</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/action/Defend" title="http://purl.org/story/action/Defend">defend</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/location/District" title="http://purl.org/story/location/District">district</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/meo/Elda" title="http://purl.org/meo/Elda">
+         <span>Elda</span>
+      </a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/action/Flee" title="http://purl.org/story/action/Flee">flee</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/location/Forest" title="http://purl.org/story/location/Forest">forest</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/location/Fortress" title="http://purl.org/story/location/Fortress">fortress</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/action/Give" title="http://purl.org/story/action/Give">give</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/social/House" title="http://purl.org/story/social/House">house or clan</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/Journey" title="http://purl.org/story/event/Journey">journey</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/action/LeavePlace" title="http://purl.org/story/action/LeavePlace">leave place</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/social/Lord" title="http://purl.org/story/social/Lord">lord</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/meo/Lócë" title="http://purl.org/meo/Lócë">
+         <span>Lócë</span>
+      </a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/location/Marsh" title="http://purl.org/story/location/Marsh">marsh</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/Meeting" title="http://purl.org/story/event/Meeting">meeting</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/location/MountainRange" title="http://purl.org/story/location/MountainRange">mountain range</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/plot/NarrativeUnit" title="http://purl.org/story/plot/NarrativeUnit">narrative unit</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/action/Oath" title="http://purl.org/story/action/Oath">oath</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/social/Occupation" title="http://purl.org/story/social/Occupation">occupation</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/location/Ocean" title="http://purl.org/story/location/Ocean">ocean</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/location/Place" title="http://purl.org/story/location/Place">place</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/location/Region" title="http://purl.org/story/location/Region">region</a>
+   </li>
+   <li>
+      <a href="#https://purl.org/region/rcc8/Region" title="https://purl.org/region/rcc8/Region">region</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/action/Rescue" title="http://purl.org/story/action/Rescue">rescue</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/location/River" title="http://purl.org/story/location/River">river</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/location/Sea" title="http://purl.org/story/location/Sea">sea</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/location/Settlement" title="http://purl.org/story/location/Settlement">settlement</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/social/SocialRole" title="http://purl.org/story/social/SocialRole">social role</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/action/SpeechAct" title="http://purl.org/story/action/SpeechAct">speech act</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/plot/Story" title="http://purl.org/story/plot/Story">story</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/time/StoryTimeInstant" title="http://purl.org/story/time/StoryTimeInstant">story time instant</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/time/StoryTimeInterval" title="http://purl.org/story/time/StoryTimeInterval">story time interval</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/action/Take" title="http://purl.org/story/action/Take">take</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/action/Threat" title="http://purl.org/story/action/Threat">threat</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/location/Town" title="http://purl.org/story/location/Town">town</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/plot/TragicEnding" title="http://purl.org/story/plot/TragicEnding">tragic ending</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/action/TravelAction" title="http://purl.org/story/action/TravelAction">travel action</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/location/Valley" title="http://purl.org/story/location/Valley">valley</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/social/Vassal" title="http://purl.org/story/social/Vassal">vassal</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/location/Village" title="http://purl.org/story/location/Village">village</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/location/WildArea" title="http://purl.org/story/location/WildArea">wild area</a>
+   </li>
+</ul><h4>Object Properties</h4><ul xmlns:widoco="https://w3id.org/widoco/vocab#"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    class="hlist">
+   <li>
+      <a href="#http://purl.org/story/event/after" title="http://purl.org/story/event/after">after</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/b" title="http://purl.org/story/event/b">b</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/before" title="http://purl.org/story/event/before">before</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/social/belongsToHouse" title="http://purl.org/story/social/belongsToHouse">belongs to house</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/bi" title="http://purl.org/story/event/bi">bi</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/location/capitalOf" title="http://purl.org/story/location/capitalOf">capital of</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/contains" title="http://purl.org/story/event/contains">contains</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/location/containsPlace" title="http://purl.org/story/location/containsPlace">contains place</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/d" title="http://purl.org/story/event/d">d</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/di" title="http://purl.org/story/event/di">di</a>
+   </li>
+   <li>
+      <a href="#https://purl.org/region/rcc8/dc" title="https://purl.org/region/rcc8/dc">disconnected</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/during" title="http://purl.org/story/event/during">during</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/plot/endsWithEvent" title="http://purl.org/story/plot/endsWithEvent">ends with event</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/eq" title="http://purl.org/story/event/eq">eq</a>
+   </li>
+   <li>
+      <a href="#https://purl.org/region/rcc8/eq" title="https://purl.org/region/rcc8/eq">equal</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/equals" title="http://purl.org/story/event/equals">equals in time</a>
+   </li>
+   <li>
+      <a href="#https://purl.org/region/rcc8/ec" title="https://purl.org/region/rcc8/ec">externally connected</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/f" title="http://purl.org/story/event/f">f</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/fi" title="http://purl.org/story/event/fi">fi</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/finishedBy" title="http://purl.org/story/event/finishedBy">finished by</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/finishes" title="http://purl.org/story/event/finishes">finishes</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/action/hasAgent" title="http://purl.org/story/action/hasAgent">has agent</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/social/hasAllegianceTo" title="http://purl.org/story/social/hasAllegianceTo">has allegiance to</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/location/hasCapital" title="http://purl.org/story/location/hasCapital">has capital</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/hasEndInstant" title="http://purl.org/story/event/hasEndInstant">has end instant</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/time/hasEnd" title="http://purl.org/story/time/hasEnd">has end instant</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/action/hasInstrument" title="http://purl.org/story/action/hasInstrument">has instrument</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/social/hasOccupation" title="http://purl.org/story/social/hasOccupation">has occupation</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/hasParticipant" title="http://purl.org/story/event/hasParticipant">has participant</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/action/hasPatient" title="http://purl.org/story/action/hasPatient">has patient</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/plot/hasProtagonist" title="http://purl.org/story/plot/hasProtagonist">has protagonist</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/social/hasSocialRole" title="http://purl.org/story/social/hasSocialRole">has social role</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/hasStartInstant" title="http://purl.org/story/event/hasStartInstant">has start instant</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/time/hasStart" title="http://purl.org/story/time/hasStart">has start instant</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/hasSubEvent" title="http://purl.org/story/event/hasSubEvent">has sub-event</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/hasTemporalExtent" title="http://purl.org/story/event/hasTemporalExtent">has temporal extent</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/action/hasTheme" title="http://purl.org/story/action/hasTheme">has theme</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/plot/hasUnit" title="http://purl.org/story/plot/hasUnit">has unit</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/location/isPartOf" title="http://purl.org/story/location/isPartOf">is part of</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/plot/isUnitOf" title="http://purl.org/story/plot/isUnitOf">is unit of</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/m" title="http://purl.org/story/event/m">m</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/meets" title="http://purl.org/story/event/meets">meets</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/metBy" title="http://purl.org/story/event/metBy">met by</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/mi" title="http://purl.org/story/event/mi">mi</a>
+   </li>
+   <li>
+      <a href="#https://purl.org/region/rcc8/ntpp" title="https://purl.org/region/rcc8/ntpp">non-tangential proper part</a>
+   </li>
+   <li>
+      <a href="#https://purl.org/region/rcc8/ntppi" title="https://purl.org/region/rcc8/ntppi">non-tangential proper part inverse</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/o" title="http://purl.org/story/event/o">o</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/occursAt" title="http://purl.org/story/event/occursAt">occurs at</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/oi" title="http://purl.org/story/event/oi">oi</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/overlappedBy" title="http://purl.org/story/event/overlappedBy">overlapped by</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/overlaps" title="http://purl.org/story/event/overlaps">overlaps</a>
+   </li>
+   <li>
+      <a href="#https://purl.org/region/rcc8/po" title="https://purl.org/region/rcc8/po">partially overlapping</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/plot/precedesUnit" title="http://purl.org/story/plot/precedesUnit">precedes unit</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/s" title="http://purl.org/story/event/s">s</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/si" title="http://purl.org/story/event/si">si</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/startedBy" title="http://purl.org/story/event/startedBy">started by</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/starts" title="http://purl.org/story/event/starts">starts</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/action/subActionOf" title="http://purl.org/story/action/subActionOf">sub-action of</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/subEventOf" title="http://purl.org/story/event/subEventOf">sub-event of</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/social/swornEnemyOf" title="http://purl.org/story/social/swornEnemyOf">sworn enemy of</a>
+   </li>
+   <li>
+      <a href="#https://purl.org/region/rcc8/tpp" title="https://purl.org/region/rcc8/tpp">tangential proper part</a>
+   </li>
+   <li>
+      <a href="#https://purl.org/region/rcc8/tppi" title="https://purl.org/region/rcc8/tppi">tangential proper part inverse</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/plot/tellsEvent" title="http://purl.org/story/plot/tellsEvent">tells event</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/event/usesItem" title="http://purl.org/story/event/usesItem">uses item</a>
+   </li>
+</ul><h4>Named Individuals</h4><ul xmlns:widoco="https://w3id.org/widoco/vocab#"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    class="hlist">
+   <li>
+      <a href="#http://purl.org/story/social/Blacksmith" title="http://purl.org/story/social/Blacksmith">blacksmith</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/social/Burglar" title="http://purl.org/story/social/Burglar">burglar</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/social/Farmer" title="http://purl.org/story/social/Farmer">farmer</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/social/Innkeeper" title="http://purl.org/story/social/Innkeeper">innkeeper</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/social/Merchant" title="http://purl.org/story/social/Merchant">merchant</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/social/Messenger" title="http://purl.org/story/social/Messenger">messenger</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/social/Physician" title="http://purl.org/story/social/Physician">physician</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/social/Soldier" title="http://purl.org/story/social/Soldier">soldier</a>
+   </li>
+   <li>
+      <a href="#http://purl.org/story/social/Thief" title="http://purl.org/story/social/Thief">thief</a>
+   </li>
+</ul>
+</div>
+  
+
+<!--DESCRIPTION SECTION-->
+    <div id="description"><h2 id="desc" class="list">Story plot ontology: Description <span class="backlink"> back to <a href="#toc">ToC</a></span></h2>
+
+<span class="markdown">Ontology for expressing story plots in terms of characters, events, locations, and temporal relations.
+
+</span></div>
+   
+
+<!--CROSSREF SECTION-->
+   <div id="crossref"><h2 id="crossreference" class="list">Cross-reference for Story plot ontology classes, object properties and data properties <span class="backlink"> back to <a href="#toc">ToC</a></span></h2>
+This section provides details for each class and property defined by Story plot ontology.
+<div xmlns:widoco="https://w3id.org/widoco/vocab#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="classes">
+ <h3 id="classes-headline" class="list">Classes</h3>
+ <ul class="hlist">
+  <li><a href="#http://purl.org/story/action/Action" title="http://purl.org/story/action/Action">action</a></li>
+  <li><a href="#http://purl.org/story/action/Arrive" title="http://purl.org/story/action/Arrive">arrive</a></li>
+  <li><a href="#http://purl.org/story/action/Assist" title="http://purl.org/story/action/Assist">assist</a></li>
+  <li><a href="#http://purl.org/meo/Atan" title="http://purl.org/meo/Atan"> <span>Atan</span> </a></li>
+  <li><a href="#http://purl.org/story/action/Attack" title="http://purl.org/story/action/Attack">attack</a></li>
+  <li><a href="#http://purl.org/story/event/Battle" title="http://purl.org/story/event/Battle">battle</a></li>
+  <li><a href="#http://purl.org/story/event/Birth" title="http://purl.org/story/event/Birth">birth</a></li>
+  <li><a href="#http://purl.org/story/location/BodyOfWater" title="http://purl.org/story/location/BodyOfWater">body of water</a></li>
+  <li><a href="#http://purl.org/story/action/Capture" title="http://purl.org/story/action/Capture">capture</a></li>
+  <li><a href="#http://purl.org/meo/Casar" title="http://purl.org/meo/Casar"> <span>Casar</span> </a></li>
+  <li><a href="#http://purl.org/story/plot/Chapter" title="http://purl.org/story/plot/Chapter">chapter</a></li>
+  <li><a href="#http://purl.org/story/social/Character" title="http://purl.org/story/social/Character">character</a></li>
+  <li><a href="#http://purl.org/story/location/City" title="http://purl.org/story/location/City">city</a></li>
+  <li><a href="#http://purl.org/story/plot/Climax" title="http://purl.org/story/plot/Climax">climax</a></li>
+  <li><a href="#http://purl.org/story/action/Command" title="http://purl.org/story/action/Command">command</a></li>
+  <li><a href="#http://purl.org/story/action/Counsel" title="http://purl.org/story/action/Counsel">counsel</a></li>
+  <li><a href="#http://purl.org/story/event/Death" title="http://purl.org/story/event/Death">death</a></li>
+  <li><a href="#http://purl.org/story/action/Decide" title="http://purl.org/story/action/Decide">decide</a></li>
+  <li><a href="#http://purl.org/story/action/Defend" title="http://purl.org/story/action/Defend">defend</a></li>
+  <li><a href="#http://purl.org/story/location/District" title="http://purl.org/story/location/District">district</a></li>
+  <li><a href="#http://purl.org/meo/Elda" title="http://purl.org/meo/Elda"> <span>Elda</span> </a></li>
+  <li><a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a></li>
+  <li><a href="#http://purl.org/story/action/Flee" title="http://purl.org/story/action/Flee">flee</a></li>
+  <li><a href="#http://purl.org/story/location/Forest" title="http://purl.org/story/location/Forest">forest</a></li>
+  <li><a href="#http://purl.org/story/location/Fortress" title="http://purl.org/story/location/Fortress">fortress</a></li>
+  <li><a href="#http://purl.org/story/action/Give" title="http://purl.org/story/action/Give">give</a></li>
+  <li><a href="#http://purl.org/story/social/House" title="http://purl.org/story/social/House">house or clan</a></li>
+  <li><a href="#http://purl.org/story/event/Journey" title="http://purl.org/story/event/Journey">journey</a></li>
+  <li><a href="#http://purl.org/story/action/LeavePlace" title="http://purl.org/story/action/LeavePlace">leave place</a></li>
+  <li><a href="#http://purl.org/story/social/Lord" title="http://purl.org/story/social/Lord">lord</a></li>
+  <li><a href="#http://purl.org/meo/Lócë" title="http://purl.org/meo/Lócë"> <span>Lócë</span> </a></li>
+  <li><a href="#http://purl.org/story/location/Marsh" title="http://purl.org/story/location/Marsh">marsh</a></li>
+  <li><a href="#http://purl.org/story/event/Meeting" title="http://purl.org/story/event/Meeting">meeting</a></li>
+  <li><a href="#http://purl.org/story/location/MountainRange" title="http://purl.org/story/location/MountainRange">mountain range</a></li>
+  <li><a href="#http://purl.org/story/plot/NarrativeUnit" title="http://purl.org/story/plot/NarrativeUnit">narrative unit</a></li>
+  <li><a href="#http://purl.org/story/action/Oath" title="http://purl.org/story/action/Oath">oath</a></li>
+  <li><a href="#http://purl.org/story/social/Occupation" title="http://purl.org/story/social/Occupation">occupation</a></li>
+  <li><a href="#http://purl.org/story/location/Ocean" title="http://purl.org/story/location/Ocean">ocean</a></li>
+  <li><a href="#http://purl.org/story/location/Place" title="http://purl.org/story/location/Place">place</a></li>
+  <li><a href="#http://purl.org/story/location/Region" title="http://purl.org/story/location/Region">region</a></li>
+  <li><a href="#https://purl.org/region/rcc8/Region" title="https://purl.org/region/rcc8/Region">region</a></li>
+  <li><a href="#http://purl.org/story/action/Rescue" title="http://purl.org/story/action/Rescue">rescue</a></li>
+  <li><a href="#http://purl.org/story/location/River" title="http://purl.org/story/location/River">river</a></li>
+  <li><a href="#http://purl.org/story/location/Sea" title="http://purl.org/story/location/Sea">sea</a></li>
+  <li><a href="#http://purl.org/story/location/Settlement" title="http://purl.org/story/location/Settlement">settlement</a></li>
+  <li><a href="#http://purl.org/story/social/SocialRole" title="http://purl.org/story/social/SocialRole">social role</a></li>
+  <li><a href="#http://purl.org/story/action/SpeechAct" title="http://purl.org/story/action/SpeechAct">speech act</a></li>
+  <li><a href="#http://purl.org/story/plot/Story" title="http://purl.org/story/plot/Story">story</a></li>
+  <li><a href="#http://purl.org/story/time/StoryTimeInstant" title="http://purl.org/story/time/StoryTimeInstant">story time instant</a></li>
+  <li><a href="#http://purl.org/story/time/StoryTimeInterval" title="http://purl.org/story/time/StoryTimeInterval">story time interval</a></li>
+  <li><a href="#http://purl.org/story/action/Take" title="http://purl.org/story/action/Take">take</a></li>
+  <li><a href="#http://purl.org/story/action/Threat" title="http://purl.org/story/action/Threat">threat</a></li>
+  <li><a href="#http://purl.org/story/location/Town" title="http://purl.org/story/location/Town">town</a></li>
+  <li><a href="#http://purl.org/story/plot/TragicEnding" title="http://purl.org/story/plot/TragicEnding">tragic ending</a></li>
+  <li><a href="#http://purl.org/story/action/TravelAction" title="http://purl.org/story/action/TravelAction">travel action</a></li>
+  <li><a href="#http://purl.org/story/location/Valley" title="http://purl.org/story/location/Valley">valley</a></li>
+  <li><a href="#http://purl.org/story/social/Vassal" title="http://purl.org/story/social/Vassal">vassal</a></li>
+  <li><a href="#http://purl.org/story/location/Village" title="http://purl.org/story/location/Village">village</a></li>
+  <li><a href="#http://purl.org/story/location/WildArea" title="http://purl.org/story/location/WildArea">wild area</a></li>
+ </ul>
+ <div class="entity" id="http://purl.org/story/action/Action">
+  <h3>action<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/action/Action</p>
+  <div class="comment">
+   <span class="markdown">An event viewed as something done on purpose by an agent (possibly affecting a patient, object, or place).</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+   <dt>
+    has sub-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/action/Assist" title="http://purl.org/story/action/Assist">assist</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/action/Attack" title="http://purl.org/story/action/Attack">attack</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/action/Capture" title="http://purl.org/story/action/Capture">capture</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/action/Decide" title="http://purl.org/story/action/Decide">decide</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/action/Defend" title="http://purl.org/story/action/Defend">defend</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/action/Give" title="http://purl.org/story/action/Give">give</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/action/Rescue" title="http://purl.org/story/action/Rescue">rescue</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/action/SpeechAct" title="http://purl.org/story/action/SpeechAct">speech act</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/action/Take" title="http://purl.org/story/action/Take">take</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/action/TravelAction" title="http://purl.org/story/action/TravelAction">travel action</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+   <dt>
+    is in domain of
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/action/hasAgent" title="http://purl.org/story/action/hasAgent">has agent</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/action/hasInstrument" title="http://purl.org/story/action/hasInstrument">has instrument</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/action/hasPatient" title="http://purl.org/story/action/hasPatient">has patient</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/action/hasTheme" title="http://purl.org/story/action/hasTheme">has theme</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/action/subActionOf" title="http://purl.org/story/action/subActionOf">sub-action of</a> <sup class="type-op" title="object property">op</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/action/Arrive">
+  <h3>arrive<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/action/Arrive</p>
+  <div class="comment">
+   <span class="markdown">Reaching or entering a destination.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/action/TravelAction" title="http://purl.org/story/action/TravelAction">travel action</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/action/Assist">
+  <h3>assist<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/action/Assist</p>
+  <div class="comment">
+   <span class="markdown">Helping another carry out their aim (joint agency possible in data).</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/action/Action" title="http://purl.org/story/action/Action">action</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/meo/Atan">
+  <h3>Atan<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/meo/Atan</p>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/social/Character" title="http://purl.org/story/social/Character">character</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/action/Attack">
+  <h3>attack<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/action/Attack</p>
+  <div class="comment">
+   <span class="markdown">An agent tries to harm or overcome a patient (battle, duel, ambush).</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/action/Action" title="http://purl.org/story/action/Action">action</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/Battle">
+  <h3>battle<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/Battle</p>
+  <div class="comment">
+   <span class="markdown">An event where at least two opposing sides fight each other; in the Narn this covers large clashes as well as smaller armed encounters.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/Birth">
+  <h3>birth<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/Birth</p>
+  <div class="comment">
+   <span class="markdown">An event where a new character is born.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/location/BodyOfWater">
+  <h3>body of water<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/location/BodyOfWater</p>
+  <div class="comment">
+   <span class="markdown">Sea, ocean, bay, or large lake as a spatial region.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/Place" title="http://purl.org/story/location/Place">place</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+   <dt>
+    has sub-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/Ocean" title="http://purl.org/story/location/Ocean">ocean</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/location/Sea" title="http://purl.org/story/location/Sea">sea</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/action/Capture">
+  <h3>capture<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/action/Capture</p>
+  <div class="comment">
+   <span class="markdown">Making a patient prisoner or captive.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/action/Action" title="http://purl.org/story/action/Action">action</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/meo/Casar">
+  <h3>Casar<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/meo/Casar</p>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/social/Character" title="http://purl.org/story/social/Character">character</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/plot/Chapter">
+  <h3>chapter<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/plot/Chapter</p>
+  <div class="comment">
+   <span class="markdown">A named division of a written story, usually corresponding to one or more scenes.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/plot/NarrativeUnit" title="http://purl.org/story/plot/NarrativeUnit">narrative unit</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/social/Character">
+  <h3>character<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/social/Character</p>
+  <div class="comment">
+   <span class="markdown">An individual that can act, speak or simply be mentioned in the story world (for the Narn: people like Túrin, Húrin, Morwen, but also dragons or Valar if needed).</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has sub-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/meo/Atan" title="http://purl.org/meo/Atan">Atan</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/meo/Casar" title="http://purl.org/meo/Casar">Casar</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/meo/Elda" title="http://purl.org/meo/Elda">Elda</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/meo/Lócë" title="http://purl.org/meo/Lócë">Lócë</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/social/Lord" title="http://purl.org/story/social/Lord">lord</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/social/Vassal" title="http://purl.org/story/social/Vassal">vassal</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+   <dt>
+    is in domain of
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/social/belongsToHouse" title="http://purl.org/story/social/belongsToHouse">belongs to house</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/social/hasAllegianceTo" title="http://purl.org/story/social/hasAllegianceTo">has allegiance to</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/social/hasOccupation" title="http://purl.org/story/social/hasOccupation">has occupation</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/social/hasSocialRole" title="http://purl.org/story/social/hasSocialRole">has social role</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/social/swornEnemyOf" title="http://purl.org/story/social/swornEnemyOf">sworn enemy of</a> <sup class="type-op" title="object property">op</sup>
+   </dd>
+   <dt>
+    is in range of
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/action/hasAgent" title="http://purl.org/story/action/hasAgent">has agent</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/social/hasAllegianceTo" title="http://purl.org/story/social/hasAllegianceTo">has allegiance to</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/hasParticipant" title="http://purl.org/story/event/hasParticipant">has participant</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/action/hasPatient" title="http://purl.org/story/action/hasPatient">has patient</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/plot/hasProtagonist" title="http://purl.org/story/plot/hasProtagonist">has protagonist</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/social/swornEnemyOf" title="http://purl.org/story/social/swornEnemyOf">sworn enemy of</a> <sup class="type-op" title="object property">op</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/location/City">
+  <h3>city<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/location/City</p>
+  <div class="comment">
+   <span class="markdown">A large settlement, often walled or densely built.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/Settlement" title="http://purl.org/story/location/Settlement">settlement</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/plot/Climax">
+  <h3>climax<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/plot/Climax</p>
+  <div class="comment">
+   <span class="markdown">A narrative unit that marks the peak of the central conflict of the story.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/plot/NarrativeUnit" title="http://purl.org/story/plot/NarrativeUnit">narrative unit</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/action/Command">
+  <h3>command<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/action/Command</p>
+  <div class="comment">
+   <span class="markdown">Ordering or directing another character to act.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/action/SpeechAct" title="http://purl.org/story/action/SpeechAct">speech act</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/action/Counsel">
+  <h3>counsel<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/action/Counsel</p>
+  <div class="comment">
+   <span class="markdown">Advice or warning offered to a patient.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/action/SpeechAct" title="http://purl.org/story/action/SpeechAct">speech act</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/Death">
+  <h3>death<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/Death</p>
+  <div class="comment">
+   <span class="markdown">An event where a character dies.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/action/Decide">
+  <h3>decide<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/action/Decide</p>
+  <div class="comment">
+   <span class="markdown">A deliberate choice or resolution (agent may be the only required role).</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/action/Action" title="http://purl.org/story/action/Action">action</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/action/Defend">
+  <h3>defend<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/action/Defend</p>
+  <div class="comment">
+   <span class="markdown">Protecting or standing for a patient against harm.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/action/Action" title="http://purl.org/story/action/Action">action</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/location/District">
+  <h3>district<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/location/District</p>
+  <div class="comment">
+   <span class="markdown">A named part of a larger settlement (ward, quarter, suburb); use loc:isPartOf to link it to the city or town.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/Place" title="http://purl.org/story/location/Place">place</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/meo/Elda">
+  <h3>Elda<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/meo/Elda</p>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/social/Character" title="http://purl.org/story/social/Character">character</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/Event">
+  <h3>event<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/Event</p>
+  <div class="comment">
+   <span class="markdown">Something that happens in the story and can be located in time and space.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has sub-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/action/Action" title="http://purl.org/story/action/Action">action</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/event/Battle" title="http://purl.org/story/event/Battle">battle</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/event/Birth" title="http://purl.org/story/event/Birth">birth</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/event/Death" title="http://purl.org/story/event/Death">death</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/event/Journey" title="http://purl.org/story/event/Journey">journey</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/event/Meeting" title="http://purl.org/story/event/Meeting">meeting</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+   <dt>
+    is in domain of
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/event/b" title="http://purl.org/story/event/b">b</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/before" title="http://purl.org/story/event/before">before</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/bi" title="http://purl.org/story/event/bi">bi</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/d" title="http://purl.org/story/event/d">d</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/di" title="http://purl.org/story/event/di">di</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/during" title="http://purl.org/story/event/during">during</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/eq" title="http://purl.org/story/event/eq">eq</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/equals" title="http://purl.org/story/event/equals">equals in time</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/f" title="http://purl.org/story/event/f">f</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/fi" title="http://purl.org/story/event/fi">fi</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/finishes" title="http://purl.org/story/event/finishes">finishes</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/hasEndInstant" title="http://purl.org/story/event/hasEndInstant">has end instant</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/hasParticipant" title="http://purl.org/story/event/hasParticipant">has participant</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/hasStartInstant" title="http://purl.org/story/event/hasStartInstant">has start instant</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/hasTemporalExtent" title="http://purl.org/story/event/hasTemporalExtent">has temporal extent</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/m" title="http://purl.org/story/event/m">m</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/meets" title="http://purl.org/story/event/meets">meets</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/mi" title="http://purl.org/story/event/mi">mi</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/o" title="http://purl.org/story/event/o">o</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/occursAt" title="http://purl.org/story/event/occursAt">occurs at</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/oi" title="http://purl.org/story/event/oi">oi</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/overlaps" title="http://purl.org/story/event/overlaps">overlaps</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/s" title="http://purl.org/story/event/s">s</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/si" title="http://purl.org/story/event/si">si</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/starts" title="http://purl.org/story/event/starts">starts</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/subEventOf" title="http://purl.org/story/event/subEventOf">sub-event of</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/usesItem" title="http://purl.org/story/event/usesItem">uses item</a> <sup class="type-op" title="object property">op</sup>
+   </dd>
+   <dt>
+    is in range of
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/event/b" title="http://purl.org/story/event/b">b</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/before" title="http://purl.org/story/event/before">before</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/bi" title="http://purl.org/story/event/bi">bi</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/d" title="http://purl.org/story/event/d">d</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/di" title="http://purl.org/story/event/di">di</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/during" title="http://purl.org/story/event/during">during</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/plot/endsWithEvent" title="http://purl.org/story/plot/endsWithEvent">ends with event</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/eq" title="http://purl.org/story/event/eq">eq</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/equals" title="http://purl.org/story/event/equals">equals in time</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/f" title="http://purl.org/story/event/f">f</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/fi" title="http://purl.org/story/event/fi">fi</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/finishes" title="http://purl.org/story/event/finishes">finishes</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/m" title="http://purl.org/story/event/m">m</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/meets" title="http://purl.org/story/event/meets">meets</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/mi" title="http://purl.org/story/event/mi">mi</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/o" title="http://purl.org/story/event/o">o</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/oi" title="http://purl.org/story/event/oi">oi</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/overlaps" title="http://purl.org/story/event/overlaps">overlaps</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/s" title="http://purl.org/story/event/s">s</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/si" title="http://purl.org/story/event/si">si</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/starts" title="http://purl.org/story/event/starts">starts</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/action/subActionOf" title="http://purl.org/story/action/subActionOf">sub-action of</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/subEventOf" title="http://purl.org/story/event/subEventOf">sub-event of</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/plot/tellsEvent" title="http://purl.org/story/plot/tellsEvent">tells event</a> <sup class="type-op" title="object property">op</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/action/Flee">
+  <h3>flee<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/action/Flee</p>
+  <div class="comment">
+   <span class="markdown">Evasive flight, often with an implied or explicit pursuer (patient optional).</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/action/TravelAction" title="http://purl.org/story/action/TravelAction">travel action</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/location/Forest">
+  <h3>forest<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/location/Forest</p>
+  <div class="comment">
+   <span class="markdown">Woodland or forested region.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/WildArea" title="http://purl.org/story/location/WildArea">wild area</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/location/Fortress">
+  <h3>fortress<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/location/Fortress</p>
+  <div class="comment">
+   <span class="markdown">A fortified settlement mainly used for defence or war.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/Settlement" title="http://purl.org/story/location/Settlement">settlement</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/action/Give">
+  <h3>give<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/action/Give</p>
+  <div class="comment">
+   <span class="markdown">Transfer of something (theme) toward a recipient; recipient can be act:hasPatient when they are a character.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/action/Action" title="http://purl.org/story/action/Action">action</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/social/House">
+  <h3>house or clan<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/social/House</p>
+  <div class="comment">
+   <span class="markdown">A named social group or lineage, such as a house, clan, order or company (e.g. the House of Hador in the Narn).</span>
+  </div>
+  <dl class="description">
+   <dt>
+    is in range of
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/social/belongsToHouse" title="http://purl.org/story/social/belongsToHouse">belongs to house</a> <sup class="type-op" title="object property">op</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/Journey">
+  <h3>journey<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/Journey</p>
+  <div class="comment">
+   <span class="markdown">An event where one or more characters travel from one place to another, possibly broken down into several smaller travel actions.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/action/LeavePlace">
+  <h3>leave place<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/action/LeavePlace</p>
+  <div class="comment">
+   <span class="markdown">Departing from a location (start of a leg of travel).</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/action/TravelAction" title="http://purl.org/story/action/TravelAction">travel action</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/social/Lord">
+  <h3>lord<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/social/Lord</p>
+  <div class="comment">
+   <span class="markdown">A character recognised as lord over others, usually with vassals or followers.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/social/Character" title="http://purl.org/story/social/Character">character</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/meo/Lócë">
+  <h3>Lócë<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/meo/Lócë</p>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/social/Character" title="http://purl.org/story/social/Character">character</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/location/Marsh">
+  <h3>marsh<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/location/Marsh</p>
+  <div class="comment">
+   <span class="markdown">Wetland, fen, or marsh.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/WildArea" title="http://purl.org/story/location/WildArea">wild area</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/Meeting">
+  <h3>meeting<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/Meeting</p>
+  <div class="comment">
+   <span class="markdown">An event where characters come together to talk or decide something.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/location/MountainRange">
+  <h3>mountain range<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/location/MountainRange</p>
+  <div class="comment">
+   <span class="markdown">Highlands or connected mountains.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/WildArea" title="http://purl.org/story/location/WildArea">wild area</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/plot/NarrativeUnit">
+  <h3>narrative unit<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/plot/NarrativeUnit</p>
+  <div class="comment">
+   <span class="markdown">A self-contained part of a story such as a chapter, scene or episode (chapter titles in the Narn, or shorter scenes inside them).</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has sub-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/plot/Chapter" title="http://purl.org/story/plot/Chapter">chapter</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/plot/Climax" title="http://purl.org/story/plot/Climax">climax</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/plot/TragicEnding" title="http://purl.org/story/plot/TragicEnding">tragic ending</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+   <dt>
+    is in domain of
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/plot/precedesUnit" title="http://purl.org/story/plot/precedesUnit">precedes unit</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/plot/tellsEvent" title="http://purl.org/story/plot/tellsEvent">tells event</a> <sup class="type-op" title="object property">op</sup>
+   </dd>
+   <dt>
+    is in range of
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/plot/hasUnit" title="http://purl.org/story/plot/hasUnit">has unit</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/plot/precedesUnit" title="http://purl.org/story/plot/precedesUnit">precedes unit</a> <sup class="type-op" title="object property">op</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/action/Oath">
+  <h3>oath<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/action/Oath</p>
+  <div class="comment">
+   <span class="markdown">A binding promise or self-curse; one utterance, long consequences.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/action/SpeechAct" title="http://purl.org/story/action/SpeechAct">speech act</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/social/Occupation">
+  <h3>occupation<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/social/Occupation</p>
+  <div class="comment">
+   <span class="markdown">Trade, craft, or habitual work (farmer, smith, thief, etc.); use as object of hasOccupation or hasSocialRole.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/social/SocialRole" title="http://purl.org/story/social/SocialRole">social role</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+   <dt>
+    is in range of
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/social/hasOccupation" title="http://purl.org/story/social/hasOccupation">has occupation</a> <sup class="type-op" title="object property">op</sup>
+   </dd>
+   <dt>
+    has members
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/social/Blacksmith" title="http://purl.org/story/social/Blacksmith">blacksmith</a> <sup class="type-ni" title="named individual">ni</sup>, <a href="#http://purl.org/story/social/Burglar" title="http://purl.org/story/social/Burglar">burglar</a> <sup class="type-ni" title="named individual">ni</sup>, <a href="#http://purl.org/story/social/Farmer" title="http://purl.org/story/social/Farmer">farmer</a> <sup class="type-ni" title="named individual">ni</sup>, <a href="#http://purl.org/story/social/Innkeeper" title="http://purl.org/story/social/Innkeeper">innkeeper</a> <sup class="type-ni" title="named individual">ni</sup>, <a href="#http://purl.org/story/social/Merchant" title="http://purl.org/story/social/Merchant">merchant</a> <sup class="type-ni" title="named individual">ni</sup>, <a href="#http://purl.org/story/social/Messenger" title="http://purl.org/story/social/Messenger">messenger</a> <sup class="type-ni" title="named individual">ni</sup>, <a href="#http://purl.org/story/social/Physician" title="http://purl.org/story/social/Physician">physician</a> <sup class="type-ni" title="named individual">ni</sup>, <a href="#http://purl.org/story/social/Soldier" title="http://purl.org/story/social/Soldier">soldier</a> <sup class="type-ni" title="named individual">ni</sup>, <a href="#http://purl.org/story/social/Thief" title="http://purl.org/story/social/Thief">thief</a> <sup class="type-ni" title="named individual">ni</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/location/Ocean">
+  <h3>ocean<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/location/Ocean</p>
+  <div class="comment">
+   <span class="markdown">Open ocean.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/BodyOfWater" title="http://purl.org/story/location/BodyOfWater">body of water</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/location/Place">
+  <h3>place<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/location/Place</p>
+  <div class="comment">
+   <span class="markdown">Any spatial region that can be referred to in the story, from a room to a whole country.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#https://purl.org/region/rcc8/Region" title="https://purl.org/region/rcc8/Region">region</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+   <dt>
+    has sub-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/BodyOfWater" title="http://purl.org/story/location/BodyOfWater">body of water</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/location/District" title="http://purl.org/story/location/District">district</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/location/Region" title="http://purl.org/story/location/Region">region</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/location/Settlement" title="http://purl.org/story/location/Settlement">settlement</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/location/WildArea" title="http://purl.org/story/location/WildArea">wild area</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+   <dt>
+    is in domain of
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/isPartOf" title="http://purl.org/story/location/isPartOf">is part of</a> <sup class="type-op" title="object property">op</sup>
+   </dd>
+   <dt>
+    is in range of
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/isPartOf" title="http://purl.org/story/location/isPartOf">is part of</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/event/occursAt" title="http://purl.org/story/event/occursAt">occurs at</a> <sup class="type-op" title="object property">op</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/location/Region">
+  <h3>region<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/location/Region</p>
+  <div class="comment">
+   <span class="markdown">A larger territory that may contain towns, fortresses and wild areas; treated as an RCC8 region for topological reasoning.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/Place" title="http://purl.org/story/location/Place">place</a> <sup class="type-c" title="class">c</sup>, <a href="#https://purl.org/region/rcc8/Region" title="https://purl.org/region/rcc8/Region">region</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+   <dt>
+    is in domain of
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/hasCapital" title="http://purl.org/story/location/hasCapital">has capital</a> <sup class="type-op" title="object property">op</sup>
+   </dd>
+   <dt>
+    is in range of
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/capitalOf" title="http://purl.org/story/location/capitalOf">capital of</a> <sup class="type-op" title="object property">op</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="https://purl.org/region/rcc8/Region">
+  <h3>region<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> https://purl.org/region/rcc8/Region</p>
+  <div class="comment">
+   <span class="markdown">A continuous extent of space. Mathematically, given a topological space, this concepts corresponds to a compact subspace with finite diameter.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has sub-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/Place" title="http://purl.org/story/location/Place">place</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/location/Region" title="http://purl.org/story/location/Region">region</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+   <dt>
+    is in domain of
+   </dt>
+   <dd>
+    <a href="#https://purl.org/region/rcc8/dc" title="https://purl.org/region/rcc8/dc">disconnected</a> <sup class="type-op" title="object property">op</sup>, <a href="#https://purl.org/region/rcc8/eq" title="https://purl.org/region/rcc8/eq">equal</a> <sup class="type-op" title="object property">op</sup>, <a href="#https://purl.org/region/rcc8/ec" title="https://purl.org/region/rcc8/ec">externally connected</a> <sup class="type-op" title="object property">op</sup>, <a href="#https://purl.org/region/rcc8/ntpp" title="https://purl.org/region/rcc8/ntpp">non-tangential proper part</a> <sup class="type-op" title="object property">op</sup>, <a href="#https://purl.org/region/rcc8/ntppi" title="https://purl.org/region/rcc8/ntppi">non-tangential proper part inverse</a> <sup class="type-op" title="object property">op</sup>, <a href="#https://purl.org/region/rcc8/po" title="https://purl.org/region/rcc8/po">partially overlapping</a> <sup class="type-op" title="object property">op</sup>, <a href="#https://purl.org/region/rcc8/tpp" title="https://purl.org/region/rcc8/tpp">tangential proper part</a> <sup class="type-op" title="object property">op</sup>, <a href="#https://purl.org/region/rcc8/tppi" title="https://purl.org/region/rcc8/tppi">tangential proper part inverse</a> <sup class="type-op" title="object property">op</sup>
+   </dd>
+   <dt>
+    is in range of
+   </dt>
+   <dd>
+    <a href="#https://purl.org/region/rcc8/dc" title="https://purl.org/region/rcc8/dc">disconnected</a> <sup class="type-op" title="object property">op</sup>, <a href="#https://purl.org/region/rcc8/eq" title="https://purl.org/region/rcc8/eq">equal</a> <sup class="type-op" title="object property">op</sup>, <a href="#https://purl.org/region/rcc8/ec" title="https://purl.org/region/rcc8/ec">externally connected</a> <sup class="type-op" title="object property">op</sup>, <a href="#https://purl.org/region/rcc8/ntpp" title="https://purl.org/region/rcc8/ntpp">non-tangential proper part</a> <sup class="type-op" title="object property">op</sup>, <a href="#https://purl.org/region/rcc8/ntppi" title="https://purl.org/region/rcc8/ntppi">non-tangential proper part inverse</a> <sup class="type-op" title="object property">op</sup>, <a href="#https://purl.org/region/rcc8/po" title="https://purl.org/region/rcc8/po">partially overlapping</a> <sup class="type-op" title="object property">op</sup>, <a href="#https://purl.org/region/rcc8/tpp" title="https://purl.org/region/rcc8/tpp">tangential proper part</a> <sup class="type-op" title="object property">op</sup>, <a href="#https://purl.org/region/rcc8/tppi" title="https://purl.org/region/rcc8/tppi">tangential proper part inverse</a> <sup class="type-op" title="object property">op</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/action/Rescue">
+  <h3>rescue<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/action/Rescue</p>
+  <div class="comment">
+   <span class="markdown">Freeing or saving a patient from danger or captivity.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/action/Action" title="http://purl.org/story/action/Action">action</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/location/River">
+  <h3>river<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/location/River</p>
+  <div class="comment">
+   <span class="markdown">River or large stream as a place reference.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/WildArea" title="http://purl.org/story/location/WildArea">wild area</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/location/Sea">
+  <h3>sea<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/location/Sea</p>
+  <div class="comment">
+   <span class="markdown">Sea or gulf.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/BodyOfWater" title="http://purl.org/story/location/BodyOfWater">body of water</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/location/Settlement">
+  <h3>settlement<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/location/Settlement</p>
+  <div class="comment">
+   <span class="markdown">A place where people live in a relatively permanent way: village, town, city, fortress, etc.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/Place" title="http://purl.org/story/location/Place">place</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+   <dt>
+    has sub-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/City" title="http://purl.org/story/location/City">city</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/location/Fortress" title="http://purl.org/story/location/Fortress">fortress</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/location/Town" title="http://purl.org/story/location/Town">town</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/location/Village" title="http://purl.org/story/location/Village">village</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+   <dt>
+    is in domain of
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/capitalOf" title="http://purl.org/story/location/capitalOf">capital of</a> <sup class="type-op" title="object property">op</sup>
+   </dd>
+   <dt>
+    is in range of
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/hasCapital" title="http://purl.org/story/location/hasCapital">has capital</a> <sup class="type-op" title="object property">op</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/social/SocialRole">
+  <h3>social role<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/social/SocialRole</p>
+  <div class="comment">
+   <span class="markdown">A social position that a character may hold in the world of the story: lord, captain, messenger, servant, prisoner, and so on.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has sub-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/social/Occupation" title="http://purl.org/story/social/Occupation">occupation</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+   <dt>
+    is in range of
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/social/hasSocialRole" title="http://purl.org/story/social/hasSocialRole">has social role</a> <sup class="type-op" title="object property">op</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/action/SpeechAct">
+  <h3>speech act<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/action/SpeechAct</p>
+  <div class="comment">
+   <span class="markdown">Speaking: threats, oaths, commands, counsel, and other illocutionary moves that move the plot.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/action/Action" title="http://purl.org/story/action/Action">action</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+   <dt>
+    has sub-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/action/Command" title="http://purl.org/story/action/Command">command</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/action/Counsel" title="http://purl.org/story/action/Counsel">counsel</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/action/Oath" title="http://purl.org/story/action/Oath">oath</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/action/Threat" title="http://purl.org/story/action/Threat">threat</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/plot/Story">
+  <h3>story<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/plot/Story</p>
+  <div class="comment">
+   <span class="markdown">A complete narrative work, for example a tale, book or saga. In this assignment the main example is the Narn i Chîn Húrin.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    is in domain of
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/plot/endsWithEvent" title="http://purl.org/story/plot/endsWithEvent">ends with event</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/plot/hasProtagonist" title="http://purl.org/story/plot/hasProtagonist">has protagonist</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/plot/hasUnit" title="http://purl.org/story/plot/hasUnit">has unit</a> <sup class="type-op" title="object property">op</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/time/StoryTimeInstant">
+  <h3>story time instant<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/time/StoryTimeInstant</p>
+  <div class="comment">
+   <span class="markdown">A time instant that marks a punctual event such as a death or a single decisive action.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="http://www.w3.org/2006/time#Instant" target="_blank" title="http://www.w3.org/2006/time#Instant">Time instant</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/time/StoryTimeInterval">
+  <h3>story time interval<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/time/StoryTimeInterval</p>
+  <div class="comment">
+   <span class="markdown">A non-punctual time interval for an event or episode; subclass of time:ProperInterval so OWL-Time Allen relations apply between intervals.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="http://www.w3.org/2006/time#ProperInterval" target="_blank" title="http://www.w3.org/2006/time#ProperInterval">Proper interval</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/action/Take">
+  <h3>take<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/action/Take</p>
+  <div class="comment">
+   <span class="markdown">Taking or seizing act:hasTheme, often from a source (patient as holder).</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/action/Action" title="http://purl.org/story/action/Action">action</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/action/Threat">
+  <h3>threat<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/action/Threat</p>
+  <div class="comment">
+   <span class="markdown">A speech act meant to intimidate or constrain a patient.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/action/SpeechAct" title="http://purl.org/story/action/SpeechAct">speech act</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/location/Town">
+  <h3>town<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/location/Town</p>
+  <div class="comment">
+   <span class="markdown">A mid-sized settlement, larger than a village.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/Settlement" title="http://purl.org/story/location/Settlement">settlement</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/plot/TragicEnding">
+  <h3>tragic ending<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/plot/TragicEnding</p>
+  <div class="comment">
+   <span class="markdown">A narrative unit where the main tragic outcome of the story occurs (for the Narn this can be linked to Túrin's death).</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/plot/NarrativeUnit" title="http://purl.org/story/plot/NarrativeUnit">narrative unit</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/action/TravelAction">
+  <h3>travel action<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/action/TravelAction</p>
+  <div class="comment">
+   <span class="markdown">A step of movement: leave, arrive, flee, pass through.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/action/Action" title="http://purl.org/story/action/Action">action</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+   <dt>
+    has sub-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/action/Arrive" title="http://purl.org/story/action/Arrive">arrive</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/action/Flee" title="http://purl.org/story/action/Flee">flee</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/action/LeavePlace" title="http://purl.org/story/action/LeavePlace">leave place</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/location/Valley">
+  <h3>valley<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/location/Valley</p>
+  <div class="comment">
+   <span class="markdown">River valley or enclosed lowland.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/WildArea" title="http://purl.org/story/location/WildArea">wild area</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/social/Vassal">
+  <h3>vassal<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/social/Vassal</p>
+  <div class="comment">
+   <span class="markdown">A character who owes allegiance or service to a lord.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/social/Character" title="http://purl.org/story/social/Character">character</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/location/Village">
+  <h3>village<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/location/Village</p>
+  <div class="comment">
+   <span class="markdown">A small settlement.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/Settlement" title="http://purl.org/story/location/Settlement">settlement</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/location/WildArea">
+  <h3>wild area<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/location/WildArea</p>
+  <div class="comment">
+   <span class="markdown">Unsettled land: forests, mountains, marshes, etc.</span>
+  </div>
+  <dl class="description">
+   <dt>
+    has super-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/Place" title="http://purl.org/story/location/Place">place</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+   <dt>
+    has sub-classes
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/location/Forest" title="http://purl.org/story/location/Forest">forest</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/location/Marsh" title="http://purl.org/story/location/Marsh">marsh</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/location/MountainRange" title="http://purl.org/story/location/MountainRange">mountain range</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/location/River" title="http://purl.org/story/location/River">river</a> <sup class="type-c" title="class">c</sup>, <a href="#http://purl.org/story/location/Valley" title="http://purl.org/story/location/Valley">valley</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+</div><div xmlns:widoco="https://w3id.org/widoco/vocab#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="objectproperties">
+ <h3 id="properties" class="list">Object Properties</h3>
+ <ul class="hlist">
+  <li><a href="#http://purl.org/story/event/after" title="http://purl.org/story/event/after">after</a></li>
+  <li><a href="#http://purl.org/story/event/b" title="http://purl.org/story/event/b">b</a></li>
+  <li><a href="#http://purl.org/story/event/before" title="http://purl.org/story/event/before">before</a></li>
+  <li><a href="#http://purl.org/story/social/belongsToHouse" title="http://purl.org/story/social/belongsToHouse">belongs to house</a></li>
+  <li><a href="#http://purl.org/story/event/bi" title="http://purl.org/story/event/bi">bi</a></li>
+  <li><a href="#http://purl.org/story/location/capitalOf" title="http://purl.org/story/location/capitalOf">capital of</a></li>
+  <li><a href="#http://purl.org/story/event/contains" title="http://purl.org/story/event/contains">contains</a></li>
+  <li><a href="#http://purl.org/story/location/containsPlace" title="http://purl.org/story/location/containsPlace">contains place</a></li>
+  <li><a href="#http://purl.org/story/event/d" title="http://purl.org/story/event/d">d</a></li>
+  <li><a href="#http://purl.org/story/event/di" title="http://purl.org/story/event/di">di</a></li>
+  <li><a href="#https://purl.org/region/rcc8/dc" title="https://purl.org/region/rcc8/dc">disconnected</a></li>
+  <li><a href="#http://purl.org/story/event/during" title="http://purl.org/story/event/during">during</a></li>
+  <li><a href="#http://purl.org/story/plot/endsWithEvent" title="http://purl.org/story/plot/endsWithEvent">ends with event</a></li>
+  <li><a href="#http://purl.org/story/event/eq" title="http://purl.org/story/event/eq">eq</a></li>
+  <li><a href="#https://purl.org/region/rcc8/eq" title="https://purl.org/region/rcc8/eq">equal</a></li>
+  <li><a href="#http://purl.org/story/event/equals" title="http://purl.org/story/event/equals">equals in time</a></li>
+  <li><a href="#https://purl.org/region/rcc8/ec" title="https://purl.org/region/rcc8/ec">externally connected</a></li>
+  <li><a href="#http://purl.org/story/event/f" title="http://purl.org/story/event/f">f</a></li>
+  <li><a href="#http://purl.org/story/event/fi" title="http://purl.org/story/event/fi">fi</a></li>
+  <li><a href="#http://purl.org/story/event/finishedBy" title="http://purl.org/story/event/finishedBy">finished by</a></li>
+  <li><a href="#http://purl.org/story/event/finishes" title="http://purl.org/story/event/finishes">finishes</a></li>
+  <li><a href="#http://purl.org/story/action/hasAgent" title="http://purl.org/story/action/hasAgent">has agent</a></li>
+  <li><a href="#http://purl.org/story/social/hasAllegianceTo" title="http://purl.org/story/social/hasAllegianceTo">has allegiance to</a></li>
+  <li><a href="#http://purl.org/story/location/hasCapital" title="http://purl.org/story/location/hasCapital">has capital</a></li>
+  <li><a href="#http://purl.org/story/event/hasEndInstant" title="http://purl.org/story/event/hasEndInstant">has end instant</a></li>
+  <li><a href="#http://purl.org/story/time/hasEnd" title="http://purl.org/story/time/hasEnd">has end instant</a></li>
+  <li><a href="#http://purl.org/story/action/hasInstrument" title="http://purl.org/story/action/hasInstrument">has instrument</a></li>
+  <li><a href="#http://purl.org/story/social/hasOccupation" title="http://purl.org/story/social/hasOccupation">has occupation</a></li>
+  <li><a href="#http://purl.org/story/event/hasParticipant" title="http://purl.org/story/event/hasParticipant">has participant</a></li>
+  <li><a href="#http://purl.org/story/action/hasPatient" title="http://purl.org/story/action/hasPatient">has patient</a></li>
+  <li><a href="#http://purl.org/story/plot/hasProtagonist" title="http://purl.org/story/plot/hasProtagonist">has protagonist</a></li>
+  <li><a href="#http://purl.org/story/social/hasSocialRole" title="http://purl.org/story/social/hasSocialRole">has social role</a></li>
+  <li><a href="#http://purl.org/story/event/hasStartInstant" title="http://purl.org/story/event/hasStartInstant">has start instant</a></li>
+  <li><a href="#http://purl.org/story/time/hasStart" title="http://purl.org/story/time/hasStart">has start instant</a></li>
+  <li><a href="#http://purl.org/story/event/hasSubEvent" title="http://purl.org/story/event/hasSubEvent">has sub-event</a></li>
+  <li><a href="#http://purl.org/story/event/hasTemporalExtent" title="http://purl.org/story/event/hasTemporalExtent">has temporal extent</a></li>
+  <li><a href="#http://purl.org/story/action/hasTheme" title="http://purl.org/story/action/hasTheme">has theme</a></li>
+  <li><a href="#http://purl.org/story/plot/hasUnit" title="http://purl.org/story/plot/hasUnit">has unit</a></li>
+  <li><a href="#http://purl.org/story/location/isPartOf" title="http://purl.org/story/location/isPartOf">is part of</a></li>
+  <li><a href="#http://purl.org/story/plot/isUnitOf" title="http://purl.org/story/plot/isUnitOf">is unit of</a></li>
+  <li><a href="#http://purl.org/story/event/m" title="http://purl.org/story/event/m">m</a></li>
+  <li><a href="#http://purl.org/story/event/meets" title="http://purl.org/story/event/meets">meets</a></li>
+  <li><a href="#http://purl.org/story/event/metBy" title="http://purl.org/story/event/metBy">met by</a></li>
+  <li><a href="#http://purl.org/story/event/mi" title="http://purl.org/story/event/mi">mi</a></li>
+  <li><a href="#https://purl.org/region/rcc8/ntpp" title="https://purl.org/region/rcc8/ntpp">non-tangential proper part</a></li>
+  <li><a href="#https://purl.org/region/rcc8/ntppi" title="https://purl.org/region/rcc8/ntppi">non-tangential proper part inverse</a></li>
+  <li><a href="#http://purl.org/story/event/o" title="http://purl.org/story/event/o">o</a></li>
+  <li><a href="#http://purl.org/story/event/occursAt" title="http://purl.org/story/event/occursAt">occurs at</a></li>
+  <li><a href="#http://purl.org/story/event/oi" title="http://purl.org/story/event/oi">oi</a></li>
+  <li><a href="#http://purl.org/story/event/overlappedBy" title="http://purl.org/story/event/overlappedBy">overlapped by</a></li>
+  <li><a href="#http://purl.org/story/event/overlaps" title="http://purl.org/story/event/overlaps">overlaps</a></li>
+  <li><a href="#https://purl.org/region/rcc8/po" title="https://purl.org/region/rcc8/po">partially overlapping</a></li>
+  <li><a href="#http://purl.org/story/plot/precedesUnit" title="http://purl.org/story/plot/precedesUnit">precedes unit</a></li>
+  <li><a href="#http://purl.org/story/event/s" title="http://purl.org/story/event/s">s</a></li>
+  <li><a href="#http://purl.org/story/event/si" title="http://purl.org/story/event/si">si</a></li>
+  <li><a href="#http://purl.org/story/event/startedBy" title="http://purl.org/story/event/startedBy">started by</a></li>
+  <li><a href="#http://purl.org/story/event/starts" title="http://purl.org/story/event/starts">starts</a></li>
+  <li><a href="#http://purl.org/story/action/subActionOf" title="http://purl.org/story/action/subActionOf">sub-action of</a></li>
+  <li><a href="#http://purl.org/story/event/subEventOf" title="http://purl.org/story/event/subEventOf">sub-event of</a></li>
+  <li><a href="#http://purl.org/story/social/swornEnemyOf" title="http://purl.org/story/social/swornEnemyOf">sworn enemy of</a></li>
+  <li><a href="#https://purl.org/region/rcc8/tpp" title="https://purl.org/region/rcc8/tpp">tangential proper part</a></li>
+  <li><a href="#https://purl.org/region/rcc8/tppi" title="https://purl.org/region/rcc8/tppi">tangential proper part inverse</a></li>
+  <li><a href="#http://purl.org/story/plot/tellsEvent" title="http://purl.org/story/plot/tellsEvent">tells event</a></li>
+  <li><a href="#http://purl.org/story/event/usesItem" title="http://purl.org/story/event/usesItem">uses item</a></li>
+ </ul>
+ <div class="entity" id="http://purl.org/story/event/after">
+  <h3>after<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/after</p>
+  <div class="description">
+   <dl>
+    <dt>
+     has sub-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/bi" title="http://purl.org/story/event/bi">bi</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/before" title="http://purl.org/story/event/before">before</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has sub-property chains
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/hasStartInstant" title="http://purl.org/story/event/hasStartInstant">has start instant</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span> <a href="http://www.w3.org/2006/time#after" target="_blank" title="http://www.w3.org/2006/time#after">after</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span>
+    </dd>
+    <dd>
+     <a href="#http://purl.org/story/event/hasTemporalExtent" title="http://purl.org/story/event/hasTemporalExtent">has temporal extent</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span> <a href="http://www.w3.org/2006/time#intervalAfter" target="_blank" title="http://www.w3.org/2006/time#intervalAfter">interval after</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/b">
+  <h3>b<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/b</p>
+  <div class="description">
+   <dl>
+    <dt>
+     has super-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/before" title="http://purl.org/story/event/before">before</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/bi" title="http://purl.org/story/event/bi">bi</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/before">
+  <h3>before<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/before</p>
+  <div class="comment">
+   <span class="markdown">Allen b: first event ends strictly before the second begins; inverse after/bi. Entailed from time:intervalBefore on extents or time:before on endpoint instants (OWL Time).</span>
+  </div>
+  <div class="description">
+   <p><strong>has characteristics: </strong> transitive</p>
+   <dl>
+    <dt>
+     has sub-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/b" title="http://purl.org/story/event/b">b</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/after" title="http://purl.org/story/event/after">after</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has sub-property chains
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/hasEndInstant" title="http://purl.org/story/event/hasEndInstant">has end instant</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span> <a href="http://www.w3.org/2006/time#before" target="_blank" title="http://www.w3.org/2006/time#before">before</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span>
+    </dd>
+    <dd>
+     <a href="#http://purl.org/story/event/hasTemporalExtent" title="http://purl.org/story/event/hasTemporalExtent">has temporal extent</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span> <a href="http://www.w3.org/2006/time#intervalBefore" target="_blank" title="http://www.w3.org/2006/time#intervalBefore">interval before</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/social/belongsToHouse">
+  <h3>belongs to house<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/social/belongsToHouse</p>
+  <div class="comment">
+   <span class="markdown">Relates a character to the house, clan or similar group they are part of.</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/social/Character" title="http://purl.org/story/social/Character">character</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/social/House" title="http://purl.org/story/social/House">house or clan</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/bi">
+  <h3>bi<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/bi</p>
+  <div class="description">
+   <dl>
+    <dt>
+     has super-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/after" title="http://purl.org/story/event/after">after</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/b" title="http://purl.org/story/event/b">b</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/location/capitalOf">
+  <h3>capital of<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/location/capitalOf</p>
+  <div class="comment">
+   <span class="markdown">The settlement is the chief or ruling seat of the region (e.g. a realm's capital).</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/location/Settlement" title="http://purl.org/story/location/Settlement">settlement</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/location/Region" title="http://purl.org/story/location/Region">region</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/location/hasCapital" title="http://purl.org/story/location/hasCapital">has capital</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/contains">
+  <h3>contains<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/contains</p>
+  <div class="description">
+   <dl>
+    <dt>
+     has sub-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/di" title="http://purl.org/story/event/di">di</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/during" title="http://purl.org/story/event/during">during</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has sub-property chains
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/hasTemporalExtent" title="http://purl.org/story/event/hasTemporalExtent">has temporal extent</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span> <a href="http://www.w3.org/2006/time#intervalContains" target="_blank" title="http://www.w3.org/2006/time#intervalContains">interval contains</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/location/containsPlace">
+  <h3>contains place<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/location/containsPlace</p>
+  <div class="comment">
+   <span class="markdown">Inverse of 'is part of'.</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/location/isPartOf" title="http://purl.org/story/location/isPartOf">is part of</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/d">
+  <h3>d<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/d</p>
+  <div class="description">
+   <dl>
+    <dt>
+     has super-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/during" title="http://purl.org/story/event/during">during</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/di" title="http://purl.org/story/event/di">di</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/di">
+  <h3>di<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/di</p>
+  <div class="description">
+   <dl>
+    <dt>
+     has super-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/contains" title="http://purl.org/story/event/contains">contains</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/d" title="http://purl.org/story/event/d">d</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="https://purl.org/region/rcc8/dc">
+  <h3>disconnected<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> https://purl.org/region/rcc8/dc</p>
+  <div class="comment">
+   <span class="markdown">The two regions are completely disconnected (there are no common pieces).</span>
+  </div>
+  <div class="description">
+   <p><strong>has characteristics: </strong> symmetric, irreflexive</p>
+   <dl>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#https://purl.org/region/rcc8/Region" title="https://purl.org/region/rcc8/Region">region</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#https://purl.org/region/rcc8/Region" title="https://purl.org/region/rcc8/Region">region</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/during">
+  <h3>during<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/during</p>
+  <div class="comment">
+   <span class="markdown">Allen relation: an event is entirely contained within the time of a longer event.</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     has sub-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/d" title="http://purl.org/story/event/d">d</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/contains" title="http://purl.org/story/event/contains">contains</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has sub-property chains
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/hasTemporalExtent" title="http://purl.org/story/event/hasTemporalExtent">has temporal extent</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span> <a href="http://www.w3.org/2006/time#intervalDuring" target="_blank" title="http://www.w3.org/2006/time#intervalDuring">interval during</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/plot/endsWithEvent">
+  <h3>ends with event<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/plot/endsWithEvent</p>
+  <div class="comment">
+   <span class="markdown">The event that closes the story; each story has at most one such ending event.</span>
+  </div>
+  <div class="description">
+   <p><strong>has characteristics: </strong> functional</p>
+   <dl>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/plot/Story" title="http://purl.org/story/plot/Story">story</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/eq">
+  <h3>eq<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/eq</p>
+  <div class="description">
+   <p><strong>has characteristics: </strong> symmetric</p>
+   <dl>
+    <dt>
+     has super-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/equals" title="http://purl.org/story/event/equals">equals in time</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="https://purl.org/region/rcc8/eq">
+  <h3>equal<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> https://purl.org/region/rcc8/eq</p>
+  <div class="comment">
+   <span class="markdown">two regions have the same spatial extent</span>
+  </div>
+  <div class="description">
+   <p><strong>has characteristics: </strong> symmetric</p>
+   <dl>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#https://purl.org/region/rcc8/Region" title="https://purl.org/region/rcc8/Region">region</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#https://purl.org/region/rcc8/Region" title="https://purl.org/region/rcc8/Region">region</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/equals">
+  <h3>equals in time<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/equals</p>
+  <div class="comment">
+   <span class="markdown">Allen relation: two events share exactly the same temporal interval.</span>
+  </div>
+  <div class="description">
+   <p><strong>has characteristics: </strong> symmetric</p>
+   <dl>
+    <dt>
+     has sub-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/eq" title="http://purl.org/story/event/eq">eq</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has sub-property chains
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/hasTemporalExtent" title="http://purl.org/story/event/hasTemporalExtent">has temporal extent</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span> <a href="http://www.w3.org/2006/time#intervalEquals" target="_blank" title="http://www.w3.org/2006/time#intervalEquals">interval equals</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="https://purl.org/region/rcc8/ec">
+  <h3>externally connected<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> https://purl.org/region/rcc8/ec</p>
+  <div class="comment">
+   <span class="markdown">the boundaries of the regions touch, but their interiors are disjoint</span>
+  </div>
+  <div class="description">
+   <p><strong>has characteristics: </strong> symmetric, irreflexive</p>
+   <dl>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#https://purl.org/region/rcc8/Region" title="https://purl.org/region/rcc8/Region">region</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#https://purl.org/region/rcc8/Region" title="https://purl.org/region/rcc8/Region">region</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/f">
+  <h3>f<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/f</p>
+  <div class="description">
+   <dl>
+    <dt>
+     has super-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/finishes" title="http://purl.org/story/event/finishes">finishes</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/fi" title="http://purl.org/story/event/fi">fi</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/fi">
+  <h3>fi<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/fi</p>
+  <div class="description">
+   <dl>
+    <dt>
+     has super-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/finishedBy" title="http://purl.org/story/event/finishedBy">finished by</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/f" title="http://purl.org/story/event/f">f</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/finishedBy">
+  <h3>finished by<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/finishedBy</p>
+  <div class="description">
+   <dl>
+    <dt>
+     has sub-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/fi" title="http://purl.org/story/event/fi">fi</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/finishes" title="http://purl.org/story/event/finishes">finishes</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has sub-property chains
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/hasTemporalExtent" title="http://purl.org/story/event/hasTemporalExtent">has temporal extent</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span> <a href="http://www.w3.org/2006/time#intervalFinishedBy" target="_blank" title="http://www.w3.org/2006/time#intervalFinishedBy">interval finished by</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/finishes">
+  <h3>finishes<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/finishes</p>
+  <div class="comment">
+   <span class="markdown">Allen relation: two events end together, but the first one starts later.</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     has sub-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/f" title="http://purl.org/story/event/f">f</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/finishedBy" title="http://purl.org/story/event/finishedBy">finished by</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has sub-property chains
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/hasTemporalExtent" title="http://purl.org/story/event/hasTemporalExtent">has temporal extent</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span> <a href="http://www.w3.org/2006/time#intervalFinishes" target="_blank" title="http://www.w3.org/2006/time#intervalFinishes">interval finishes</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/action/hasAgent">
+  <h3>has agent<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/action/hasAgent</p>
+  <div class="comment">
+   <span class="markdown">The character who performs the action on purpose.</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     has super-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/hasParticipant" title="http://purl.org/story/event/hasParticipant">has participant</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/action/Action" title="http://purl.org/story/action/Action">action</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/social/Character" title="http://purl.org/story/social/Character">character</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/social/hasAllegianceTo">
+  <h3>has allegiance to<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/social/hasAllegianceTo</p>
+  <div class="comment">
+   <span class="markdown">Links a character to the person they have pledged allegiance or service to.</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/social/Character" title="http://purl.org/story/social/Character">character</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/social/Character" title="http://purl.org/story/social/Character">character</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/location/hasCapital">
+  <h3>has capital<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/location/hasCapital</p>
+  <div class="comment">
+   <span class="markdown">The chief settlement of the region.</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/location/Region" title="http://purl.org/story/location/Region">region</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/location/Settlement" title="http://purl.org/story/location/Settlement">settlement</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/location/capitalOf" title="http://purl.org/story/location/capitalOf">capital of</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/hasEndInstant">
+  <h3>has end instant<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/hasEndInstant</p>
+  <div class="comment">
+   <span class="markdown">Relates an event to the instant when it ends (Allen: Ie).</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="http://www.w3.org/2006/time#Instant" target="_blank" title="http://www.w3.org/2006/time#Instant">Time instant</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has sub-property chains
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/hasTemporalExtent" title="http://purl.org/story/event/hasTemporalExtent">has temporal extent</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span> <a href="http://www.w3.org/2006/time#hasEnd" target="_blank" title="http://www.w3.org/2006/time#hasEnd">has end</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/time/hasEnd">
+  <h3>has end instant<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/time/hasEnd</p>
+  <div class="comment">
+   <span class="markdown">Allen-style end function Ie: associates each temporal entity with the instant when it ends.</span>
+  </div>
+  <div class="description">
+   <p><strong>has characteristics: </strong> functional</p>
+   <dl>
+    <dt>
+     has super-properties
+    </dt>
+    <dd>
+     <a href="http://www.w3.org/2006/time#hasEnd" target="_blank" title="http://www.w3.org/2006/time#hasEnd">has end</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="http://www.w3.org/2006/time#TemporalEntity" target="_blank" title="http://www.w3.org/2006/time#TemporalEntity">Temporal entity</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="http://www.w3.org/2006/time#Instant" target="_blank" title="http://www.w3.org/2006/time#Instant">Time instant</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/action/hasInstrument">
+  <h3>has instrument<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/action/hasInstrument</p>
+  <div class="comment">
+   <span class="markdown">Tool or means used to carry out the action.</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     has super-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/usesItem" title="http://purl.org/story/event/usesItem">uses item</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/action/Action" title="http://purl.org/story/action/Action">action</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/social/hasOccupation">
+  <h3>has occupation<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/social/hasOccupation</p>
+  <div class="comment">
+   <span class="markdown">Job or trade; narrows hasSocialRole to soc:Occupation individuals.</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     has super-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/social/hasSocialRole" title="http://purl.org/story/social/hasSocialRole">has social role</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/social/Character" title="http://purl.org/story/social/Character">character</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/social/Occupation" title="http://purl.org/story/social/Occupation">occupation</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/hasParticipant">
+  <h3>has participant<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/hasParticipant</p>
+  <div class="comment">
+   <span class="markdown">Relates an event to a character who takes part in it in some way.</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     has sub-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/action/hasAgent" title="http://purl.org/story/action/hasAgent">has agent</a> <sup class="type-op" title="object property">op</sup>, <a href="#http://purl.org/story/action/hasPatient" title="http://purl.org/story/action/hasPatient">has patient</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/social/Character" title="http://purl.org/story/social/Character">character</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/action/hasPatient">
+  <h3>has patient<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/action/hasPatient</p>
+  <div class="comment">
+   <span class="markdown">Character the action is directed at or primarily affects.</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     has super-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/hasParticipant" title="http://purl.org/story/event/hasParticipant">has participant</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/action/Action" title="http://purl.org/story/action/Action">action</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/social/Character" title="http://purl.org/story/social/Character">character</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/plot/hasProtagonist">
+  <h3>has protagonist<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/plot/hasProtagonist</p>
+  <div class="comment">
+   <span class="markdown">Main character whose fate drives the story as a whole (e.g. Túrin in the Narn).</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/plot/Story" title="http://purl.org/story/plot/Story">story</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/social/Character" title="http://purl.org/story/social/Character">character</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/social/hasSocialRole">
+  <h3>has social role<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/social/hasSocialRole</p>
+  <div class="comment">
+   <span class="markdown">Relates a character to a social role they occupy in the story.</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     has sub-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/social/hasOccupation" title="http://purl.org/story/social/hasOccupation">has occupation</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/social/Character" title="http://purl.org/story/social/Character">character</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/social/SocialRole" title="http://purl.org/story/social/SocialRole">social role</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/hasStartInstant">
+  <h3>has start instant<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/hasStartInstant</p>
+  <div class="comment">
+   <span class="markdown">Relates an event to the instant when it starts (Allen: Is).</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="http://www.w3.org/2006/time#Instant" target="_blank" title="http://www.w3.org/2006/time#Instant">Time instant</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has sub-property chains
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/hasTemporalExtent" title="http://purl.org/story/event/hasTemporalExtent">has temporal extent</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span> <a href="http://www.w3.org/2006/time#hasBeginning" target="_blank" title="http://www.w3.org/2006/time#hasBeginning">has beginning</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/time/hasStart">
+  <h3>has start instant<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/time/hasStart</p>
+  <div class="comment">
+   <span class="markdown">Allen-style start function Is: associates each temporal entity with the instant when it starts.</span>
+  </div>
+  <div class="description">
+   <p><strong>has characteristics: </strong> functional</p>
+   <dl>
+    <dt>
+     has super-properties
+    </dt>
+    <dd>
+     <a href="http://www.w3.org/2006/time#hasBeginning" target="_blank" title="http://www.w3.org/2006/time#hasBeginning">has beginning</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="http://www.w3.org/2006/time#TemporalEntity" target="_blank" title="http://www.w3.org/2006/time#TemporalEntity">Temporal entity</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="http://www.w3.org/2006/time#Instant" target="_blank" title="http://www.w3.org/2006/time#Instant">Time instant</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/hasSubEvent">
+  <h3>has sub-event<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/hasSubEvent</p>
+  <div class="description">
+   <dl>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/subEventOf" title="http://purl.org/story/event/subEventOf">sub-event of</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/hasTemporalExtent">
+  <h3>has temporal extent<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/hasTemporalExtent</p>
+  <div class="comment">
+   <span class="markdown">Relates an event to a time instant or interval describing when it happens.</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="http://www.w3.org/2006/time#TemporalEntity" target="_blank" title="http://www.w3.org/2006/time#TemporalEntity">Temporal entity</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/action/hasTheme">
+  <h3>has theme<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/action/hasTheme</p>
+  <div class="comment">
+   <span class="markdown">Primary object in view: token given, thing seized, subject of counsel, etc.</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/action/Action" title="http://purl.org/story/action/Action">action</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="http://www.w3.org/2002/07/owl#Thing" target="_blank" title="http://www.w3.org/2002/07/owl#Thing">Thing</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/plot/hasUnit">
+  <h3>has unit<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/plot/hasUnit</p>
+  <div class="comment">
+   <span class="markdown">Relates a story to one of its narrative units (chapter, scene, etc.).</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/plot/Story" title="http://purl.org/story/plot/Story">story</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/plot/NarrativeUnit" title="http://purl.org/story/plot/NarrativeUnit">narrative unit</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/plot/isUnitOf" title="http://purl.org/story/plot/isUnitOf">is unit of</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/location/isPartOf">
+  <h3>is part of<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/location/isPartOf</p>
+  <div class="comment">
+   <span class="markdown">Relates a place to a larger place it belongs to, for example a city to a region.</span>
+  </div>
+  <div class="description">
+   <p><strong>has characteristics: </strong> transitive</p>
+   <dl>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/location/Place" title="http://purl.org/story/location/Place">place</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/location/Place" title="http://purl.org/story/location/Place">place</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/location/containsPlace" title="http://purl.org/story/location/containsPlace">contains place</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/plot/isUnitOf">
+  <h3>is unit of<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/plot/isUnitOf</p>
+  <div class="description">
+   <dl>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/plot/hasUnit" title="http://purl.org/story/plot/hasUnit">has unit</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/m">
+  <h3>m<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/m</p>
+  <div class="description">
+   <dl>
+    <dt>
+     has super-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/meets" title="http://purl.org/story/event/meets">meets</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/mi" title="http://purl.org/story/event/mi">mi</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/meets">
+  <h3>meets<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/meets</p>
+  <div class="comment">
+   <span class="markdown">Allen relation: one event finishes exactly when the next one starts.</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     has sub-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/m" title="http://purl.org/story/event/m">m</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/metBy" title="http://purl.org/story/event/metBy">met by</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has sub-property chains
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/hasTemporalExtent" title="http://purl.org/story/event/hasTemporalExtent">has temporal extent</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span> <a href="http://www.w3.org/2006/time#intervalMeets" target="_blank" title="http://www.w3.org/2006/time#intervalMeets">interval meets</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/metBy">
+  <h3>met by<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/metBy</p>
+  <div class="description">
+   <dl>
+    <dt>
+     has sub-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/mi" title="http://purl.org/story/event/mi">mi</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/meets" title="http://purl.org/story/event/meets">meets</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has sub-property chains
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/hasTemporalExtent" title="http://purl.org/story/event/hasTemporalExtent">has temporal extent</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span> <a href="http://www.w3.org/2006/time#intervalMetBy" target="_blank" title="http://www.w3.org/2006/time#intervalMetBy">interval met by</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/mi">
+  <h3>mi<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/mi</p>
+  <div class="description">
+   <dl>
+    <dt>
+     has super-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/metBy" title="http://purl.org/story/event/metBy">met by</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/m" title="http://purl.org/story/event/m">m</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="https://purl.org/region/rcc8/ntpp">
+  <h3>non-tangential proper part<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> https://purl.org/region/rcc8/ntpp</p>
+  <div class="comment">
+   <span class="markdown">the first region is entirely inside the second region and their boundaries do not touch</span>
+  </div>
+  <div class="description">
+   <p><strong>has characteristics: </strong> asymmetric, irreflexive</p>
+   <dl>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#https://purl.org/region/rcc8/Region" title="https://purl.org/region/rcc8/Region">region</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#https://purl.org/region/rcc8/Region" title="https://purl.org/region/rcc8/Region">region</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#https://purl.org/region/rcc8/ntppi" title="https://purl.org/region/rcc8/ntppi">non-tangential proper part inverse</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="https://purl.org/region/rcc8/ntppi">
+  <h3>non-tangential proper part inverse<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> https://purl.org/region/rcc8/ntppi</p>
+  <div class="comment">
+   <span class="markdown">the first region entirely contains the second region and their boundaries do not touch</span>
+  </div>
+  <div class="description">
+   <p><strong>has characteristics: </strong> asymmetric, irreflexive</p>
+   <dl>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#https://purl.org/region/rcc8/Region" title="https://purl.org/region/rcc8/Region">region</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#https://purl.org/region/rcc8/Region" title="https://purl.org/region/rcc8/Region">region</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#https://purl.org/region/rcc8/ntpp" title="https://purl.org/region/rcc8/ntpp">non-tangential proper part</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/o">
+  <h3>o<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/o</p>
+  <div class="description">
+   <dl>
+    <dt>
+     has super-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/overlaps" title="http://purl.org/story/event/overlaps">overlaps</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/oi" title="http://purl.org/story/event/oi">oi</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/occursAt">
+  <h3>occurs at<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/occursAt</p>
+  <div class="comment">
+   <span class="markdown">Main place where the event happens.</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/location/Place" title="http://purl.org/story/location/Place">place</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/oi">
+  <h3>oi<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/oi</p>
+  <div class="description">
+   <dl>
+    <dt>
+     has super-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/overlappedBy" title="http://purl.org/story/event/overlappedBy">overlapped by</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/o" title="http://purl.org/story/event/o">o</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/overlappedBy">
+  <h3>overlapped by<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/overlappedBy</p>
+  <div class="description">
+   <dl>
+    <dt>
+     has sub-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/oi" title="http://purl.org/story/event/oi">oi</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/overlaps" title="http://purl.org/story/event/overlaps">overlaps</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has sub-property chains
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/hasTemporalExtent" title="http://purl.org/story/event/hasTemporalExtent">has temporal extent</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span> <a href="http://www.w3.org/2006/time#intervalOverlappedBy" target="_blank" title="http://www.w3.org/2006/time#intervalOverlappedBy">interval overlapped by</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/overlaps">
+  <h3>overlaps<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/overlaps</p>
+  <div class="comment">
+   <span class="markdown">Allen o (not symmetric): first starts before second, overlaps in time, ends before second ends; inverse overlappedBy/oi. Matches time:intervalOverlaps in OWL Time.</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     has sub-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/o" title="http://purl.org/story/event/o">o</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/overlappedBy" title="http://purl.org/story/event/overlappedBy">overlapped by</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has sub-property chains
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/hasTemporalExtent" title="http://purl.org/story/event/hasTemporalExtent">has temporal extent</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span> <a href="http://www.w3.org/2006/time#intervalOverlaps" target="_blank" title="http://www.w3.org/2006/time#intervalOverlaps">interval overlaps</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="https://purl.org/region/rcc8/po">
+  <h3>partially overlapping<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> https://purl.org/region/rcc8/po</p>
+  <div class="comment">
+   <span class="markdown">the two regions partially overlap (there are disjoint sub parts, and some part of one is included in some part of the other</span>
+  </div>
+  <div class="description">
+   <p><strong>has characteristics: </strong> symmetric, irreflexive</p>
+   <dl>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#https://purl.org/region/rcc8/Region" title="https://purl.org/region/rcc8/Region">region</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#https://purl.org/region/rcc8/Region" title="https://purl.org/region/rcc8/Region">region</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/plot/precedesUnit">
+  <h3>precedes unit<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/plot/precedesUnit</p>
+  <div class="comment">
+   <span class="markdown">One narrative unit comes before another in the order of telling.</span>
+  </div>
+  <div class="description">
+   <p><strong>has characteristics: </strong> transitive</p>
+   <dl>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/plot/NarrativeUnit" title="http://purl.org/story/plot/NarrativeUnit">narrative unit</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/plot/NarrativeUnit" title="http://purl.org/story/plot/NarrativeUnit">narrative unit</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/s">
+  <h3>s<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/s</p>
+  <div class="description">
+   <dl>
+    <dt>
+     has super-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/starts" title="http://purl.org/story/event/starts">starts</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/si" title="http://purl.org/story/event/si">si</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/si">
+  <h3>si<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/si</p>
+  <div class="description">
+   <dl>
+    <dt>
+     has super-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/startedBy" title="http://purl.org/story/event/startedBy">started by</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/s" title="http://purl.org/story/event/s">s</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/startedBy">
+  <h3>started by<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/startedBy</p>
+  <div class="description">
+   <dl>
+    <dt>
+     has sub-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/si" title="http://purl.org/story/event/si">si</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/starts" title="http://purl.org/story/event/starts">starts</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has sub-property chains
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/hasTemporalExtent" title="http://purl.org/story/event/hasTemporalExtent">has temporal extent</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span> <a href="http://www.w3.org/2006/time#intervalStartedBy" target="_blank" title="http://www.w3.org/2006/time#intervalStartedBy">interval started by</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/starts">
+  <h3>starts<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/starts</p>
+  <div class="comment">
+   <span class="markdown">Allen relation: two events start together, but the first one ends earlier.</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     has sub-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/s" title="http://purl.org/story/event/s">s</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/startedBy" title="http://purl.org/story/event/startedBy">started by</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has sub-property chains
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/hasTemporalExtent" title="http://purl.org/story/event/hasTemporalExtent">has temporal extent</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span> <a href="http://www.w3.org/2006/time#intervalStarts" target="_blank" title="http://www.w3.org/2006/time#intervalStarts">interval starts</a> <sup class="type-op" title="object property">op</sup> <span class="logic">o</span>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/action/subActionOf">
+  <h3>sub-action of<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/action/subActionOf</p>
+  <div class="comment">
+   <span class="markdown">Nests this intentional act under a larger event or action.</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     has super-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/subEventOf" title="http://purl.org/story/event/subEventOf">sub-event of</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/action/Action" title="http://purl.org/story/action/Action">action</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/subEventOf">
+  <h3>sub-event of<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/subEventOf</p>
+  <div class="comment">
+   <span class="markdown">Relates a smaller event to a larger one it belongs to.</span>
+  </div>
+  <div class="description">
+   <p><strong>has characteristics: </strong> transitive</p>
+   <dl>
+    <dt>
+     has sub-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/action/subActionOf" title="http://purl.org/story/action/subActionOf">sub-action of</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/hasSubEvent" title="http://purl.org/story/event/hasSubEvent">has sub-event</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/social/swornEnemyOf">
+  <h3>sworn enemy of<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/social/swornEnemyOf</p>
+  <div class="comment">
+   <span class="markdown">Two characters that are openly hostile to each other.</span>
+  </div>
+  <div class="description">
+   <p><strong>has characteristics: </strong> symmetric</p>
+   <dl>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/social/Character" title="http://purl.org/story/social/Character">character</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/social/Character" title="http://purl.org/story/social/Character">character</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="https://purl.org/region/rcc8/tpp">
+  <h3>tangential proper part<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> https://purl.org/region/rcc8/tpp</p>
+  <div class="comment">
+   <span class="markdown">the first region is entirely inside the second region and their boundaries touch each other from the inside</span>
+  </div>
+  <div class="description">
+   <p><strong>has characteristics: </strong> asymmetric, irreflexive</p>
+   <dl>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#https://purl.org/region/rcc8/Region" title="https://purl.org/region/rcc8/Region">region</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#https://purl.org/region/rcc8/Region" title="https://purl.org/region/rcc8/Region">region</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#https://purl.org/region/rcc8/tppi" title="https://purl.org/region/rcc8/tppi">tangential proper part inverse</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="https://purl.org/region/rcc8/tppi">
+  <h3>tangential proper part inverse<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> https://purl.org/region/rcc8/tppi</p>
+  <div class="comment">
+   <span class="markdown">the first region entirely contains the second region and their boundaries touch each other from the inside</span>
+  </div>
+  <div class="description">
+   <p><strong>has characteristics: </strong> asymmetric, irreflexive</p>
+   <dl>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#https://purl.org/region/rcc8/Region" title="https://purl.org/region/rcc8/Region">region</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#https://purl.org/region/rcc8/Region" title="https://purl.org/region/rcc8/Region">region</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     is inverse of
+    </dt>
+    <dd>
+     <a href="#https://purl.org/region/rcc8/tpp" title="https://purl.org/region/rcc8/tpp">tangential proper part</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/plot/tellsEvent">
+  <h3>tells event<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/plot/tellsEvent</p>
+  <div class="comment">
+   <span class="markdown">Relates a narrative unit to an event it narrates.</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/plot/NarrativeUnit" title="http://purl.org/story/plot/NarrativeUnit">narrative unit</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+    <dt>
+     has range
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+ <div class="entity" id="http://purl.org/story/event/usesItem">
+  <h3>uses item<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/event/usesItem</p>
+  <div class="comment">
+   <span class="markdown">An item that is used as part of an event, for instance a weapon or artefact.</span>
+  </div>
+  <div class="description">
+   <dl>
+    <dt>
+     has sub-properties
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/action/hasInstrument" title="http://purl.org/story/action/hasInstrument">has instrument</a> <sup class="type-op" title="object property">op</sup>
+    </dd>
+    <dt>
+     has domain
+    </dt>
+    <dd>
+     <a href="#http://purl.org/story/event/Event" title="http://purl.org/story/event/Event">event</a> <sup class="type-c" title="class">c</sup>
+    </dd>
+   </dl>
+  </div>
+ </div>
+</div><div xmlns:widoco="https://w3id.org/widoco/vocab#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="namedindividuals">
+ <h3 id="namedindividuals" class="list">Named Individuals</h3>
+ <ul class="hlist">
+  <li><a href="#http://purl.org/story/social/Blacksmith" title="http://purl.org/story/social/Blacksmith">blacksmith</a></li>
+  <li><a href="#http://purl.org/story/social/Burglar" title="http://purl.org/story/social/Burglar">burglar</a></li>
+  <li><a href="#http://purl.org/story/social/Farmer" title="http://purl.org/story/social/Farmer">farmer</a></li>
+  <li><a href="#http://purl.org/story/social/Innkeeper" title="http://purl.org/story/social/Innkeeper">innkeeper</a></li>
+  <li><a href="#http://purl.org/story/social/Merchant" title="http://purl.org/story/social/Merchant">merchant</a></li>
+  <li><a href="#http://purl.org/story/social/Messenger" title="http://purl.org/story/social/Messenger">messenger</a></li>
+  <li><a href="#http://purl.org/story/social/Physician" title="http://purl.org/story/social/Physician">physician</a></li>
+  <li><a href="#http://purl.org/story/social/Soldier" title="http://purl.org/story/social/Soldier">soldier</a></li>
+  <li><a href="#http://purl.org/story/social/Thief" title="http://purl.org/story/social/Thief">thief</a></li>
+ </ul>
+ <div class="entity" id="http://purl.org/story/social/Blacksmith">
+  <h3>blacksmith<sup class="type-ni" title="named individual">ni</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#namedindividuals">Named Individual ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/social/Blacksmith</p>
+  <dl class="description">
+   <dt>
+    belongs to
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/social/Occupation" title="http://purl.org/story/social/Occupation">occupation</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/social/Burglar">
+  <h3>burglar<sup class="type-ni" title="named individual">ni</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#namedindividuals">Named Individual ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/social/Burglar</p>
+  <dl class="description">
+   <dt>
+    belongs to
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/social/Occupation" title="http://purl.org/story/social/Occupation">occupation</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/social/Farmer">
+  <h3>farmer<sup class="type-ni" title="named individual">ni</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#namedindividuals">Named Individual ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/social/Farmer</p>
+  <dl class="description">
+   <dt>
+    belongs to
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/social/Occupation" title="http://purl.org/story/social/Occupation">occupation</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/social/Innkeeper">
+  <h3>innkeeper<sup class="type-ni" title="named individual">ni</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#namedindividuals">Named Individual ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/social/Innkeeper</p>
+  <dl class="description">
+   <dt>
+    belongs to
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/social/Occupation" title="http://purl.org/story/social/Occupation">occupation</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/social/Merchant">
+  <h3>merchant<sup class="type-ni" title="named individual">ni</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#namedindividuals">Named Individual ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/social/Merchant</p>
+  <dl class="description">
+   <dt>
+    belongs to
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/social/Occupation" title="http://purl.org/story/social/Occupation">occupation</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/social/Messenger">
+  <h3>messenger<sup class="type-ni" title="named individual">ni</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#namedindividuals">Named Individual ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/social/Messenger</p>
+  <dl class="description">
+   <dt>
+    belongs to
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/social/Occupation" title="http://purl.org/story/social/Occupation">occupation</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/social/Physician">
+  <h3>physician<sup class="type-ni" title="named individual">ni</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#namedindividuals">Named Individual ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/social/Physician</p>
+  <dl class="description">
+   <dt>
+    belongs to
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/social/Occupation" title="http://purl.org/story/social/Occupation">occupation</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/social/Soldier">
+  <h3>soldier<sup class="type-ni" title="named individual">ni</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#namedindividuals">Named Individual ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/social/Soldier</p>
+  <dl class="description">
+   <dt>
+    belongs to
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/social/Occupation" title="http://purl.org/story/social/Occupation">occupation</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+ <div class="entity" id="http://purl.org/story/social/Thief">
+  <h3>thief<sup class="type-ni" title="named individual">ni</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#namedindividuals">Named Individual ToC</a> </span></h3>
+  <p><strong>IRI:</strong> http://purl.org/story/social/Thief</p>
+  <dl class="description">
+   <dt>
+    belongs to
+   </dt>
+   <dd>
+    <a href="#http://purl.org/story/social/Occupation" title="http://purl.org/story/social/Occupation">occupation</a> <sup class="type-c" title="class">c</sup>
+   </dd>
+  </dl>
+ </div>
+</div><div id="legend">
+<h2>Legend <span class="backlink"> back to <a href="#toc">ToC</a></span></h2>
+<div   class="entity">
+<sup class="type-c" title="Classes">c</sup>: Classes <br/>
+<sup class="type-op" title="Object Properties">op</sup>: Object Properties <br/>
+<sup class="type-ni" title="Named Individuals">ni</sup>: Named Individuals <br/>
+</div>
+</div>
+</div>
+    
+
+<!--REFERENCES SECTION-->
+  <div id="references"><span class="markdown">
+- Allen, J.F. (1983). Maintaining knowledge about temporal intervals. *Communications of the ACM*, 26(11), 832–843.
+- Randell, D.A., Cui, Z., &amp; Cohn, A.G. (1992). A spatial logic based on regions and connection. In *KR* (Vol. 92, pp. 165–176).
+- Tolkien, J.R.R. (2007). *The Children of Húrin*. Edited by Christopher Tolkien. Houghton Mifflin Harcourt.
+</span>
+</div>
+<div id="acknowledgments">
+<h2 id="ack" class="list">Acknowledgments <span class="backlink"> back to <a href="#toc">ToC</a></span></h2>
+<p>
+The authors would like to thank <a href="http://www.essepuntato.it/">Silvio Peroni</a> for developing <a href="http://www.essepuntato.it/lode">LODE</a>, a Live OWL Documentation Environment, which is used for representing the Cross Referencing Section of this document and <a href="https://w3id.org/people/dgarijo">Daniel Garijo</a> for developing <a href="https://github.com/dgarijo/Widoco">Widoco</a>, the program used to create the template used in this documentation.</p>
+</div>
+
+
+</div>
+</body>
+</html>

@@ -1,0 +1,265 @@
+@prefix narn:   <http://purl.org/story/narn/> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix meo:    <http://purl.org/meo/> .
+@prefix fo:     <http://purl.org/family/> .
+@prefix loc:    <http://purl.org/story/location/> .
+@prefix rcc:    <https://purl.org/region/rcc8/> .
+@prefix soc:    <http://purl.org/story/social/> .
+@prefix ev:     <http://purl.org/story/event/> .
+@prefix act:    <http://purl.org/story/action/> .
+@prefix plot:   <http://purl.org/story/plot/> .
+@prefix stime:  <http://purl.org/story/time/> .
+@prefix time:   <http://www.w3.org/2006/time#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+
+narn: a owl:Ontology ;
+  owl:imports <http://purl.org/story/ontology/>,
+      fo:,
+      meo: ;
+  rdfs:label "Narn i Chîn Húrin example"@en ;
+  rdfs:comment "Example instances for the story ontology, based on the Narn i Chîn Húrin (The Tale of the Children of Húrin)."@en .
+
+
+### ========== Characters ==========
+# The main characters of the Narn: Túrin (protagonist), his father Húrin, and mother Morwen.
+# All are Edain (Men of the Three Houses) and belong to the House of Hador.
+
+narn:Túrin a soc:Character ;
+  rdfs:label "Túrin Turambar"@en ;
+  rdfs:comment "Protagonist of the Narn; son of Húrin and Morwen, later takes the name Turambar."@en ;
+  soc:hasAllegianceTo narn:Thingol .
+
+narn:Húrin a soc:Character, soc:Lord ;
+  rdfs:label "Húrin Thalion"@en ;
+  rdfs:comment "Father of Túrin; lord of Dor-lómin, captured by Morgoth at the Nirnaeth."@en .
+
+narn:Morwen a soc:Character ;
+  rdfs:label "Morwen Eledhwen"@en ;
+  rdfs:comment "Mother of Túrin; stays in Dor-lómin when Túrin leaves."@en .
+
+narn:Thingol a soc:Character, soc:Lord ;
+  rdfs:label "Elu Thingol"@en ;
+  rdfs:comment "King of Doriath; overlord to whom Túrin pledges allegiance for a time."@en .
+
+narn:Beleg a soc:Character ;
+  rdfs:label "Beleg Cúthalion"@en ;
+  rdfs:comment "Strongbow of Doriath; friend of Túrin and captain among the march-wardens."@en ;
+  soc:hasOccupation soc:Soldier .
+
+narn:Glaurung a soc:Character ;
+  rdfs:label "Glaurung"@en ;
+  rdfs:comment "The Father of Dragons; slain by Túrin; story antagonist linked by enmity."@en ;
+  soc:swornEnemyOf narn:Túrin .
+
+narn:OrcChieftain a soc:Character ;
+  rdfs:label "Orc chieftain (generic)"@en ;
+  rdfs:comment "Stand-in second participant for an armed clash in the tale."@en .
+
+narn:Morgoth a soc:Character ;
+  rdfs:label "Morgoth"@en ;
+  rdfs:comment "Dark Enemy; stand-in agent for a capture action (plot-scale, not precise timeline)."@en .
+
+narn:HouseOfHador a soc:House ;
+  rdfs:label "House of Hador"@en ;
+  rdfs:comment "One of the Three Houses of the Edain; Húrin and Túrin belong to this house."@en .
+
+narn:Húrin soc:belongsToHouse narn:HouseOfHador .
+narn:Túrin soc:belongsToHouse narn:HouseOfHador .
+
+
+### ========== Locations ==========
+# Dor-lómin is the region where Húrin's house stands; Túrin leaves from here.
+
+narn:Doriath a loc:Region ;
+  rdfs:label "Doriath"@en ;
+  rdfs:comment "Elven realm in Beleriand where Túrin sought refuge; ruled by Thingol."@en ;
+  loc:hasCapital narn:Menegroth .
+
+narn:DorLómin a loc:Region ;
+  rdfs:label "Dor-lómin"@en ;
+  rdfs:comment "Land in Hithlum given to the House of Hador; home of Húrin and his family."@en ;
+  rcc:dc narn:Doriath ;
+  loc:containsPlace narn:HouseOfHúrinPlace,
+      narn:EredWethrin .
+
+narn:HouseOfHúrinPlace a loc:Settlement ;
+  rdfs:label "House of Húrin"@en ;
+  rdfs:comment "The dwelling where Túrin's departure and farewell to Morwen take place."@en ;
+  loc:isPartOf narn:DorLómin ;
+  rcc:tpp narn:DorLómin .
+
+narn:EredWethrin a loc:MountainRange ;
+  rdfs:label "Ered Wethrin"@en ;
+  rdfs:comment "Mountains bordering Dor-lómin; the house lies near their shadow."@en ;
+  loc:isPartOf narn:DorLómin ;
+  rcc:ec narn:HouseOfHúrinPlace .
+
+narn:Menegroth a loc:City ;
+  rdfs:label "Menegroth"@en ;
+  rdfs:comment "The Thousand Caves; chief city of Doriath under Thingol."@en ;
+  loc:isPartOf narn:Doriath ;
+  loc:capitalOf narn:Doriath .
+
+narn:ThousandCavesHall a loc:District ;
+  rdfs:label "Thousand Caves (hall)"@en ;
+  rdfs:comment "A named great hall and seat within Menegroth."@en ;
+  loc:isPartOf narn:Menegroth .
+
+narn:Sirion a loc:River ;
+  rdfs:label "Sirion"@en ;
+  rdfs:comment "Great river of Beleriand; crosses the realm of Doriath."@en ;
+  loc:isPartOf narn:Doriath .
+
+narn:Belegaer a loc:Sea ;
+  rdfs:label "Belegaer"@en ;
+  rdfs:comment "The Great Sea west of Beleriand."@en .
+
+
+### ========== Time intervals ==========
+# Story-time intervals and instants; time:before links support OWL-Time / Allen chains (time-story.ttl).
+
+narn:t_departure a stime:StoryTimeInterval ;
+  rdfs:label "Time of Túrin's departure from Dor-lómin"@en ;
+  rdfs:comment "The interval during which Túrin leaves Dor-lómin, including his farewell to Morwen."@en ;
+  stime:hasStart narn:t_departure_start ;
+  stime:hasEnd   narn:t_departure_end .
+
+narn:t_departure_start a stime:StoryTimeInstant ;
+  rdfs:label "Start of Túrin's departure from Dor-lómin"@en .
+
+narn:t_departure_end a stime:StoryTimeInstant ;
+  rdfs:label "End of Túrin's departure from Dor-lómin"@en .
+
+narn:t_childhood a stime:StoryTimeInterval ;
+  rdfs:label "Childhood span in Dor-lómin"@en ;
+  stime:hasStart narn:t_childhood_start ;
+  stime:hasEnd   narn:t_childhood_end .
+
+narn:t_childhood_start a stime:StoryTimeInstant ;
+  rdfs:label "Start of Túrin's childhood at home"@en .
+
+narn:t_childhood_end a stime:StoryTimeInstant ;
+  rdfs:label "End of Túrin's childhood at home"@en .
+
+narn:t_childhood_end time:before narn:t_departure_start .
+
+narn:t_glaurung a stime:StoryTimeInterval ;
+  rdfs:label "Interval of Glaurung's fall"@en ;
+  stime:hasStart narn:t_glaurung_start ;
+  stime:hasEnd   narn:t_glaurung_end .
+
+narn:t_glaurung_start a stime:StoryTimeInstant ;
+  rdfs:label "Start of Glaurung's fall"@en .
+
+narn:t_glaurung_end a stime:StoryTimeInstant ;
+  rdfs:label "End of Glaurung's fall"@en .
+
+narn:t_departure_end time:before narn:t_glaurung_start .
+narn:t_glaurung_end time:before narn:t_death .
+
+narn:t_death a stime:StoryTimeInstant ;
+  rdfs:label "Instant of Túrin's death"@en ;
+  rdfs:comment "The moment of Túrin's death by his own sword at the end of the Narn."@en .
+
+
+### ========== Events ==========
+# Journey, battles, meeting, sub-events, Allen ordering, and dragon fall as plot climax material.
+
+narn:DepartureFromDorLómin a ev:Journey ;
+  rdfs:label "Departure of Túrin from Dor-lómin"@en ;
+  rdfs:comment "Túrin leaves his home to seek safety in Doriath; marks the start of his tragic path."@en ;
+  ev:hasParticipant narn:Túrin ;
+  ev:hasOrigin narn:HouseOfHúrinPlace ;
+  ev:hasDestination narn:Doriath ;
+  ev:occursAt narn:HouseOfHúrinPlace ;
+  ev:hasTemporalExtent narn:t_departure ;
+  ev:hasSubEvent narn:FarewellToMorwen,
+      narn:TúrinDecidesToLeave,
+      narn:TúrinLeavesHouse,
+      narn:MorwenGivesKeepsake,
+      narn:TúrinSwearsOath,
+      narn:TúrinArrivesInMenegroth .
+
+narn:FarewellToMorwen a act:SpeechAct ;
+  rdfs:label "Farewell of Túrin to Morwen"@en ;
+  rdfs:comment "Túrin's parting words to his mother before leaving; a speech act within the departure."@en ;
+  act:hasAgent narn:Túrin ;
+  act:hasPatient narn:Morwen ;
+  ev:occursAt narn:HouseOfHúrinPlace ;
+  ev:hasTemporalExtent narn:t_departure ;
+  ev:subEventOf narn:DepartureFromDorLómin ;
+  ev:during narn:DepartureFromDorLómin ;
+  act:subActionOf narn:DepartureFromDorLómin .
+
+narn:SkirmishInWilderness a ev:Battle ;
+  rdfs:label "Skirmish with orcs"@en ;
+  rdfs:comment "Illustrative armed clash with two named participants."@en ;
+  ev:hasParticipant narn:Húrin,
+      narn:OrcChieftain ;
+  ev:occursAt narn:DorLómin ;
+  ev:hasTemporalExtent narn:t_childhood .
+
+narn:AudienceWithThingol a ev:Meeting ;
+  rdfs:label "Audience of Túrin with Thingol"@en ;
+  rdfs:comment "Túrin received in Menegroth after reaching Doriath."@en ;
+  ev:hasParticipant narn:Túrin,
+      narn:Thingol ;
+  ev:occursAt narn:ThousandCavesHall ;
+  ev:hasTemporalExtent narn:t_departure .
+
+narn:FallOfGlaurung a ev:Battle ;
+  rdfs:label "Fall of Glaurung"@en ;
+  rdfs:comment "Narrative climax: Túrin slays Glaurung (treated as battle for two participants)."@en ;
+  ev:hasParticipant narn:Túrin,
+      narn:Glaurung ;
+  ev:hasTemporalExtent narn:t_glaurung ;
+  ev:hasSubEvent narn:TúrinStrikesGlaurung,
+      narn:GlaurungThreatensTúrin .
+
+narn:DeathOfTúrin a ev:Death ;
+  rdfs:label "Death of Túrin"@en ;
+  rdfs:comment "Túrin's suicide with Gurthang; the tragic ending of the Narn."@en ;
+  ev:hasParticipant narn:Túrin ;
+  ev:hasTemporalExtent narn:t_death ;
+  ev:usesItem narn:Gurthang .
+
+narn:Gurthang a owl:Thing ;
+  rdfs:label "Gurthang"@en ;
+  rdfs:comment "Túrin's sword, the Iron of Death; used in his suicide at the end of the Narn."@en .
+
+narn:DepartureFromDorLómin ev:before narn:FallOfGlaurung .
+narn:FallOfGlaurung ev:before narn:DeathOfTúrin .
+
+
+### ========== Story structure ==========
+# Story with chapters, explicit hasUnit, climax unit, and linear precedesUnit chain.
+
+narn:TheNarn a plot:Story ;
+  rdfs:label "Narn i Chîn Húrin"@en ;
+  rdfs:comment "The Tale of the Children of Húrin; a tragic story whose protagonist is Túrin."@en ;
+  plot:endsWithEvent narn:DeathOfTúrin ;
+  plot:hasProtagonist narn:Túrin ;
+  plot:hasUnit narn:Ch1_Childhood,
+      narn:Climax_Glaurung,
+      narn:Ch2_FateOfTúrin .
+
+narn:Ch1_Childhood a plot:Chapter ;
+  rdfs:label "Childhood of Túrin"@en ;
+  rdfs:comment "Early part of the tale; includes Túrin's departure from Dor-lómin."@en ;
+  plot:isUnitOf narn:TheNarn ;
+  plot:tellsEvent narn:DepartureFromDorLómin .
+
+narn:Climax_Glaurung a plot:Climax ;
+  rdfs:label "Slaying of Glaurung"@en ;
+  rdfs:comment "Peak narrative unit: defeat of the dragon before the final tragedy."@en ;
+  plot:isUnitOf narn:TheNarn ;
+  plot:tellsEvent narn:FallOfGlaurung .
+
+narn:Ch2_FateOfTúrin a plot:Chapter, plot:TragicEnding ;
+  rdfs:label "The fate of Túrin"@en ;
+  rdfs:comment "Final chapter; narrates Túrin's death and the tragic conclusion."@en ;
+  plot:isUnitOf narn:TheNarn ;
+  plot:tellsEvent narn:DeathOfTúrin .
+
+narn:Ch1_Childhood plot:precedesUnit narn:Climax_Glaurung .
+narn:Climax_Glaurung plot:precedesUnit narn:Ch2_FateOfTúrin .

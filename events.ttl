@@ -1,0 +1,304 @@
+@prefix ev:   <http://purl.org/story/event/> .
+@prefix loc:  <http://purl.org/story/location/> .
+@prefix soc:  <http://purl.org/story/social/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+ev: a owl:Ontology ;
+  owl:imports loc:, soc:, <http://www.w3.org/2006/time#> ;
+  rdfs:label "Events and temporal relations in stories"@en ;
+  rdfs:comment "Events with their participants, locations and temporal ordering, using the W3C Time ontology to describe time."@en .
+
+### Event classes
+
+ev:Event a owl:Class ;
+  rdfs:label "event"@en ;
+  rdfs:comment "Something that happens in the story and can be located in time and space."@en .
+
+ev:Battle a owl:Class ;
+  rdfs:subClassOf ev:Event ;
+  rdfs:label "battle"@en ;
+  rdfs:comment "An event where at least two opposing sides fight each other; in the Narn this covers large clashes as well as smaller armed encounters."@en .
+
+ev:Journey a owl:Class ;
+  rdfs:subClassOf ev:Event ;
+  rdfs:label "journey"@en ;
+  rdfs:comment "An event where one or more characters travel from one place to another, possibly broken down into several smaller travel actions."@en .
+
+ev:Meeting a owl:Class ;
+  rdfs:subClassOf ev:Event ;
+  rdfs:label "meeting"@en ;
+  rdfs:comment "An event where characters come together to talk or decide something."@en .
+
+ev:Birth a owl:Class ;
+  rdfs:subClassOf ev:Event ;
+  rdfs:label "birth"@en ;
+  rdfs:comment "An event where a new character is born."@en .
+
+ev:Death a owl:Class ;
+  rdfs:subClassOf ev:Event ;
+  rdfs:label "death"@en ;
+  rdfs:comment "An event where a character dies."@en .
+
+### Basic relations between events, characters, places and time
+
+ev:hasParticipant a owl:ObjectProperty ;
+  rdfs:domain ev:Event ;
+  rdfs:range  soc:Character ;
+  rdfs:label "has participant"@en ;
+  rdfs:comment "Relates an event to a character who takes part in it in some way."@en .
+
+ev:occursAt a owl:ObjectProperty ;
+  rdfs:domain ev:Event ;
+  rdfs:range  loc:Place ;
+  rdfs:label "occurs at"@en ;
+  rdfs:comment "Main place where the event happens."@en .
+
+ev:hasTemporalExtent a owl:ObjectProperty ;
+  rdfs:domain ev:Event ;
+  rdfs:range  time:TemporalEntity ;
+  rdfs:label "has temporal extent"@en ;
+  rdfs:comment "Relates an event to a time instant or interval describing when it happens."@en .
+
+### Start and end instants of events (Allen-style)
+
+ev:hasStartInstant a owl:ObjectProperty ;
+  rdfs:domain ev:Event ;
+  rdfs:range  time:Instant ;
+  rdfs:label "has start instant"@en ;
+  rdfs:comment "Relates an event to the instant when it starts (Allen: Is)."@en .
+
+ev:hasEndInstant a owl:ObjectProperty ;
+  rdfs:domain ev:Event ;
+  rdfs:range  time:Instant ;
+  rdfs:label "has end instant"@en ;
+  rdfs:comment "Relates an event to the instant when it ends (Allen: Ie)."@en .
+
+ev:hasStartInstant owl:propertyChainAxiom ( ev:hasTemporalExtent time:hasBeginning ) .
+ev:hasEndInstant   owl:propertyChainAxiom ( ev:hasTemporalExtent time:hasEnd ) .
+
+### Allen axiomatisation via W3C OWL-Time (interval algebra)
+
+# When ev:hasTemporalExtent points to time:ProperInterval individuals, each time:interval*
+# between those extents entails the matching Allen relation between story events (cf. Allen 1983; OWL Time).
+
+ev:before owl:propertyChainAxiom ( ev:hasTemporalExtent time:intervalBefore [ owl:inverseOf ev:hasTemporalExtent ] ) ;
+  owl:propertyChainAxiom ( ev:hasEndInstant time:before [ owl:inverseOf ev:hasStartInstant ] ) .
+
+ev:after owl:propertyChainAxiom ( ev:hasTemporalExtent time:intervalAfter [ owl:inverseOf ev:hasTemporalExtent ] ) ;
+  owl:propertyChainAxiom ( ev:hasStartInstant time:after [ owl:inverseOf ev:hasEndInstant ] ) .
+
+ev:meets owl:propertyChainAxiom ( ev:hasTemporalExtent time:intervalMeets [ owl:inverseOf ev:hasTemporalExtent ] ) .
+
+ev:metBy owl:propertyChainAxiom ( ev:hasTemporalExtent time:intervalMetBy [ owl:inverseOf ev:hasTemporalExtent ] ) .
+
+ev:overlaps owl:propertyChainAxiom ( ev:hasTemporalExtent time:intervalOverlaps [ owl:inverseOf ev:hasTemporalExtent ] ) .
+
+ev:overlappedBy owl:propertyChainAxiom ( ev:hasTemporalExtent time:intervalOverlappedBy [ owl:inverseOf ev:hasTemporalExtent ] ) .
+
+ev:starts owl:propertyChainAxiom ( ev:hasTemporalExtent time:intervalStarts [ owl:inverseOf ev:hasTemporalExtent ] ) .
+
+ev:startedBy owl:propertyChainAxiom ( ev:hasTemporalExtent time:intervalStartedBy [ owl:inverseOf ev:hasTemporalExtent ] ) .
+
+ev:during owl:propertyChainAxiom ( ev:hasTemporalExtent time:intervalDuring [ owl:inverseOf ev:hasTemporalExtent ] ) .
+
+ev:contains owl:propertyChainAxiom ( ev:hasTemporalExtent time:intervalContains [ owl:inverseOf ev:hasTemporalExtent ] ) .
+
+ev:finishes owl:propertyChainAxiom ( ev:hasTemporalExtent time:intervalFinishes [ owl:inverseOf ev:hasTemporalExtent ] ) .
+
+ev:finishedBy owl:propertyChainAxiom ( ev:hasTemporalExtent time:intervalFinishedBy [ owl:inverseOf ev:hasTemporalExtent ] ) .
+
+ev:equals owl:propertyChainAxiom ( ev:hasTemporalExtent time:intervalEquals [ owl:inverseOf ev:hasTemporalExtent ] ) .
+
+ev:usesItem a owl:ObjectProperty ;
+  rdfs:domain ev:Event ;
+  rdfs:label "uses item"@en ;
+  rdfs:comment "An item that is used as part of an event, for instance a weapon or artefact."@en .
+
+### Temporal ordering using Allen's interval relations
+
+ev:before a owl:ObjectProperty, owl:TransitiveProperty ;
+  rdfs:domain ev:Event ;
+  rdfs:range  ev:Event ;
+  rdfs:label "before"@en ;
+  rdfs:comment "Allen b: first event ends strictly before the second begins; inverse after/bi. Entailed from time:intervalBefore on extents or time:before on endpoint instants (OWL Time)."@en .
+
+ev:after a owl:ObjectProperty ;
+  owl:inverseOf ev:before ;
+  rdfs:label "after"@en .
+
+ev:meets a owl:ObjectProperty ;
+  rdfs:domain ev:Event ;
+  rdfs:range  ev:Event ;
+  rdfs:label "meets"@en ;
+  rdfs:comment "Allen relation: one event finishes exactly when the next one starts."@en .
+
+ev:metBy a owl:ObjectProperty ;
+  owl:inverseOf ev:meets ;
+  rdfs:label "met by"@en .
+
+ev:overlaps a owl:ObjectProperty ;
+  rdfs:domain ev:Event ;
+  rdfs:range  ev:Event ;
+  rdfs:label "overlaps"@en ;
+  rdfs:comment "Allen o (not symmetric): first starts before second, overlaps in time, ends before second ends; inverse overlappedBy/oi. Matches time:intervalOverlaps in OWL Time."@en .
+
+ev:overlappedBy a owl:ObjectProperty ;
+  owl:inverseOf ev:overlaps ;
+  rdfs:label "overlapped by"@en .
+
+ev:during a owl:ObjectProperty ;
+  rdfs:domain ev:Event ;
+  rdfs:range  ev:Event ;
+  rdfs:label "during"@en ;
+  rdfs:comment "Allen relation: an event is entirely contained within the time of a longer event."@en .
+
+ev:contains a owl:ObjectProperty ;
+  owl:inverseOf ev:during ;
+  rdfs:label "contains"@en .
+
+ev:starts a owl:ObjectProperty ;
+  rdfs:domain ev:Event ;
+  rdfs:range  ev:Event ;
+  rdfs:label "starts"@en ;
+  rdfs:comment "Allen relation: two events start together, but the first one ends earlier."@en .
+
+ev:startedBy a owl:ObjectProperty ;
+  owl:inverseOf ev:starts ;
+  rdfs:label "started by"@en .
+
+ev:finishes a owl:ObjectProperty ;
+  rdfs:domain ev:Event ;
+  rdfs:range  ev:Event ;
+  rdfs:label "finishes"@en ;
+  rdfs:comment "Allen relation: two events end together, but the first one starts later."@en .
+
+ev:finishedBy a owl:ObjectProperty ;
+  owl:inverseOf ev:finishes ;
+  rdfs:label "finished by"@en .
+
+ev:equals a owl:ObjectProperty, owl:SymmetricProperty ;
+  rdfs:domain ev:Event ;
+  rdfs:range  ev:Event ;
+  rdfs:label "equals in time"@en ;
+  rdfs:comment "Allen relation: two events share exactly the same temporal interval."@en .
+
+### Symbolic Allen relations (b, bi, m, mi, o, oi, s, si, d, di, f, fi, eq)
+
+ev:b a owl:ObjectProperty ;
+  rdfs:subPropertyOf ev:before ;
+  rdfs:domain ev:Event ;
+  rdfs:range  ev:Event ;
+  rdfs:label "b"@en .
+
+ev:bi a owl:ObjectProperty ;
+  rdfs:subPropertyOf ev:after ;
+  owl:inverseOf ev:b ;
+  rdfs:domain ev:Event ;
+  rdfs:range  ev:Event ;
+  rdfs:label "bi"@en .
+
+ev:m a owl:ObjectProperty ;
+  rdfs:subPropertyOf ev:meets ;
+  rdfs:domain ev:Event ;
+  rdfs:range  ev:Event ;
+  rdfs:label "m"@en .
+
+ev:mi a owl:ObjectProperty ;
+  rdfs:subPropertyOf ev:metBy ;
+  owl:inverseOf ev:m ;
+  rdfs:domain ev:Event ;
+  rdfs:range  ev:Event ;
+  rdfs:label "mi"@en .
+
+ev:o a owl:ObjectProperty ;
+  rdfs:subPropertyOf ev:overlaps ;
+  rdfs:domain ev:Event ;
+  rdfs:range  ev:Event ;
+  rdfs:label "o"@en .
+
+ev:oi a owl:ObjectProperty ;
+  rdfs:subPropertyOf ev:overlappedBy ;
+  owl:inverseOf ev:o ;
+  rdfs:domain ev:Event ;
+  rdfs:range  ev:Event ;
+  rdfs:label "oi"@en .
+
+ev:s a owl:ObjectProperty ;
+  rdfs:subPropertyOf ev:starts ;
+  rdfs:domain ev:Event ;
+  rdfs:range  ev:Event ;
+  rdfs:label "s"@en .
+
+ev:si a owl:ObjectProperty ;
+  rdfs:subPropertyOf ev:startedBy ;
+  owl:inverseOf ev:s ;
+  rdfs:domain ev:Event ;
+  rdfs:range  ev:Event ;
+  rdfs:label "si"@en .
+
+ev:d a owl:ObjectProperty ;
+  rdfs:subPropertyOf ev:during ;
+  rdfs:domain ev:Event ;
+  rdfs:range  ev:Event ;
+  rdfs:label "d"@en .
+
+ev:di a owl:ObjectProperty ;
+  rdfs:subPropertyOf ev:contains ;
+  owl:inverseOf ev:d ;
+  rdfs:domain ev:Event ;
+  rdfs:range  ev:Event ;
+  rdfs:label "di"@en .
+
+ev:f a owl:ObjectProperty ;
+  rdfs:subPropertyOf ev:finishes ;
+  rdfs:domain ev:Event ;
+  rdfs:range  ev:Event ;
+  rdfs:label "f"@en .
+
+ev:fi a owl:ObjectProperty ;
+  rdfs:subPropertyOf ev:finishedBy ;
+  owl:inverseOf ev:f ;
+  rdfs:domain ev:Event ;
+  rdfs:range  ev:Event ;
+  rdfs:label "fi"@en .
+
+ev:eq a owl:ObjectProperty, owl:SymmetricProperty ;
+  rdfs:subPropertyOf ev:equals ;
+  rdfs:domain ev:Event ;
+  rdfs:range  ev:Event ;
+  rdfs:label "eq"@en .
+
+### Event structure
+
+ev:subEventOf a owl:ObjectProperty, owl:TransitiveProperty ;
+  rdfs:domain ev:Event ;
+  rdfs:range  ev:Event ;
+  rdfs:label "sub-event of"@en ;
+  rdfs:comment "Relates a smaller event to a larger one it belongs to."@en .
+
+ev:hasSubEvent a owl:ObjectProperty ;
+  owl:inverseOf ev:subEventOf ;
+  rdfs:label "has sub-event"@en .
+
+### Example richer constraints
+
+ev:Battle rdfs:subClassOf
+  [ a owl:Restriction ;
+    owl:onProperty ev:hasParticipant ;
+    owl:minQualifiedCardinality "2"^^xsd:nonNegativeInteger ;
+    owl:onClass soc:Character
+  ] .
+
+ev:Journey rdfs:subClassOf
+  [ a owl:Restriction ;
+    owl:onProperty ev:hasParticipant ;
+    owl:someValuesFrom soc:Character
+  ],
+  [ a owl:Restriction ;
+    owl:onProperty ev:occursAt ;
+    owl:someValuesFrom loc:Place
+  ] .

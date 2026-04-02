@@ -1,0 +1,284 @@
+@prefix act: <http://purl.org/story/action/> .
+@prefix ev:  <http://purl.org/story/event/> .
+@prefix soc: <http://purl.org/story/social/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+act: a owl:Ontology ;
+  rdfs:label "Actions in story plots"@en ;
+  rdfs:comment "Intentional doings: agents, patients, instruments, themes; linked to events via sub-event links and participant entailments."@en ;
+  owl:imports ev:,
+      soc: .
+
+### Classes
+
+act:Action a owl:Class ;
+  rdfs:subClassOf ev:Event ;
+  rdfs:label "action"@en ;
+  rdfs:comment "An event viewed as something done on purpose by an agent (possibly affecting a patient, object, or place)."@en .
+
+act:SpeechAct a owl:Class ;
+  rdfs:subClassOf act:Action ;
+  rdfs:label "speech act"@en ;
+  rdfs:comment "Speaking: threats, oaths, commands, counsel, and other illocutionary moves that move the plot."@en .
+
+act:TravelAction a owl:Class ;
+  rdfs:subClassOf act:Action ;
+  rdfs:label "travel action"@en ;
+  rdfs:comment "A step of movement: leave, arrive, flee, pass through."@en .
+
+act:Attack a owl:Class ;
+  rdfs:subClassOf act:Action ;
+  rdfs:label "attack"@en ;
+  rdfs:comment "An agent tries to harm or overcome a patient (battle, duel, ambush)."@en .
+
+act:Oath a owl:Class ;
+  rdfs:subClassOf act:SpeechAct ;
+  rdfs:label "oath"@en ;
+  rdfs:comment "A binding promise or self-curse; one utterance, long consequences."@en .
+
+act:Threat a owl:Class ;
+  rdfs:subClassOf act:SpeechAct ;
+  rdfs:label "threat"@en ;
+  rdfs:comment "A speech act meant to intimidate or constrain a patient."@en .
+
+act:Command a owl:Class ;
+  rdfs:subClassOf act:SpeechAct ;
+  rdfs:label "command"@en ;
+  rdfs:comment "Ordering or directing another character to act."@en .
+
+act:Counsel a owl:Class ;
+  rdfs:subClassOf act:SpeechAct ;
+  rdfs:label "counsel"@en ;
+  rdfs:comment "Advice or warning offered to a patient."@en .
+
+act:LeavePlace a owl:Class ;
+  rdfs:subClassOf act:TravelAction ;
+  rdfs:label "leave place"@en ;
+  rdfs:comment "Departing from a location (start of a leg of travel)."@en .
+
+act:Arrive a owl:Class ;
+  rdfs:subClassOf act:TravelAction ;
+  rdfs:label "arrive"@en ;
+  rdfs:comment "Reaching or entering a destination."@en .
+
+act:Flee a owl:Class ;
+  rdfs:subClassOf act:TravelAction ;
+  rdfs:label "flee"@en ;
+  rdfs:comment "Evasive flight, often with an implied or explicit pursuer (patient optional)."@en .
+
+act:Defend a owl:Class ;
+  rdfs:subClassOf act:Action ;
+  rdfs:label "defend"@en ;
+  rdfs:comment "Protecting or standing for a patient against harm."@en .
+
+act:Assist a owl:Class ;
+  rdfs:subClassOf act:Action ;
+  rdfs:label "assist"@en ;
+  rdfs:comment "Helping another carry out their aim (joint agency possible in data)."@en .
+
+act:Give a owl:Class ;
+  rdfs:subClassOf act:Action ;
+  rdfs:label "give"@en ;
+  rdfs:comment "Transfer of something (theme) toward a recipient; recipient can be act:hasPatient when they are a character."@en .
+
+act:Take a owl:Class ;
+  rdfs:subClassOf act:Action ;
+  rdfs:label "take"@en ;
+  rdfs:comment "Taking or seizing act:hasTheme, often from a source (patient as holder)."@en .
+
+act:Capture a owl:Class ;
+  rdfs:subClassOf act:Action ;
+  rdfs:label "capture"@en ;
+  rdfs:comment "Making a patient prisoner or captive."@en .
+
+act:Rescue a owl:Class ;
+  rdfs:subClassOf act:Action ;
+  rdfs:label "rescue"@en ;
+  rdfs:comment "Freeing or saving a patient from danger or captivity."@en .
+
+act:Decide a owl:Class ;
+  rdfs:subClassOf act:Action ;
+  rdfs:label "decide"@en ;
+  rdfs:comment "A deliberate choice or resolution (agent may be the only required role)."@en .
+
+### Object properties
+
+act:hasAgent a owl:ObjectProperty ;
+  rdfs:domain act:Action ;
+  rdfs:range soc:Character ;
+  rdfs:label "has agent"@en ;
+  rdfs:comment "The character who performs the action on purpose."@en ;
+  rdfs:subPropertyOf ev:hasParticipant .
+
+act:hasPatient a owl:ObjectProperty ;
+  rdfs:domain act:Action ;
+  rdfs:range soc:Character ;
+  rdfs:label "has patient"@en ;
+  rdfs:comment "Character the action is directed at or primarily affects."@en ;
+  rdfs:subPropertyOf ev:hasParticipant .
+
+act:hasInstrument a owl:ObjectProperty ;
+  rdfs:domain act:Action ;
+  rdfs:label "has instrument"@en ;
+  rdfs:comment "Tool or means used to carry out the action."@en ;
+  rdfs:subPropertyOf ev:usesItem .
+
+act:hasTheme a owl:ObjectProperty ;
+  rdfs:domain act:Action ;
+  rdfs:range owl:Thing ;
+  rdfs:label "has theme"@en ;
+  rdfs:comment "Primary object in view: token given, thing seized, subject of counsel, etc."@en .
+
+act:subActionOf a owl:ObjectProperty ;
+  rdfs:subPropertyOf ev:subEventOf ;
+  rdfs:domain act:Action ;
+  rdfs:range ev:Event ;
+  rdfs:label "sub-action of"@en ;
+  rdfs:comment "Nests this intentional act under a larger event or action."@en .
+
+### Restrictions
+
+act:SpeechAct rdfs:subClassOf
+  [ a owl:Restriction ;
+    owl:onProperty act:hasAgent ;
+    owl:someValuesFrom soc:Character
+  ] .
+
+act:TravelAction rdfs:subClassOf
+  [ a owl:Restriction ;
+    owl:onProperty act:hasAgent ;
+    owl:someValuesFrom soc:Character
+  ] .
+
+act:Attack rdfs:subClassOf
+  [ a owl:Restriction ;
+    owl:onProperty act:hasAgent ;
+    owl:someValuesFrom soc:Character
+  ],
+  [ a owl:Restriction ;
+    owl:onProperty act:hasPatient ;
+    owl:someValuesFrom soc:Character
+  ] .
+
+act:Threat rdfs:subClassOf
+  [ a owl:Restriction ;
+    owl:onProperty act:hasAgent ;
+    owl:someValuesFrom soc:Character
+  ],
+  [ a owl:Restriction ;
+    owl:onProperty act:hasPatient ;
+    owl:someValuesFrom soc:Character
+  ] .
+
+act:Command rdfs:subClassOf
+  [ a owl:Restriction ;
+    owl:onProperty act:hasAgent ;
+    owl:someValuesFrom soc:Character
+  ],
+  [ a owl:Restriction ;
+    owl:onProperty act:hasPatient ;
+    owl:someValuesFrom soc:Character
+  ] .
+
+act:Counsel rdfs:subClassOf
+  [ a owl:Restriction ;
+    owl:onProperty act:hasAgent ;
+    owl:someValuesFrom soc:Character
+  ],
+  [ a owl:Restriction ;
+    owl:onProperty act:hasPatient ;
+    owl:someValuesFrom soc:Character
+  ] .
+
+act:Oath rdfs:subClassOf
+  [ a owl:Restriction ;
+    owl:onProperty act:hasAgent ;
+    owl:someValuesFrom soc:Character
+  ] .
+
+act:Defend rdfs:subClassOf
+  [ a owl:Restriction ;
+    owl:onProperty act:hasAgent ;
+    owl:someValuesFrom soc:Character
+  ],
+  [ a owl:Restriction ;
+    owl:onProperty act:hasPatient ;
+    owl:someValuesFrom soc:Character
+  ] .
+
+act:Assist rdfs:subClassOf
+  [ a owl:Restriction ;
+    owl:onProperty act:hasAgent ;
+    owl:someValuesFrom soc:Character
+  ],
+  [ a owl:Restriction ;
+    owl:onProperty act:hasPatient ;
+    owl:someValuesFrom soc:Character
+  ] .
+
+act:Give rdfs:subClassOf
+  [ a owl:Restriction ;
+    owl:onProperty act:hasAgent ;
+    owl:someValuesFrom soc:Character
+  ],
+  [ a owl:Restriction ;
+    owl:onProperty act:hasTheme ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger
+  ] .
+
+act:Take rdfs:subClassOf
+  [ a owl:Restriction ;
+    owl:onProperty act:hasAgent ;
+    owl:someValuesFrom soc:Character
+  ],
+  [ a owl:Restriction ;
+    owl:onProperty act:hasTheme ;
+    owl:minCardinality "1"^^xsd:nonNegativeInteger
+  ] .
+
+act:Capture rdfs:subClassOf
+  [ a owl:Restriction ;
+    owl:onProperty act:hasAgent ;
+    owl:someValuesFrom soc:Character
+  ],
+  [ a owl:Restriction ;
+    owl:onProperty act:hasPatient ;
+    owl:someValuesFrom soc:Character
+  ] .
+
+act:Rescue rdfs:subClassOf
+  [ a owl:Restriction ;
+    owl:onProperty act:hasAgent ;
+    owl:someValuesFrom soc:Character
+  ],
+  [ a owl:Restriction ;
+    owl:onProperty act:hasPatient ;
+    owl:someValuesFrom soc:Character
+  ] .
+
+act:Decide rdfs:subClassOf
+  [ a owl:Restriction ;
+    owl:onProperty act:hasAgent ;
+    owl:someValuesFrom soc:Character
+  ] .
+
+act:LeavePlace rdfs:subClassOf
+  [ a owl:Restriction ;
+    owl:onProperty act:hasAgent ;
+    owl:someValuesFrom soc:Character
+  ] .
+
+act:Arrive rdfs:subClassOf
+  [ a owl:Restriction ;
+    owl:onProperty act:hasAgent ;
+    owl:someValuesFrom soc:Character
+  ] .
+
+act:Flee rdfs:subClassOf
+  [ a owl:Restriction ;
+    owl:onProperty act:hasAgent ;
+    owl:someValuesFrom soc:Character
+  ] .
